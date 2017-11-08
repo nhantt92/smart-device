@@ -1,0 +1,102 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 1.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  002710 L
+    .__.ABS.                                                    =  000000 G
+    .__.CPU.                                                    =  000000 L
+    .__.H$L.                                                    =  000001 L
+  1 _CHANNEL                                                       000000 GR
+    _CLK_PeripheralClockConfig                                     ****** GX
+    _GPIO_ExternalPullUpConfig                                     ****** GX
+    _GPIO_Init                                                     ****** GX
+    _GPIO_WriteHigh                                                ****** GX
+    _GPIO_WriteLow                                                 ****** GX
+  1 _RX_ADDRESS                                                    000006 GR
+  1 _RX_ADDRESS_P0                                                 00000B GR
+  1 _RX_ADDRESS_P1                                                 000010 GR
+  1 _RX_ADDRESS_P2                                                 000015 GR
+  1 _RX_ADDRESS_P3                                                 000016 GR
+  1 _RX_ADDRESS_P4                                                 000017 GR
+  1 _RX_ADDRESS_P5                                                 000018 GR
+    _SPI_Cmd                                                       ****** GX
+    _SPI_DeInit                                                    ****** GX
+    _SPI_GetFlagStatus                                             ****** GX
+    _SPI_Init                                                      ****** GX
+    _SPI_ReceiveData                                               ****** GX
+    _SPI_SendData                                                  ****** GX
+  1 _TX_ADDRESS                                                    000001 GR
+    _VCOM_puts                                                     ****** GX
+  7 ___str_0                                                       000861 R
+  7 ___str_1                                                       00086F R
+  7 ___str_10                                                      0008F6 R
+  7 ___str_11                                                      000914 R
+  7 ___str_12                                                      000932 R
+  7 ___str_13                                                      000944 R
+  7 ___str_14                                                      000956 R
+  7 ___str_15                                                      000968 R
+  7 ___str_16                                                      00097A R
+  7 ___str_17                                                      000995 R
+  7 ___str_18                                                      0009A5 R
+  7 ___str_19                                                      0009B5 R
+  7 ___str_2                                                       00087C R
+  7 ___str_20                                                      0009C5 R
+  7 ___str_21                                                      0009D5 R
+  7 ___str_22                                                      0009E5 R
+  7 ___str_23                                                      0009F5 R
+  7 ___str_24                                                      000A08 R
+  7 ___str_25                                                      000A15 R
+  7 ___str_3                                                       00088D R
+  7 ___str_4                                                       00089D R
+  7 ___str_5                                                       0008AF R
+  7 ___str_6                                                       0008BC R
+  7 ___str_7                                                       0008CC R
+  7 ___str_8                                                       0008DA R
+  7 ___str_9                                                       0008EC R
+  7 _nRF_ClearSend                                                 000357 GR
+  7 _nRF_Clear_Status                                              00037A GR
+  7 _nRF_Debug                                                     00040D GR
+  7 _nRF_Init                                                      0000C0 GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 2.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  7 _nRF_Pin_Conf                                                  000051 GR
+  7 _nRF_Read                                                      0001F2 GR
+  7 _nRF_Read_Lost_Packet                                          00038C GR
+  7 _nRF_Read_Power_Detector                                       000399 GR
+  7 _nRF_Read_Retransmitted_Packet                                 0003A1 GR
+  7 _nRF_Read_Status                                               000384 GR
+  7 _nRF_RxPacket                                                  0003AB GR
+  7 _nRF_SPI_Read_Buf                                              000246 GR
+  7 _nRF_SPI_Write_Buf                                             000288 GR
+  7 _nRF_Set_Channel                                               000343 GR
+  7 _nRF_Set_RxMode                                                0002C4 GR
+  7 _nRF_Set_Rx_Addr                                               00036D GR
+  7 _nRF_Set_TxMode                                                0002FF GR
+  7 _nRF_Set_Tx_Addr                                               000360 GR
+  7 _nRF_TxPacket                                                  0003D6 GR
+  7 _nRF_Write_Reg                                                 000219 GR
+  7 _nRF_delay                                                     000000 GR
+  7 _nRF_spiTransfer                                               0001D4 GR
+    _sprintf                                                       ****** GX
+
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 3.
+Hexadecimal [24-Bits]
+
+Area Table
+
+   0 _CODE                                      size      0   flags    0
+   1 DATA                                       size     19   flags    0
+   2 INITIALIZED                                size      0   flags    0
+   3 DABS                                       size      0   flags    8
+   4 HOME                                       size      0   flags    0
+   5 GSINIT                                     size      0   flags    0
+   6 GSFINAL                                    size      0   flags    0
+   7 CODE                                       size    A24   flags    0
+   8 INITIALIZER                                size      0   flags    0
+   9 CABS                                       size      0   flags    8
+

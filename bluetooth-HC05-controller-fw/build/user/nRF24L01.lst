@@ -1,0 +1,1701 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 3.6.0 #9615 (MINGW64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module nRF24L01
+                                      6 	.optsdcc -mstm8
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _VCOM_puts
+                                     12 	.globl _sprintf
+                                     13 	.globl _SPI_GetFlagStatus
+                                     14 	.globl _SPI_ReceiveData
+                                     15 	.globl _SPI_SendData
+                                     16 	.globl _SPI_Cmd
+                                     17 	.globl _SPI_Init
+                                     18 	.globl _SPI_DeInit
+                                     19 	.globl _GPIO_ExternalPullUpConfig
+                                     20 	.globl _GPIO_WriteLow
+                                     21 	.globl _GPIO_WriteHigh
+                                     22 	.globl _GPIO_Init
+                                     23 	.globl _CLK_PeripheralClockConfig
+                                     24 	.globl _RX_ADDRESS_P5
+                                     25 	.globl _RX_ADDRESS_P4
+                                     26 	.globl _RX_ADDRESS_P3
+                                     27 	.globl _RX_ADDRESS_P2
+                                     28 	.globl _RX_ADDRESS_P1
+                                     29 	.globl _RX_ADDRESS_P0
+                                     30 	.globl _RX_ADDRESS
+                                     31 	.globl _TX_ADDRESS
+                                     32 	.globl _CHANNEL
+                                     33 	.globl _nRF_delay
+                                     34 	.globl _nRF_Pin_Conf
+                                     35 	.globl _nRF_Init
+                                     36 	.globl _nRF_spiTransfer
+                                     37 	.globl _nRF_Read
+                                     38 	.globl _nRF_Write_Reg
+                                     39 	.globl _nRF_SPI_Read_Buf
+                                     40 	.globl _nRF_SPI_Write_Buf
+                                     41 	.globl _nRF_Set_RxMode
+                                     42 	.globl _nRF_Set_TxMode
+                                     43 	.globl _nRF_Set_Channel
+                                     44 	.globl _nRF_ClearSend
+                                     45 	.globl _nRF_Set_Tx_Addr
+                                     46 	.globl _nRF_Set_Rx_Addr
+                                     47 	.globl _nRF_Clear_Status
+                                     48 	.globl _nRF_Read_Status
+                                     49 	.globl _nRF_Read_Lost_Packet
+                                     50 	.globl _nRF_Read_Power_Detector
+                                     51 	.globl _nRF_Read_Retransmitted_Packet
+                                     52 	.globl _nRF_RxPacket
+                                     53 	.globl _nRF_TxPacket
+                                     54 	.globl _nRF_Debug
+                                     55 ;--------------------------------------------------------
+                                     56 ; ram data
+                                     57 ;--------------------------------------------------------
+                                     58 	.area DATA
+      000000                         59 _CHANNEL::
+      000000                         60 	.ds 1
+      000001                         61 _TX_ADDRESS::
+      000001                         62 	.ds 5
+      000006                         63 _RX_ADDRESS::
+      000006                         64 	.ds 5
+      00000B                         65 _RX_ADDRESS_P0::
+      00000B                         66 	.ds 5
+      000010                         67 _RX_ADDRESS_P1::
+      000010                         68 	.ds 5
+      000015                         69 _RX_ADDRESS_P2::
+      000015                         70 	.ds 1
+      000016                         71 _RX_ADDRESS_P3::
+      000016                         72 	.ds 1
+      000017                         73 _RX_ADDRESS_P4::
+      000017                         74 	.ds 1
+      000018                         75 _RX_ADDRESS_P5::
+      000018                         76 	.ds 1
+                                     77 ;--------------------------------------------------------
+                                     78 ; ram data
+                                     79 ;--------------------------------------------------------
+                                     80 	.area INITIALIZED
+                                     81 ;--------------------------------------------------------
+                                     82 ; absolute external ram data
+                                     83 ;--------------------------------------------------------
+                                     84 	.area DABS (ABS)
+                                     85 ;--------------------------------------------------------
+                                     86 ; global & static initialisations
+                                     87 ;--------------------------------------------------------
+                                     88 	.area HOME
+                                     89 	.area GSINIT
+                                     90 	.area GSFINAL
+                                     91 	.area GSINIT
+                                     92 ;--------------------------------------------------------
+                                     93 ; Home
+                                     94 ;--------------------------------------------------------
+                                     95 	.area HOME
+                                     96 	.area HOME
+                                     97 ;--------------------------------------------------------
+                                     98 ; code
+                                     99 ;--------------------------------------------------------
+                                    100 	.area CODE
+                                    101 ;	user/nRF24L01.c: 19: void nRF_delay(uint32_t cnt)
+                                    102 ;	-----------------------------------------
+                                    103 ;	 function nRF_delay
+                                    104 ;	-----------------------------------------
+      000000                        105 _nRF_delay:
+      000000 52 0C            [ 2]  106 	sub	sp, #12
+      000002 16 0F            [ 2]  107 	ldw	y, (0x0f, sp)
+      000004 17 09            [ 2]  108 	ldw	(0x09, sp), y
+      000006 1E 11            [ 2]  109 	ldw	x, (0x11, sp)
+      000008                        110 00107$:
+                                    111 ;	user/nRF24L01.c: 23: for (; cnt > 0; cnt--) {
+      000008 5D               [ 2]  112 	tnzw	x
+      000009 26 04            [ 1]  113 	jrne	00130$
+      00000B 16 09            [ 2]  114 	ldw	y, (0x09, sp)
+      00000D 27 3F            [ 1]  115 	jreq	00109$
+      00000F                        116 00130$:
+                                    117 ;	user/nRF24L01.c: 24: for (i = 0; i < 3000; i++)
+      00000F 90 AE 0B B8      [ 2]  118 	ldw	y, #0x0bb8
+      000013 17 03            [ 2]  119 	ldw	(0x03, sp), y
+      000015 0F 02            [ 1]  120 	clr	(0x02, sp)
+      000017 0F 01            [ 1]  121 	clr	(0x01, sp)
+      000019                        122 00105$:
+      000019 16 03            [ 2]  123 	ldw	y, (0x03, sp)
+      00001B 72 A2 00 01      [ 2]  124 	subw	y, #0x0001
+      00001F 17 07            [ 2]  125 	ldw	(0x07, sp), y
+      000021 7B 02            [ 1]  126 	ld	a, (0x02, sp)
+      000023 A2 00            [ 1]  127 	sbc	a, #0x00
+      000025 6B 06            [ 1]  128 	ld	(0x06, sp), a
+      000027 7B 01            [ 1]  129 	ld	a, (0x01, sp)
+      000029 A2 00            [ 1]  130 	sbc	a, #0x00
+      00002B 6B 05            [ 1]  131 	ld	(0x05, sp), a
+      00002D 16 07            [ 2]  132 	ldw	y, (0x07, sp)
+      00002F 17 03            [ 2]  133 	ldw	(0x03, sp), y
+      000031 16 05            [ 2]  134 	ldw	y, (0x05, sp)
+      000033 17 01            [ 2]  135 	ldw	(0x01, sp), y
+      000035 16 07            [ 2]  136 	ldw	y, (0x07, sp)
+      000037 26 E0            [ 1]  137 	jrne	00105$
+      000039 16 05            [ 2]  138 	ldw	y, (0x05, sp)
+      00003B 26 DC            [ 1]  139 	jrne	00105$
+                                    140 ;	user/nRF24L01.c: 23: for (; cnt > 0; cnt--) {
+      00003D 1D 00 01         [ 2]  141 	subw	x, #0x0001
+      000040 7B 0A            [ 1]  142 	ld	a, (0x0a, sp)
+      000042 A2 00            [ 1]  143 	sbc	a, #0x00
+      000044 6B 0A            [ 1]  144 	ld	(0x0a, sp), a
+      000046 7B 09            [ 1]  145 	ld	a, (0x09, sp)
+      000048 A2 00            [ 1]  146 	sbc	a, #0x00
+      00004A 6B 09            [ 1]  147 	ld	(0x09, sp), a
+      00004C 20 BA            [ 2]  148 	jra	00107$
+      00004E                        149 00109$:
+      00004E 5B 0C            [ 2]  150 	addw	sp, #12
+      000050 81               [ 4]  151 	ret
+                                    152 ;	user/nRF24L01.c: 29: void nRF_Pin_Conf(void)
+                                    153 ;	-----------------------------------------
+                                    154 ;	 function nRF_Pin_Conf
+                                    155 ;	-----------------------------------------
+      000051                        156 _nRF_Pin_Conf:
+                                    157 ;	user/nRF24L01.c: 31: CLK_PeripheralClockConfig(CLK_PERIPHERAL_SPI , ENABLE);
+      000051 4B 01            [ 1]  158 	push	#0x01
+      000053 4B 01            [ 1]  159 	push	#0x01
+      000055 CDr00r00         [ 4]  160 	call	_CLK_PeripheralClockConfig
+      000058 85               [ 2]  161 	popw	x
+                                    162 ;	user/nRF24L01.c: 32: GPIO_ExternalPullUpConfig(GPIOC, (GPIO_Pin_TypeDef)(GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7), ENABLE);
+      000059 4B 01            [ 1]  163 	push	#0x01
+      00005B 4B E0            [ 1]  164 	push	#0xe0
+      00005D 4B 0A            [ 1]  165 	push	#0x0a
+      00005F 4B 50            [ 1]  166 	push	#0x50
+      000061 CDr00r00         [ 4]  167 	call	_GPIO_ExternalPullUpConfig
+      000064 5B 04            [ 2]  168 	addw	sp, #4
+                                    169 ;	user/nRF24L01.c: 33: GPIO_Init(GPIOF, CE, GPIO_MODE_OUT_PP_HIGH_FAST);
+      000066 4B F0            [ 1]  170 	push	#0xf0
+      000068 4B 10            [ 1]  171 	push	#0x10
+      00006A 4B 19            [ 1]  172 	push	#0x19
+      00006C 4B 50            [ 1]  173 	push	#0x50
+      00006E CDr00r00         [ 4]  174 	call	_GPIO_Init
+      000071 5B 04            [ 2]  175 	addw	sp, #4
+                                    176 ;	user/nRF24L01.c: 34: GPIO_Init(GPIOE, CSN, GPIO_MODE_OUT_PP_HIGH_FAST);
+      000073 4B F0            [ 1]  177 	push	#0xf0
+      000075 4B 20            [ 1]  178 	push	#0x20
+      000077 4B 14            [ 1]  179 	push	#0x14
+      000079 4B 50            [ 1]  180 	push	#0x50
+      00007B CDr00r00         [ 4]  181 	call	_GPIO_Init
+      00007E 5B 04            [ 2]  182 	addw	sp, #4
+                                    183 ;	user/nRF24L01.c: 36: SPI_DeInit();
+      000080 CDr00r00         [ 4]  184 	call	_SPI_DeInit
+                                    185 ;	user/nRF24L01.c: 38: SPI_Init(SPI_FIRSTBIT_MSB, SPI_BAUDRATEPRESCALER_4, SPI_MODE_MASTER,
+      000083 4B 07            [ 1]  186 	push	#0x07
+      000085 4B 02            [ 1]  187 	push	#0x02
+      000087 4B 00            [ 1]  188 	push	#0x00
+      000089 4B 00            [ 1]  189 	push	#0x00
+      00008B 4B 00            [ 1]  190 	push	#0x00
+      00008D 4B 04            [ 1]  191 	push	#0x04
+      00008F 4B 08            [ 1]  192 	push	#0x08
+      000091 4B 00            [ 1]  193 	push	#0x00
+      000093 CDr00r00         [ 4]  194 	call	_SPI_Init
+      000096 5B 08            [ 2]  195 	addw	sp, #8
+                                    196 ;	user/nRF24L01.c: 42: SPI_Cmd(ENABLE);
+      000098 4B 01            [ 1]  197 	push	#0x01
+      00009A CDr00r00         [ 4]  198 	call	_SPI_Cmd
+      00009D 84               [ 1]  199 	pop	a
+                                    200 ;	user/nRF24L01.c: 43: ClrCE;
+      00009E 4B 10            [ 1]  201 	push	#0x10
+      0000A0 4B 19            [ 1]  202 	push	#0x19
+      0000A2 4B 50            [ 1]  203 	push	#0x50
+      0000A4 CDr00r00         [ 4]  204 	call	_GPIO_WriteLow
+      0000A7 5B 03            [ 2]  205 	addw	sp, #3
+                                    206 ;	user/nRF24L01.c: 44: nRF_delay(10);
+      0000A9 4B 0A            [ 1]  207 	push	#0x0a
+      0000AB 5F               [ 1]  208 	clrw	x
+      0000AC 89               [ 2]  209 	pushw	x
+      0000AD 4B 00            [ 1]  210 	push	#0x00
+      0000AF CDr00r00         [ 4]  211 	call	_nRF_delay
+      0000B2 5B 04            [ 2]  212 	addw	sp, #4
+                                    213 ;	user/nRF24L01.c: 45: SetCSN;
+      0000B4 4B 20            [ 1]  214 	push	#0x20
+      0000B6 4B 14            [ 1]  215 	push	#0x14
+      0000B8 4B 50            [ 1]  216 	push	#0x50
+      0000BA CDr00r00         [ 4]  217 	call	_GPIO_WriteHigh
+      0000BD 5B 03            [ 2]  218 	addw	sp, #3
+      0000BF 81               [ 4]  219 	ret
+                                    220 ;	user/nRF24L01.c: 48: void nRF_Init(void)
+                                    221 ;	-----------------------------------------
+                                    222 ;	 function nRF_Init
+                                    223 ;	-----------------------------------------
+      0000C0                        224 _nRF_Init:
+                                    225 ;	user/nRF24L01.c: 50: nRF_Pin_Conf();
+      0000C0 CDr00r51         [ 4]  226 	call	_nRF_Pin_Conf
+                                    227 ;	user/nRF24L01.c: 51: ClrCE;
+      0000C3 4B 10            [ 1]  228 	push	#0x10
+      0000C5 4B 19            [ 1]  229 	push	#0x19
+      0000C7 4B 50            [ 1]  230 	push	#0x50
+      0000C9 CDr00r00         [ 4]  231 	call	_GPIO_WriteLow
+      0000CC 5B 03            [ 2]  232 	addw	sp, #3
+                                    233 ;	user/nRF24L01.c: 52: nRF_delay(10);
+      0000CE 4B 0A            [ 1]  234 	push	#0x0a
+      0000D0 5F               [ 1]  235 	clrw	x
+      0000D1 89               [ 2]  236 	pushw	x
+      0000D2 4B 00            [ 1]  237 	push	#0x00
+      0000D4 CDr00r00         [ 4]  238 	call	_nRF_delay
+      0000D7 5B 04            [ 2]  239 	addw	sp, #4
+                                    240 ;	user/nRF24L01.c: 53: nRF_Write_Reg(W_REGISTER + CONFIG, 0x0E); //Enable CRC,power up and ptx,CRC 2 Byte
+      0000D9 4B 0E            [ 1]  241 	push	#0x0e
+      0000DB 4B 20            [ 1]  242 	push	#0x20
+      0000DD CDr02r19         [ 4]  243 	call	_nRF_Write_Reg
+      0000E0 85               [ 2]  244 	popw	x
+                                    245 ;	user/nRF24L01.c: 55: nRF_delay(10);
+      0000E1 4B 0A            [ 1]  246 	push	#0x0a
+      0000E3 5F               [ 1]  247 	clrw	x
+      0000E4 89               [ 2]  248 	pushw	x
+      0000E5 4B 00            [ 1]  249 	push	#0x00
+      0000E7 CDr00r00         [ 4]  250 	call	_nRF_delay
+      0000EA 5B 04            [ 2]  251 	addw	sp, #4
+                                    252 ;	user/nRF24L01.c: 56: nRF_Write_Reg(W_REGISTER + EN_AA, 0x3F); //Enable Auto.Ack:Pipe0-5
+      0000EC 4B 3F            [ 1]  253 	push	#0x3f
+      0000EE 4B 21            [ 1]  254 	push	#0x21
+      0000F0 CDr02r19         [ 4]  255 	call	_nRF_Write_Reg
+      0000F3 85               [ 2]  256 	popw	x
+                                    257 ;	user/nRF24L01.c: 57: nRF_Write_Reg(W_REGISTER + EN_RXADDR, 0x3F); //Enable data P0,P1,P2,P3,P4,P5
+      0000F4 4B 3F            [ 1]  258 	push	#0x3f
+      0000F6 4B 22            [ 1]  259 	push	#0x22
+      0000F8 CDr02r19         [ 4]  260 	call	_nRF_Write_Reg
+      0000FB 85               [ 2]  261 	popw	x
+                                    262 ;	user/nRF24L01.c: 58: nRF_Write_Reg(W_REGISTER + SETUP_AW, 0x03); //Address width 5 bytes
+      0000FC 4B 03            [ 1]  263 	push	#0x03
+      0000FE 4B 23            [ 1]  264 	push	#0x23
+      000100 CDr02r19         [ 4]  265 	call	_nRF_Write_Reg
+      000103 85               [ 2]  266 	popw	x
+                                    267 ;	user/nRF24L01.c: 59: nRF_Write_Reg(W_REGISTER + SETUP_RETR, 0xFA); // 4000us Auto Retransmit Delay, 10 Auto Retransmit Count	
+      000104 4B FA            [ 1]  268 	push	#0xfa
+      000106 4B 24            [ 1]  269 	push	#0x24
+      000108 CDr02r19         [ 4]  270 	call	_nRF_Write_Reg
+      00010B 85               [ 2]  271 	popw	x
+                                    272 ;	user/nRF24L01.c: 60: nRF_Write_Reg(W_REGISTER + RF_CH, CHANNEL);   // Select RF channel  F = 2400 Mhz + RF_CH Mhz  ex: RF_CH = 0  => F = 2.4 Ghz
+      00010C 3Bu00u00         [ 1]  273 	push	_CHANNEL+0
+      00010F 4B 25            [ 1]  274 	push	#0x25
+      000111 CDr02r19         [ 4]  275 	call	_nRF_Write_Reg
+      000114 85               [ 2]  276 	popw	x
+                                    277 ;	user/nRF24L01.c: 61: nRF_Write_Reg(W_REGISTER + RF_SETUP, RF_PWR_0dBm|RF_DR_2Mbps);// Setup power 0dbm, rate 2Mbps
+      000115 4B 0E            [ 1]  278 	push	#0x0e
+      000117 4B 26            [ 1]  279 	push	#0x26
+      000119 CDr02r19         [ 4]  280 	call	_nRF_Write_Reg
+      00011C 85               [ 2]  281 	popw	x
+                                    282 ;	user/nRF24L01.c: 62: nRF_Write_Reg(W_REGISTER + STATUS, 0x70); // Clear Data Ready RX FIFO interrupt,Data Sent TX FIFO interrupt,Maximum number of TX retransmits interrupt
+      00011D 4B 70            [ 1]  283 	push	#0x70
+      00011F 4B 27            [ 1]  284 	push	#0x27
+      000121 CDr02r19         [ 4]  285 	call	_nRF_Write_Reg
+      000124 85               [ 2]  286 	popw	x
+                                    287 ;	user/nRF24L01.c: 64: nRF_SPI_Write_Buf(W_REGISTER + RX_ADDR_P0, RX_ADDRESS_P0, ADR_WIDTH); // Write address into rx_add_p0
+      000125 AEr00r0B         [ 2]  288 	ldw	x, #_RX_ADDRESS_P0+0
+      000128 4B 05            [ 1]  289 	push	#0x05
+      00012A 89               [ 2]  290 	pushw	x
+      00012B 4B 2A            [ 1]  291 	push	#0x2a
+      00012D CDr02r88         [ 4]  292 	call	_nRF_SPI_Write_Buf
+      000130 5B 04            [ 2]  293 	addw	sp, #4
+                                    294 ;	user/nRF24L01.c: 65: nRF_SPI_Write_Buf(W_REGISTER + RX_ADDR_P1, RX_ADDRESS_P1, ADR_WIDTH); 	// Write address into rx_add_p1
+      000132 AEr00r10         [ 2]  295 	ldw	x, #_RX_ADDRESS_P1+0
+      000135 4B 05            [ 1]  296 	push	#0x05
+      000137 89               [ 2]  297 	pushw	x
+      000138 4B 2B            [ 1]  298 	push	#0x2b
+      00013A CDr02r88         [ 4]  299 	call	_nRF_SPI_Write_Buf
+      00013D 5B 04            [ 2]  300 	addw	sp, #4
+                                    301 ;	user/nRF24L01.c: 67: nRF_Write_Reg(W_REGISTER + RX_ADDR_P2, RX_ADDRESS_P2[0]); // Write address into rx_add_p2
+      00013F AEr00r15         [ 2]  302 	ldw	x, #_RX_ADDRESS_P2+0
+      000142 F6               [ 1]  303 	ld	a, (x)
+      000143 88               [ 1]  304 	push	a
+      000144 4B 2C            [ 1]  305 	push	#0x2c
+      000146 CDr02r19         [ 4]  306 	call	_nRF_Write_Reg
+      000149 85               [ 2]  307 	popw	x
+                                    308 ;	user/nRF24L01.c: 68: nRF_Write_Reg(W_REGISTER + RX_ADDR_P3, RX_ADDRESS_P3[0]); // Write address into rx_add_p3
+      00014A AEr00r16         [ 2]  309 	ldw	x, #_RX_ADDRESS_P3+0
+      00014D F6               [ 1]  310 	ld	a, (x)
+      00014E 88               [ 1]  311 	push	a
+      00014F 4B 2D            [ 1]  312 	push	#0x2d
+      000151 CDr02r19         [ 4]  313 	call	_nRF_Write_Reg
+      000154 85               [ 2]  314 	popw	x
+                                    315 ;	user/nRF24L01.c: 69: nRF_Write_Reg(W_REGISTER + RX_ADDR_P4, RX_ADDRESS_P4[0]); // Write address into rx_add_p4
+      000155 AEr00r17         [ 2]  316 	ldw	x, #_RX_ADDRESS_P4+0
+      000158 F6               [ 1]  317 	ld	a, (x)
+      000159 88               [ 1]  318 	push	a
+      00015A 4B 2E            [ 1]  319 	push	#0x2e
+      00015C CDr02r19         [ 4]  320 	call	_nRF_Write_Reg
+      00015F 85               [ 2]  321 	popw	x
+                                    322 ;	user/nRF24L01.c: 70: nRF_Write_Reg(W_REGISTER + RX_ADDR_P5, RX_ADDRESS_P5[0]); // Write address into rx_add_p5
+      000160 AEr00r18         [ 2]  323 	ldw	x, #_RX_ADDRESS_P5+0
+      000163 F6               [ 1]  324 	ld	a, (x)
+      000164 88               [ 1]  325 	push	a
+      000165 4B 2F            [ 1]  326 	push	#0x2f
+      000167 CDr02r19         [ 4]  327 	call	_nRF_Write_Reg
+      00016A 85               [ 2]  328 	popw	x
+                                    329 ;	user/nRF24L01.c: 72: nRF_SPI_Write_Buf(W_REGISTER + TX_ADDR, TX_ADDRESS, ADR_WIDTH); // Write address into tx_add
+      00016B AEr00r01         [ 2]  330 	ldw	x, #_TX_ADDRESS+0
+      00016E 4B 05            [ 1]  331 	push	#0x05
+      000170 89               [ 2]  332 	pushw	x
+      000171 4B 30            [ 1]  333 	push	#0x30
+      000173 CDr02r88         [ 4]  334 	call	_nRF_SPI_Write_Buf
+      000176 5B 04            [ 2]  335 	addw	sp, #4
+                                    336 ;	user/nRF24L01.c: 74: nRF_Write_Reg(W_REGISTER + RX_PW_P0, 32);  // 32 bytes in RX payload in data pipe 0
+      000178 4B 20            [ 1]  337 	push	#0x20
+      00017A 4B 31            [ 1]  338 	push	#0x31
+      00017C CDr02r19         [ 4]  339 	call	_nRF_Write_Reg
+      00017F 85               [ 2]  340 	popw	x
+                                    341 ;	user/nRF24L01.c: 75: nRF_Write_Reg(W_REGISTER + RX_PW_P1, 32);  // 32 bytes in RX payload in data pipe 1
+      000180 4B 20            [ 1]  342 	push	#0x20
+      000182 4B 32            [ 1]  343 	push	#0x32
+      000184 CDr02r19         [ 4]  344 	call	_nRF_Write_Reg
+      000187 85               [ 2]  345 	popw	x
+                                    346 ;	user/nRF24L01.c: 76: nRF_Write_Reg(W_REGISTER + RX_PW_P2, 32);  // 32 bytes in RX payload in data pipe 2
+      000188 4B 20            [ 1]  347 	push	#0x20
+      00018A 4B 33            [ 1]  348 	push	#0x33
+      00018C CDr02r19         [ 4]  349 	call	_nRF_Write_Reg
+      00018F 85               [ 2]  350 	popw	x
+                                    351 ;	user/nRF24L01.c: 77: nRF_Write_Reg(W_REGISTER + RX_PW_P3, 32);  // 32 bytes in RX payload in data pipe 3
+      000190 4B 20            [ 1]  352 	push	#0x20
+      000192 4B 34            [ 1]  353 	push	#0x34
+      000194 CDr02r19         [ 4]  354 	call	_nRF_Write_Reg
+      000197 85               [ 2]  355 	popw	x
+                                    356 ;	user/nRF24L01.c: 78: nRF_Write_Reg(W_REGISTER + RX_PW_P4, 32);  // 32 bytes in RX payload in data pipe 4
+      000198 4B 20            [ 1]  357 	push	#0x20
+      00019A 4B 35            [ 1]  358 	push	#0x35
+      00019C CDr02r19         [ 4]  359 	call	_nRF_Write_Reg
+      00019F 85               [ 2]  360 	popw	x
+                                    361 ;	user/nRF24L01.c: 79: nRF_Write_Reg(W_REGISTER + RX_PW_P5, 32);  // 32 bytes in RX payload in data pipe 5
+      0001A0 4B 20            [ 1]  362 	push	#0x20
+      0001A2 4B 36            [ 1]  363 	push	#0x36
+      0001A4 CDr02r19         [ 4]  364 	call	_nRF_Write_Reg
+      0001A7 85               [ 2]  365 	popw	x
+                                    366 ;	user/nRF24L01.c: 80: nRF_Write_Reg(W_REGISTER + DYNPD, 0x00);   // Enable dynamic payload length
+      0001A8 4B 00            [ 1]  367 	push	#0x00
+      0001AA 4B 3C            [ 1]  368 	push	#0x3c
+      0001AC CDr02r19         [ 4]  369 	call	_nRF_Write_Reg
+      0001AF 85               [ 2]  370 	popw	x
+                                    371 ;	user/nRF24L01.c: 81: nRF_Write_Reg(W_REGISTER + FEATURE, 0x00); // Feature Register
+      0001B0 4B 00            [ 1]  372 	push	#0x00
+      0001B2 4B 3D            [ 1]  373 	push	#0x3d
+      0001B4 CDr02r19         [ 4]  374 	call	_nRF_Write_Reg
+      0001B7 85               [ 2]  375 	popw	x
+                                    376 ;	user/nRF24L01.c: 83: nRF_Write_Reg(FLUSH_TX, 0x00); // Clear TX FIFO Buf
+      0001B8 4B 00            [ 1]  377 	push	#0x00
+      0001BA 4B E1            [ 1]  378 	push	#0xe1
+      0001BC CDr02r19         [ 4]  379 	call	_nRF_Write_Reg
+      0001BF 85               [ 2]  380 	popw	x
+                                    381 ;	user/nRF24L01.c: 84: nRF_Write_Reg(FLUSH_RX, 0x00); // Clear RX FIFO Buf
+      0001C0 4B 00            [ 1]  382 	push	#0x00
+      0001C2 4B E2            [ 1]  383 	push	#0xe2
+      0001C4 CDr02r19         [ 4]  384 	call	_nRF_Write_Reg
+      0001C7 85               [ 2]  385 	popw	x
+                                    386 ;	user/nRF24L01.c: 86: SetCE;
+      0001C8 4B 10            [ 1]  387 	push	#0x10
+      0001CA 4B 19            [ 1]  388 	push	#0x19
+      0001CC 4B 50            [ 1]  389 	push	#0x50
+      0001CE CDr00r00         [ 4]  390 	call	_GPIO_WriteHigh
+      0001D1 5B 03            [ 2]  391 	addw	sp, #3
+      0001D3 81               [ 4]  392 	ret
+                                    393 ;	user/nRF24L01.c: 89: uint8_t nRF_spiTransfer(uint8_t send)
+                                    394 ;	-----------------------------------------
+                                    395 ;	 function nRF_spiTransfer
+                                    396 ;	-----------------------------------------
+      0001D4                        397 _nRF_spiTransfer:
+                                    398 ;	user/nRF24L01.c: 91: while(SPI_GetFlagStatus(SPI_FLAG_TXE) == RESET);
+      0001D4                        399 00101$:
+      0001D4 4B 02            [ 1]  400 	push	#0x02
+      0001D6 CDr00r00         [ 4]  401 	call	_SPI_GetFlagStatus
+      0001D9 5B 01            [ 2]  402 	addw	sp, #1
+      0001DB 4D               [ 1]  403 	tnz	a
+      0001DC 27 F6            [ 1]  404 	jreq	00101$
+                                    405 ;	user/nRF24L01.c: 92: SPI_SendData(send);
+      0001DE 7B 03            [ 1]  406 	ld	a, (0x03, sp)
+      0001E0 88               [ 1]  407 	push	a
+      0001E1 CDr00r00         [ 4]  408 	call	_SPI_SendData
+      0001E4 84               [ 1]  409 	pop	a
+                                    410 ;	user/nRF24L01.c: 93: while(SPI_GetFlagStatus(SPI_FLAG_RXNE) == RESET);
+      0001E5                        411 00104$:
+      0001E5 4B 01            [ 1]  412 	push	#0x01
+      0001E7 CDr00r00         [ 4]  413 	call	_SPI_GetFlagStatus
+      0001EA 5B 01            [ 2]  414 	addw	sp, #1
+      0001EC 4D               [ 1]  415 	tnz	a
+      0001ED 27 F6            [ 1]  416 	jreq	00104$
+                                    417 ;	user/nRF24L01.c: 94: return SPI_ReceiveData();
+      0001EF CCr00r00         [ 2]  418 	jp	_SPI_ReceiveData
+                                    419 ;	user/nRF24L01.c: 98: uint8_t nRF_Read(uint8_t RegAddr)
+                                    420 ;	-----------------------------------------
+                                    421 ;	 function nRF_Read
+                                    422 ;	-----------------------------------------
+      0001F2                        423 _nRF_Read:
+                                    424 ;	user/nRF24L01.c: 102: ClrCSN;	//CSN low, initialize SPI communication...					
+      0001F2 4B 20            [ 1]  425 	push	#0x20
+      0001F4 4B 14            [ 1]  426 	push	#0x14
+      0001F6 4B 50            [ 1]  427 	push	#0x50
+      0001F8 CDr00r00         [ 4]  428 	call	_GPIO_WriteLow
+      0001FB 5B 03            [ 2]  429 	addw	sp, #3
+                                    430 ;	user/nRF24L01.c: 103: nRF_spiTransfer(RegAddr);	// Select register to read	
+      0001FD 7B 03            [ 1]  431 	ld	a, (0x03, sp)
+      0001FF 88               [ 1]  432 	push	a
+      000200 CDr01rD4         [ 4]  433 	call	_nRF_spiTransfer
+      000203 84               [ 1]  434 	pop	a
+                                    435 ;	user/nRF24L01.c: 104: data = nRF_spiTransfer(0);  //read data
+      000204 4B 00            [ 1]  436 	push	#0x00
+      000206 CDr01rD4         [ 4]  437 	call	_nRF_spiTransfer
+      000209 5B 01            [ 2]  438 	addw	sp, #1
+                                    439 ;	user/nRF24L01.c: 105: SetCSN;   // CSN high, terminate SPI communication
+      00020B 88               [ 1]  440 	push	a
+      00020C 4B 20            [ 1]  441 	push	#0x20
+      00020E 4B 14            [ 1]  442 	push	#0x14
+      000210 4B 50            [ 1]  443 	push	#0x50
+      000212 CDr00r00         [ 4]  444 	call	_GPIO_WriteHigh
+      000215 5B 03            [ 2]  445 	addw	sp, #3
+      000217 84               [ 1]  446 	pop	a
+                                    447 ;	user/nRF24L01.c: 106: return(data); 
+      000218 81               [ 4]  448 	ret
+                                    449 ;	user/nRF24L01.c: 109: uint8_t nRF_Write_Reg(uint8_t RegAddr,uint8_t data)
+                                    450 ;	-----------------------------------------
+                                    451 ;	 function nRF_Write_Reg
+                                    452 ;	-----------------------------------------
+      000219                        453 _nRF_Write_Reg:
+      000219 88               [ 1]  454 	push	a
+                                    455 ;	user/nRF24L01.c: 113: ClrCSN; 
+      00021A 4B 20            [ 1]  456 	push	#0x20
+      00021C 4B 14            [ 1]  457 	push	#0x14
+      00021E 4B 50            [ 1]  458 	push	#0x50
+      000220 CDr00r00         [ 4]  459 	call	_GPIO_WriteLow
+      000223 5B 03            [ 2]  460 	addw	sp, #3
+                                    461 ;	user/nRF24L01.c: 114: status = nRF_spiTransfer(RegAddr);
+      000225 7B 04            [ 1]  462 	ld	a, (0x04, sp)
+      000227 88               [ 1]  463 	push	a
+      000228 CDr01rD4         [ 4]  464 	call	_nRF_spiTransfer
+      00022B 5B 01            [ 2]  465 	addw	sp, #1
+      00022D 6B 01            [ 1]  466 	ld	(0x01, sp), a
+                                    467 ;	user/nRF24L01.c: 115: nRF_spiTransfer(data);
+      00022F 7B 05            [ 1]  468 	ld	a, (0x05, sp)
+      000231 88               [ 1]  469 	push	a
+      000232 CDr01rD4         [ 4]  470 	call	_nRF_spiTransfer
+      000235 84               [ 1]  471 	pop	a
+                                    472 ;	user/nRF24L01.c: 116: SetCSN;
+      000236 4B 20            [ 1]  473 	push	#0x20
+      000238 4B 14            [ 1]  474 	push	#0x14
+      00023A 4B 50            [ 1]  475 	push	#0x50
+      00023C CDr00r00         [ 4]  476 	call	_GPIO_WriteHigh
+      00023F 5B 03            [ 2]  477 	addw	sp, #3
+                                    478 ;	user/nRF24L01.c: 117: return(status);
+      000241 7B 01            [ 1]  479 	ld	a, (0x01, sp)
+      000243 5B 01            [ 2]  480 	addw	sp, #1
+      000245 81               [ 4]  481 	ret
+                                    482 ;	user/nRF24L01.c: 120: uint8_t nRF_SPI_Read_Buf(uint8_t RegAddr, uint8_t *buff, uint8_t len)
+                                    483 ;	-----------------------------------------
+                                    484 ;	 function nRF_SPI_Read_Buf
+                                    485 ;	-----------------------------------------
+      000246                        486 _nRF_SPI_Read_Buf:
+      000246 89               [ 2]  487 	pushw	x
+                                    488 ;	user/nRF24L01.c: 123: ClrCSN;
+      000247 4B 20            [ 1]  489 	push	#0x20
+      000249 4B 14            [ 1]  490 	push	#0x14
+      00024B 4B 50            [ 1]  491 	push	#0x50
+      00024D CDr00r00         [ 4]  492 	call	_GPIO_WriteLow
+      000250 5B 03            [ 2]  493 	addw	sp, #3
+                                    494 ;	user/nRF24L01.c: 124: status = nRF_spiTransfer(RegAddr);
+      000252 7B 05            [ 1]  495 	ld	a, (0x05, sp)
+      000254 88               [ 1]  496 	push	a
+      000255 CDr01rD4         [ 4]  497 	call	_nRF_spiTransfer
+      000258 5B 01            [ 2]  498 	addw	sp, #1
+      00025A 6B 02            [ 1]  499 	ld	(0x02, sp), a
+                                    500 ;	user/nRF24L01.c: 125: for(i = 0; i < len; i++)
+      00025C 0F 01            [ 1]  501 	clr	(0x01, sp)
+      00025E                        502 00103$:
+      00025E 7B 01            [ 1]  503 	ld	a, (0x01, sp)
+      000260 11 08            [ 1]  504 	cp	a, (0x08, sp)
+      000262 24 15            [ 1]  505 	jrnc	00101$
+                                    506 ;	user/nRF24L01.c: 126: buff[i] = nRF_spiTransfer(0);
+      000264 5F               [ 1]  507 	clrw	x
+      000265 7B 01            [ 1]  508 	ld	a, (0x01, sp)
+      000267 97               [ 1]  509 	ld	xl, a
+      000268 72 FB 06         [ 2]  510 	addw	x, (0x06, sp)
+      00026B 89               [ 2]  511 	pushw	x
+      00026C 4B 00            [ 1]  512 	push	#0x00
+      00026E CDr01rD4         [ 4]  513 	call	_nRF_spiTransfer
+      000271 5B 01            [ 2]  514 	addw	sp, #1
+      000273 85               [ 2]  515 	popw	x
+      000274 F7               [ 1]  516 	ld	(x), a
+                                    517 ;	user/nRF24L01.c: 125: for(i = 0; i < len; i++)
+      000275 0C 01            [ 1]  518 	inc	(0x01, sp)
+      000277 20 E5            [ 2]  519 	jra	00103$
+      000279                        520 00101$:
+                                    521 ;	user/nRF24L01.c: 127: SetCSN;
+      000279 4B 20            [ 1]  522 	push	#0x20
+      00027B 4B 14            [ 1]  523 	push	#0x14
+      00027D 4B 50            [ 1]  524 	push	#0x50
+      00027F CDr00r00         [ 4]  525 	call	_GPIO_WriteHigh
+      000282 5B 03            [ 2]  526 	addw	sp, #3
+                                    527 ;	user/nRF24L01.c: 128: return(status);
+      000284 7B 02            [ 1]  528 	ld	a, (0x02, sp)
+      000286 85               [ 2]  529 	popw	x
+      000287 81               [ 4]  530 	ret
+                                    531 ;	user/nRF24L01.c: 131: uint8_t nRF_SPI_Write_Buf(uint8_t RegAddr, uint8_t *buff, uint8_t len)
+                                    532 ;	-----------------------------------------
+                                    533 ;	 function nRF_SPI_Write_Buf
+                                    534 ;	-----------------------------------------
+      000288                        535 _nRF_SPI_Write_Buf:
+      000288 89               [ 2]  536 	pushw	x
+                                    537 ;	user/nRF24L01.c: 134: ClrCSN;
+      000289 4B 20            [ 1]  538 	push	#0x20
+      00028B 4B 14            [ 1]  539 	push	#0x14
+      00028D 4B 50            [ 1]  540 	push	#0x50
+      00028F CDr00r00         [ 4]  541 	call	_GPIO_WriteLow
+      000292 5B 03            [ 2]  542 	addw	sp, #3
+                                    543 ;	user/nRF24L01.c: 135: status = nRF_spiTransfer(RegAddr);
+      000294 7B 05            [ 1]  544 	ld	a, (0x05, sp)
+      000296 88               [ 1]  545 	push	a
+      000297 CDr01rD4         [ 4]  546 	call	_nRF_spiTransfer
+      00029A 5B 01            [ 2]  547 	addw	sp, #1
+      00029C 6B 01            [ 1]  548 	ld	(0x01, sp), a
+                                    549 ;	user/nRF24L01.c: 136: for(i = 0; i < len; i++)
+      00029E 1E 06            [ 2]  550 	ldw	x, (0x06, sp)
+      0002A0 0F 02            [ 1]  551 	clr	(0x02, sp)
+      0002A2                        552 00103$:
+      0002A2 7B 02            [ 1]  553 	ld	a, (0x02, sp)
+      0002A4 11 08            [ 1]  554 	cp	a, (0x08, sp)
+      0002A6 24 0D            [ 1]  555 	jrnc	00101$
+                                    556 ;	user/nRF24L01.c: 138: nRF_spiTransfer(*buff);
+      0002A8 F6               [ 1]  557 	ld	a, (x)
+      0002A9 89               [ 2]  558 	pushw	x
+      0002AA 88               [ 1]  559 	push	a
+      0002AB CDr01rD4         [ 4]  560 	call	_nRF_spiTransfer
+      0002AE 84               [ 1]  561 	pop	a
+      0002AF 85               [ 2]  562 	popw	x
+                                    563 ;	user/nRF24L01.c: 139: buff++;
+      0002B0 5C               [ 2]  564 	incw	x
+                                    565 ;	user/nRF24L01.c: 136: for(i = 0; i < len; i++)
+      0002B1 0C 02            [ 1]  566 	inc	(0x02, sp)
+      0002B3 20 ED            [ 2]  567 	jra	00103$
+      0002B5                        568 00101$:
+                                    569 ;	user/nRF24L01.c: 141: SetCSN;
+      0002B5 4B 20            [ 1]  570 	push	#0x20
+      0002B7 4B 14            [ 1]  571 	push	#0x14
+      0002B9 4B 50            [ 1]  572 	push	#0x50
+      0002BB CDr00r00         [ 4]  573 	call	_GPIO_WriteHigh
+      0002BE 5B 03            [ 2]  574 	addw	sp, #3
+                                    575 ;	user/nRF24L01.c: 142: return(status);
+      0002C0 7B 01            [ 1]  576 	ld	a, (0x01, sp)
+      0002C2 85               [ 2]  577 	popw	x
+      0002C3 81               [ 4]  578 	ret
+                                    579 ;	user/nRF24L01.c: 145: void nRF_Set_RxMode(void)
+                                    580 ;	-----------------------------------------
+                                    581 ;	 function nRF_Set_RxMode
+                                    582 ;	-----------------------------------------
+      0002C4                        583 _nRF_Set_RxMode:
+                                    584 ;	user/nRF24L01.c: 148: ClrCE;
+      0002C4 4B 10            [ 1]  585 	push	#0x10
+      0002C6 4B 19            [ 1]  586 	push	#0x19
+      0002C8 4B 50            [ 1]  587 	push	#0x50
+      0002CA CDr00r00         [ 4]  588 	call	_GPIO_WriteLow
+      0002CD 5B 03            [ 2]  589 	addw	sp, #3
+                                    590 ;	user/nRF24L01.c: 149: status = nRF_Read(CONFIG);
+      0002CF 4B 00            [ 1]  591 	push	#0x00
+      0002D1 CDr01rF2         [ 4]  592 	call	_nRF_Read
+      0002D4 5B 01            [ 2]  593 	addw	sp, #1
+                                    594 ;	user/nRF24L01.c: 150: status = (status&0xFE)|PRIM_RX;
+      0002D6 A4 FE            [ 1]  595 	and	a, #0xfe
+      0002D8 AA 01            [ 1]  596 	or	a, #0x01
+                                    597 ;	user/nRF24L01.c: 151: nRF_Write_Reg(W_REGISTER + CONFIG, status);
+      0002DA 88               [ 1]  598 	push	a
+      0002DB 4B 20            [ 1]  599 	push	#0x20
+      0002DD CDr02r19         [ 4]  600 	call	_nRF_Write_Reg
+      0002E0 85               [ 2]  601 	popw	x
+                                    602 ;	user/nRF24L01.c: 152: SetCE;
+      0002E1 4B 10            [ 1]  603 	push	#0x10
+      0002E3 4B 19            [ 1]  604 	push	#0x19
+      0002E5 4B 50            [ 1]  605 	push	#0x50
+      0002E7 CDr00r00         [ 4]  606 	call	_GPIO_WriteHigh
+      0002EA 5B 03            [ 2]  607 	addw	sp, #3
+                                    608 ;	user/nRF24L01.c: 153: status = nRF_Read_Status();
+      0002EC CDr03r84         [ 4]  609 	call	_nRF_Read_Status
+                                    610 ;	user/nRF24L01.c: 154: nRF_Clear_Status(status|IRQ_RX_dataready); // Clear Data Ready RX FIFO interrupt
+      0002EF AA 40            [ 1]  611 	or	a, #0x40
+      0002F1 88               [ 1]  612 	push	a
+      0002F2 CDr03r7A         [ 4]  613 	call	_nRF_Clear_Status
+      0002F5 84               [ 1]  614 	pop	a
+                                    615 ;	user/nRF24L01.c: 155: nRF_Write_Reg(FLUSH_RX, 0x00); //Clear RX FIFO Buf
+      0002F6 4B 00            [ 1]  616 	push	#0x00
+      0002F8 4B E2            [ 1]  617 	push	#0xe2
+      0002FA CDr02r19         [ 4]  618 	call	_nRF_Write_Reg
+      0002FD 85               [ 2]  619 	popw	x
+      0002FE 81               [ 4]  620 	ret
+                                    621 ;	user/nRF24L01.c: 169: void nRF_Set_TxMode(void)
+                                    622 ;	-----------------------------------------
+                                    623 ;	 function nRF_Set_TxMode
+                                    624 ;	-----------------------------------------
+      0002FF                        625 _nRF_Set_TxMode:
+                                    626 ;	user/nRF24L01.c: 172: ClrCE;
+      0002FF 4B 10            [ 1]  627 	push	#0x10
+      000301 4B 19            [ 1]  628 	push	#0x19
+      000303 4B 50            [ 1]  629 	push	#0x50
+      000305 CDr00r00         [ 4]  630 	call	_GPIO_WriteLow
+      000308 5B 03            [ 2]  631 	addw	sp, #3
+                                    632 ;	user/nRF24L01.c: 173: nRF_delay(10);
+      00030A 4B 0A            [ 1]  633 	push	#0x0a
+      00030C 5F               [ 1]  634 	clrw	x
+      00030D 89               [ 2]  635 	pushw	x
+      00030E 4B 00            [ 1]  636 	push	#0x00
+      000310 CDr00r00         [ 4]  637 	call	_nRF_delay
+      000313 5B 04            [ 2]  638 	addw	sp, #4
+                                    639 ;	user/nRF24L01.c: 174: status = nRF_Read(CONFIG);
+      000315 4B 00            [ 1]  640 	push	#0x00
+      000317 CDr01rF2         [ 4]  641 	call	_nRF_Read
+      00031A 5B 01            [ 2]  642 	addw	sp, #1
+                                    643 ;	user/nRF24L01.c: 175: status = (status&0xFE)|PRIM_TX;
+      00031C A4 FE            [ 1]  644 	and	a, #0xfe
+                                    645 ;	user/nRF24L01.c: 176: nRF_Write_Reg(W_REGISTER + CONFIG, status);
+      00031E 88               [ 1]  646 	push	a
+      00031F 4B 20            [ 1]  647 	push	#0x20
+      000321 CDr02r19         [ 4]  648 	call	_nRF_Write_Reg
+      000324 85               [ 2]  649 	popw	x
+                                    650 ;	user/nRF24L01.c: 177: SetCE;
+      000325 4B 10            [ 1]  651 	push	#0x10
+      000327 4B 19            [ 1]  652 	push	#0x19
+      000329 4B 50            [ 1]  653 	push	#0x50
+      00032B CDr00r00         [ 4]  654 	call	_GPIO_WriteHigh
+      00032E 5B 03            [ 2]  655 	addw	sp, #3
+                                    656 ;	user/nRF24L01.c: 179: status = nRF_Read_Status();
+      000330 CDr03r84         [ 4]  657 	call	_nRF_Read_Status
+                                    658 ;	user/nRF24L01.c: 180: nRF_Clear_Status(status|IRQ_TX_datasent|IRQ_MAX_retransmit); // Clear Data Sent TX FIFO interrupt,Maximum number of TX retransmits interrupt
+      000333 AA 30            [ 1]  659 	or	a, #0x30
+      000335 88               [ 1]  660 	push	a
+      000336 CDr03r7A         [ 4]  661 	call	_nRF_Clear_Status
+      000339 84               [ 1]  662 	pop	a
+                                    663 ;	user/nRF24L01.c: 181: nRF_Write_Reg(FLUSH_TX, 0x00);					 				      // Clear TX FIFO Buf
+      00033A 4B 00            [ 1]  664 	push	#0x00
+      00033C 4B E1            [ 1]  665 	push	#0xe1
+      00033E CDr02r19         [ 4]  666 	call	_nRF_Write_Reg
+      000341 85               [ 2]  667 	popw	x
+      000342 81               [ 4]  668 	ret
+                                    669 ;	user/nRF24L01.c: 200: void nRF_Set_Channel(uint8_t channel)
+                                    670 ;	-----------------------------------------
+                                    671 ;	 function nRF_Set_Channel
+                                    672 ;	-----------------------------------------
+      000343                        673 _nRF_Set_Channel:
+                                    674 ;	user/nRF24L01.c: 202: if (channel > 127)
+      000343 7B 03            [ 1]  675 	ld	a, (0x03, sp)
+      000345 A1 7F            [ 1]  676 	cp	a, #0x7f
+      000347 23 04            [ 2]  677 	jrule	00102$
+                                    678 ;	user/nRF24L01.c: 203: channel = 127;
+      000349 A6 7F            [ 1]  679 	ld	a, #0x7f
+      00034B 6B 03            [ 1]  680 	ld	(0x03, sp), a
+      00034D                        681 00102$:
+                                    682 ;	user/nRF24L01.c: 204: nRF_Write_Reg(W_REGISTER + RF_CH, channel);
+      00034D 7B 03            [ 1]  683 	ld	a, (0x03, sp)
+      00034F 88               [ 1]  684 	push	a
+      000350 4B 25            [ 1]  685 	push	#0x25
+      000352 CDr02r19         [ 4]  686 	call	_nRF_Write_Reg
+      000355 85               [ 2]  687 	popw	x
+      000356 81               [ 4]  688 	ret
+                                    689 ;	user/nRF24L01.c: 207: void nRF_ClearSend(void)
+                                    690 ;	-----------------------------------------
+                                    691 ;	 function nRF_ClearSend
+                                    692 ;	-----------------------------------------
+      000357                        693 _nRF_ClearSend:
+                                    694 ;	user/nRF24L01.c: 209: nRF_Write_Reg(W_REGISTER + STATUS, 0XFF);
+      000357 4B FF            [ 1]  695 	push	#0xff
+      000359 4B 27            [ 1]  696 	push	#0x27
+      00035B CDr02r19         [ 4]  697 	call	_nRF_Write_Reg
+      00035E 85               [ 2]  698 	popw	x
+      00035F 81               [ 4]  699 	ret
+                                    700 ;	user/nRF24L01.c: 212: void nRF_Set_Tx_Addr(uint8_t *add)
+                                    701 ;	-----------------------------------------
+                                    702 ;	 function nRF_Set_Tx_Addr
+                                    703 ;	-----------------------------------------
+      000360                        704 _nRF_Set_Tx_Addr:
+                                    705 ;	user/nRF24L01.c: 214: nRF_SPI_Write_Buf(W_REGISTER + TX_ADDR, add, ADR_WIDTH);
+      000360 4B 05            [ 1]  706 	push	#0x05
+      000362 1E 04            [ 2]  707 	ldw	x, (0x04, sp)
+      000364 89               [ 2]  708 	pushw	x
+      000365 4B 30            [ 1]  709 	push	#0x30
+      000367 CDr02r88         [ 4]  710 	call	_nRF_SPI_Write_Buf
+      00036A 5B 04            [ 2]  711 	addw	sp, #4
+      00036C 81               [ 4]  712 	ret
+                                    713 ;	user/nRF24L01.c: 217: void nRF_Set_Rx_Addr(uint8_t *add)
+                                    714 ;	-----------------------------------------
+                                    715 ;	 function nRF_Set_Rx_Addr
+                                    716 ;	-----------------------------------------
+      00036D                        717 _nRF_Set_Rx_Addr:
+                                    718 ;	user/nRF24L01.c: 219: nRF_SPI_Write_Buf(W_REGISTER + RX_ADDR_P0, add, ADR_WIDTH);
+      00036D 4B 05            [ 1]  719 	push	#0x05
+      00036F 1E 04            [ 2]  720 	ldw	x, (0x04, sp)
+      000371 89               [ 2]  721 	pushw	x
+      000372 4B 2A            [ 1]  722 	push	#0x2a
+      000374 CDr02r88         [ 4]  723 	call	_nRF_SPI_Write_Buf
+      000377 5B 04            [ 2]  724 	addw	sp, #4
+      000379 81               [ 4]  725 	ret
+                                    726 ;	user/nRF24L01.c: 222: void nRF_Clear_Status(uint8_t clear)
+                                    727 ;	-----------------------------------------
+                                    728 ;	 function nRF_Clear_Status
+                                    729 ;	-----------------------------------------
+      00037A                        730 _nRF_Clear_Status:
+                                    731 ;	user/nRF24L01.c: 224: nRF_Write_Reg(W_REGISTER + STATUS, clear);
+      00037A 7B 03            [ 1]  732 	ld	a, (0x03, sp)
+      00037C 88               [ 1]  733 	push	a
+      00037D 4B 27            [ 1]  734 	push	#0x27
+      00037F CDr02r19         [ 4]  735 	call	_nRF_Write_Reg
+      000382 85               [ 2]  736 	popw	x
+      000383 81               [ 4]  737 	ret
+                                    738 ;	user/nRF24L01.c: 227: uint8_t nRF_Read_Status(void)
+                                    739 ;	-----------------------------------------
+                                    740 ;	 function nRF_Read_Status
+                                    741 ;	-----------------------------------------
+      000384                        742 _nRF_Read_Status:
+                                    743 ;	user/nRF24L01.c: 230: status = nRF_Read(STATUS);
+      000384 4B 07            [ 1]  744 	push	#0x07
+      000386 CDr01rF2         [ 4]  745 	call	_nRF_Read
+      000389 5B 01            [ 2]  746 	addw	sp, #1
+                                    747 ;	user/nRF24L01.c: 231: return status;
+      00038B 81               [ 4]  748 	ret
+                                    749 ;	user/nRF24L01.c: 234: uint8_t nRF_Read_Lost_Packet(void)
+                                    750 ;	-----------------------------------------
+                                    751 ;	 function nRF_Read_Lost_Packet
+                                    752 ;	-----------------------------------------
+      00038C                        753 _nRF_Read_Lost_Packet:
+                                    754 ;	user/nRF24L01.c: 237: status = nRF_Read(OBSERVE_TX);
+      00038C 4B 08            [ 1]  755 	push	#0x08
+      00038E CDr01rF2         [ 4]  756 	call	_nRF_Read
+      000391 5B 01            [ 2]  757 	addw	sp, #1
+                                    758 ;	user/nRF24L01.c: 238: return((status&0xF0)>>4);
+      000393 A4 F0            [ 1]  759 	and	a, #0xf0
+      000395 4E               [ 1]  760 	swap	a
+      000396 A4 0F            [ 1]  761 	and	a, #0x0f
+      000398 81               [ 4]  762 	ret
+                                    763 ;	user/nRF24L01.c: 241: uint8_t nRF_Read_Power_Detector(void)
+                                    764 ;	-----------------------------------------
+                                    765 ;	 function nRF_Read_Power_Detector
+                                    766 ;	-----------------------------------------
+      000399                        767 _nRF_Read_Power_Detector:
+                                    768 ;	user/nRF24L01.c: 244: status = nRF_Read(STATUS);
+      000399 4B 07            [ 1]  769 	push	#0x07
+      00039B CDr01rF2         [ 4]  770 	call	_nRF_Read
+      00039E 5B 01            [ 2]  771 	addw	sp, #1
+                                    772 ;	user/nRF24L01.c: 245: return status;
+      0003A0 81               [ 4]  773 	ret
+                                    774 ;	user/nRF24L01.c: 248: uint8_t nRF_Read_Retransmitted_Packet(void)
+                                    775 ;	-----------------------------------------
+                                    776 ;	 function nRF_Read_Retransmitted_Packet
+                                    777 ;	-----------------------------------------
+      0003A1                        778 _nRF_Read_Retransmitted_Packet:
+                                    779 ;	user/nRF24L01.c: 251: status = nRF_Read(OBSERVE_TX);
+      0003A1 4B 08            [ 1]  780 	push	#0x08
+      0003A3 CDr01rF2         [ 4]  781 	call	_nRF_Read
+      0003A6 5B 01            [ 2]  782 	addw	sp, #1
+                                    783 ;	user/nRF24L01.c: 252: return (status&0x0F); 
+      0003A8 A4 0F            [ 1]  784 	and	a, #0x0f
+      0003AA 81               [ 4]  785 	ret
+                                    786 ;	user/nRF24L01.c: 255: uint8_t nRF_RxPacket(uint8_t *rxbuf)
+                                    787 ;	-----------------------------------------
+                                    788 ;	 function nRF_RxPacket
+                                    789 ;	-----------------------------------------
+      0003AB                        790 _nRF_RxPacket:
+                                    791 ;	user/nRF24L01.c: 258: flag = nRF_Read_Status();
+      0003AB CDr03r84         [ 4]  792 	call	_nRF_Read_Status
+                                    793 ;	user/nRF24L01.c: 259: if(flag & IRQ_RX_dataready) //Data Ready RX FIFO interrupt
+      0003AE A5 40            [ 1]  794 	bcp	a, #0x40
+      0003B0 27 21            [ 1]  795 	jreq	00102$
+                                    796 ;	user/nRF24L01.c: 261: nRF_Clear_Status(flag); // Write 1 to clear bit IRQ_RX_dataready
+      0003B2 88               [ 1]  797 	push	a
+      0003B3 88               [ 1]  798 	push	a
+      0003B4 CDr03r7A         [ 4]  799 	call	_nRF_Clear_Status
+      0003B7 84               [ 1]  800 	pop	a
+      0003B8 84               [ 1]  801 	pop	a
+                                    802 ;	user/nRF24L01.c: 262: nRF_SPI_Read_Buf(R_RX_PAYLOAD, rxbuf, RX_PLOAD_WIDTH); //read receive payload from RX_FIFO buffer
+      0003B9 88               [ 1]  803 	push	a
+      0003BA 4B 20            [ 1]  804 	push	#0x20
+      0003BC 1E 05            [ 2]  805 	ldw	x, (0x05, sp)
+      0003BE 89               [ 2]  806 	pushw	x
+      0003BF 4B 61            [ 1]  807 	push	#0x61
+      0003C1 CDr02r46         [ 4]  808 	call	_nRF_SPI_Read_Buf
+      0003C4 5B 04            [ 2]  809 	addw	sp, #4
+      0003C6 4B 00            [ 1]  810 	push	#0x00
+      0003C8 4B E2            [ 1]  811 	push	#0xe2
+      0003CA CDr02r19         [ 4]  812 	call	_nRF_Write_Reg
+      0003CD 85               [ 2]  813 	popw	x
+      0003CE 84               [ 1]  814 	pop	a
+                                    815 ;	user/nRF24L01.c: 264: return (flag&0x0E)>>1; //return pipe
+      0003CF A4 0E            [ 1]  816 	and	a, #0x0e
+      0003D1 44               [ 1]  817 	srl	a
+      0003D2 81               [ 4]  818 	ret
+      0003D3                        819 00102$:
+                                    820 ;	user/nRF24L01.c: 266: return 0x07;
+      0003D3 A6 07            [ 1]  821 	ld	a, #0x07
+      0003D5 81               [ 4]  822 	ret
+                                    823 ;	user/nRF24L01.c: 269: void nRF_TxPacket(uint8_t *txbuf)
+                                    824 ;	-----------------------------------------
+                                    825 ;	 function nRF_TxPacket
+                                    826 ;	-----------------------------------------
+      0003D6                        827 _nRF_TxPacket:
+                                    828 ;	user/nRF24L01.c: 272: status = nRF_Read_Status(); // read register STATUS's value
+      0003D6 CDr03r84         [ 4]  829 	call	_nRF_Read_Status
+                                    830 ;	user/nRF24L01.c: 273: Fifo = nRF_Read(FIFO_STATUS);
+      0003D9 88               [ 1]  831 	push	a
+      0003DA 4B 17            [ 1]  832 	push	#0x17
+      0003DC CDr01rF2         [ 4]  833 	call	_nRF_Read
+      0003DF 5B 01            [ 2]  834 	addw	sp, #1
+      0003E1 97               [ 1]  835 	ld	xl, a
+      0003E2 84               [ 1]  836 	pop	a
+                                    837 ;	user/nRF24L01.c: 274: if((status&IRQ_TX_datasent)||(status&IRQ_MAX_retransmit)||(Fifo&TX_EMPTY))
+      0003E3 A5 20            [ 1]  838 	bcp	a, #0x20
+      0003E5 26 0C            [ 1]  839 	jrne	00101$
+      0003E7 A5 10            [ 1]  840 	bcp	a, #0x10
+      0003E9 26 08            [ 1]  841 	jrne	00101$
+      0003EB 88               [ 1]  842 	push	a
+      0003EC 9F               [ 1]  843 	ld	a, xl
+      0003ED A5 10            [ 1]  844 	bcp	a, #0x10
+      0003EF 84               [ 1]  845 	pop	a
+      0003F0 26 01            [ 1]  846 	jrne	00117$
+      0003F2 81               [ 4]  847 	ret
+      0003F3                        848 00117$:
+      0003F3                        849 00101$:
+                                    850 ;	user/nRF24L01.c: 276: nRF_Clear_Status(status);
+      0003F3 88               [ 1]  851 	push	a
+      0003F4 CDr03r7A         [ 4]  852 	call	_nRF_Clear_Status
+      0003F7 84               [ 1]  853 	pop	a
+                                    854 ;	user/nRF24L01.c: 277: nRF_Write_Reg(FLUSH_TX, 0x00);
+      0003F8 4B 00            [ 1]  855 	push	#0x00
+      0003FA 4B E1            [ 1]  856 	push	#0xe1
+      0003FC CDr02r19         [ 4]  857 	call	_nRF_Write_Reg
+      0003FF 85               [ 2]  858 	popw	x
+                                    859 ;	user/nRF24L01.c: 278: nRF_SPI_Write_Buf(W_TX_PAYLOAD, txbuf, TX_PLOAD_WIDTH);	
+      000400 4B 20            [ 1]  860 	push	#0x20
+      000402 1E 04            [ 2]  861 	ldw	x, (0x04, sp)
+      000404 89               [ 2]  862 	pushw	x
+      000405 4B A0            [ 1]  863 	push	#0xa0
+      000407 CDr02r88         [ 4]  864 	call	_nRF_SPI_Write_Buf
+      00040A 5B 04            [ 2]  865 	addw	sp, #4
+      00040C 81               [ 4]  866 	ret
+                                    867 ;	user/nRF24L01.c: 287: void nRF_Debug(void)
+                                    868 ;	-----------------------------------------
+                                    869 ;	 function nRF_Debug
+                                    870 ;	-----------------------------------------
+      00040D                        871 _nRF_Debug:
+      00040D 52 97            [ 2]  872 	sub	sp, #151
+                                    873 ;	user/nRF24L01.c: 292: status = nRF_Read(CONFIG);
+      00040F 4B 00            [ 1]  874 	push	#0x00
+      000411 CDr01rF2         [ 4]  875 	call	_nRF_Read
+      000414 5B 01            [ 2]  876 	addw	sp, #1
+                                    877 ;	user/nRF24L01.c: 293: sprintf(buff_usart,"CONFIG: %2x\r\n",status);
+      000416 0F 7C            [ 1]  878 	clr	(0x7c, sp)
+      000418 AEr08r61         [ 2]  879 	ldw	x, #___str_0+0
+      00041B 1F 94            [ 2]  880 	ldw	(0x94, sp), x
+      00041D 96               [ 1]  881 	ldw	x, sp
+      00041E 1C 00 06         [ 2]  882 	addw	x, #6
+      000421 1F 8E            [ 2]  883 	ldw	(0x8e, sp), x
+      000423 1E 8E            [ 2]  884 	ldw	x, (0x8e, sp)
+      000425 88               [ 1]  885 	push	a
+      000426 7B 7D            [ 1]  886 	ld	a, (0x7d, sp)
+      000428 88               [ 1]  887 	push	a
+      000429 16 96            [ 2]  888 	ldw	y, (0x96, sp)
+      00042B 90 89            [ 2]  889 	pushw	y
+      00042D 89               [ 2]  890 	pushw	x
+      00042E CDr00r00         [ 4]  891 	call	_sprintf
+      000431 5B 06            [ 2]  892 	addw	sp, #6
+                                    893 ;	user/nRF24L01.c: 294: VCOM_puts(buff_usart);
+      000433 1E 8E            [ 2]  894 	ldw	x, (0x8e, sp)
+      000435 89               [ 2]  895 	pushw	x
+      000436 CDr00r00         [ 4]  896 	call	_VCOM_puts
+      000439 85               [ 2]  897 	popw	x
+                                    898 ;	user/nRF24L01.c: 295: status = nRF_Read(EN_AA);
+      00043A 4B 01            [ 1]  899 	push	#0x01
+      00043C CDr01rF2         [ 4]  900 	call	_nRF_Read
+      00043F 5B 01            [ 2]  901 	addw	sp, #1
+                                    902 ;	user/nRF24L01.c: 296: sprintf(buff_usart,"EN_AA: %2x\r\n",status);
+      000441 5F               [ 1]  903 	clrw	x
+      000442 97               [ 1]  904 	ld	xl, a
+      000443 90 AEr08r6F      [ 2]  905 	ldw	y, #___str_1+0
+      000447 17 8C            [ 2]  906 	ldw	(0x8c, sp), y
+      000449 16 8E            [ 2]  907 	ldw	y, (0x8e, sp)
+      00044B 89               [ 2]  908 	pushw	x
+      00044C 1E 8E            [ 2]  909 	ldw	x, (0x8e, sp)
+      00044E 89               [ 2]  910 	pushw	x
+      00044F 90 89            [ 2]  911 	pushw	y
+      000451 CDr00r00         [ 4]  912 	call	_sprintf
+      000454 5B 06            [ 2]  913 	addw	sp, #6
+                                    914 ;	user/nRF24L01.c: 297: VCOM_puts(buff_usart);
+      000456 1E 8E            [ 2]  915 	ldw	x, (0x8e, sp)
+      000458 89               [ 2]  916 	pushw	x
+      000459 CDr00r00         [ 4]  917 	call	_VCOM_puts
+      00045C 85               [ 2]  918 	popw	x
+                                    919 ;	user/nRF24L01.c: 298: status = nRF_Read(EN_RXADDR);
+      00045D 4B 02            [ 1]  920 	push	#0x02
+      00045F CDr01rF2         [ 4]  921 	call	_nRF_Read
+      000462 5B 01            [ 2]  922 	addw	sp, #1
+                                    923 ;	user/nRF24L01.c: 299: sprintf(buff_usart,"EN_RXADDR: %2x\r\n",status);
+      000464 5F               [ 1]  924 	clrw	x
+      000465 97               [ 1]  925 	ld	xl, a
+      000466 90 AEr08r7C      [ 2]  926 	ldw	y, #___str_2+0
+      00046A 17 82            [ 2]  927 	ldw	(0x82, sp), y
+      00046C 16 8E            [ 2]  928 	ldw	y, (0x8e, sp)
+      00046E 89               [ 2]  929 	pushw	x
+      00046F 1E 84            [ 2]  930 	ldw	x, (0x84, sp)
+      000471 89               [ 2]  931 	pushw	x
+      000472 90 89            [ 2]  932 	pushw	y
+      000474 CDr00r00         [ 4]  933 	call	_sprintf
+      000477 5B 06            [ 2]  934 	addw	sp, #6
+                                    935 ;	user/nRF24L01.c: 300: VCOM_puts(buff_usart);
+      000479 1E 8E            [ 2]  936 	ldw	x, (0x8e, sp)
+      00047B 89               [ 2]  937 	pushw	x
+      00047C CDr00r00         [ 4]  938 	call	_VCOM_puts
+      00047F 85               [ 2]  939 	popw	x
+                                    940 ;	user/nRF24L01.c: 301: status = nRF_Read(SETUP_AW);
+      000480 4B 03            [ 1]  941 	push	#0x03
+      000482 CDr01rF2         [ 4]  942 	call	_nRF_Read
+      000485 5B 01            [ 2]  943 	addw	sp, #1
+                                    944 ;	user/nRF24L01.c: 302: sprintf(buff_usart,"SETUP_AW: %2x\r\n",status);
+      000487 5F               [ 1]  945 	clrw	x
+      000488 97               [ 1]  946 	ld	xl, a
+      000489 90 AEr08r8D      [ 2]  947 	ldw	y, #___str_3+0
+      00048D 17 96            [ 2]  948 	ldw	(0x96, sp), y
+      00048F 16 8E            [ 2]  949 	ldw	y, (0x8e, sp)
+      000491 89               [ 2]  950 	pushw	x
+      000492 1E 98            [ 2]  951 	ldw	x, (0x98, sp)
+      000494 89               [ 2]  952 	pushw	x
+      000495 90 89            [ 2]  953 	pushw	y
+      000497 CDr00r00         [ 4]  954 	call	_sprintf
+      00049A 5B 06            [ 2]  955 	addw	sp, #6
+                                    956 ;	user/nRF24L01.c: 303: VCOM_puts(buff_usart);
+      00049C 1E 8E            [ 2]  957 	ldw	x, (0x8e, sp)
+      00049E 89               [ 2]  958 	pushw	x
+      00049F CDr00r00         [ 4]  959 	call	_VCOM_puts
+      0004A2 85               [ 2]  960 	popw	x
+                                    961 ;	user/nRF24L01.c: 304: status = nRF_Read(SETUP_RETR);
+      0004A3 4B 04            [ 1]  962 	push	#0x04
+      0004A5 CDr01rF2         [ 4]  963 	call	_nRF_Read
+      0004A8 5B 01            [ 2]  964 	addw	sp, #1
+                                    965 ;	user/nRF24L01.c: 305: sprintf(buff_usart,"SETUP_RETR: %2x\r\n",status);
+      0004AA 5F               [ 1]  966 	clrw	x
+      0004AB 97               [ 1]  967 	ld	xl, a
+      0004AC 90 AEr08r9D      [ 2]  968 	ldw	y, #___str_4+0
+      0004B0 17 80            [ 2]  969 	ldw	(0x80, sp), y
+      0004B2 16 8E            [ 2]  970 	ldw	y, (0x8e, sp)
+      0004B4 89               [ 2]  971 	pushw	x
+      0004B5 1E 82            [ 2]  972 	ldw	x, (0x82, sp)
+      0004B7 89               [ 2]  973 	pushw	x
+      0004B8 90 89            [ 2]  974 	pushw	y
+      0004BA CDr00r00         [ 4]  975 	call	_sprintf
+      0004BD 5B 06            [ 2]  976 	addw	sp, #6
+                                    977 ;	user/nRF24L01.c: 306: VCOM_puts(buff_usart);
+      0004BF 1E 8E            [ 2]  978 	ldw	x, (0x8e, sp)
+      0004C1 89               [ 2]  979 	pushw	x
+      0004C2 CDr00r00         [ 4]  980 	call	_VCOM_puts
+      0004C5 85               [ 2]  981 	popw	x
+                                    982 ;	user/nRF24L01.c: 307: status = nRF_Read(RF_CH);
+      0004C6 4B 05            [ 1]  983 	push	#0x05
+      0004C8 CDr01rF2         [ 4]  984 	call	_nRF_Read
+      0004CB 5B 01            [ 2]  985 	addw	sp, #1
+                                    986 ;	user/nRF24L01.c: 308: sprintf(buff_usart,"RF_CH: %2x\r\n",status);
+      0004CD 5F               [ 1]  987 	clrw	x
+      0004CE 97               [ 1]  988 	ld	xl, a
+      0004CF 90 AEr08rAF      [ 2]  989 	ldw	y, #___str_5+0
+      0004D3 17 7A            [ 2]  990 	ldw	(0x7a, sp), y
+      0004D5 16 8E            [ 2]  991 	ldw	y, (0x8e, sp)
+      0004D7 89               [ 2]  992 	pushw	x
+      0004D8 1E 7C            [ 2]  993 	ldw	x, (0x7c, sp)
+      0004DA 89               [ 2]  994 	pushw	x
+      0004DB 90 89            [ 2]  995 	pushw	y
+      0004DD CDr00r00         [ 4]  996 	call	_sprintf
+      0004E0 5B 06            [ 2]  997 	addw	sp, #6
+                                    998 ;	user/nRF24L01.c: 309: VCOM_puts(buff_usart);
+      0004E2 1E 8E            [ 2]  999 	ldw	x, (0x8e, sp)
+      0004E4 89               [ 2] 1000 	pushw	x
+      0004E5 CDr00r00         [ 4] 1001 	call	_VCOM_puts
+      0004E8 85               [ 2] 1002 	popw	x
+                                   1003 ;	user/nRF24L01.c: 310: status = nRF_Read(RF_SETUP);
+      0004E9 4B 06            [ 1] 1004 	push	#0x06
+      0004EB CDr01rF2         [ 4] 1005 	call	_nRF_Read
+      0004EE 5B 01            [ 2] 1006 	addw	sp, #1
+                                   1007 ;	user/nRF24L01.c: 311: sprintf(buff_usart,"RF_SETUP: %2x\r\n",status);
+      0004F0 5F               [ 1] 1008 	clrw	x
+      0004F1 97               [ 1] 1009 	ld	xl, a
+      0004F2 90 AEr08rBC      [ 2] 1010 	ldw	y, #___str_6+0
+      0004F6 17 78            [ 2] 1011 	ldw	(0x78, sp), y
+      0004F8 16 8E            [ 2] 1012 	ldw	y, (0x8e, sp)
+      0004FA 89               [ 2] 1013 	pushw	x
+      0004FB 1E 7A            [ 2] 1014 	ldw	x, (0x7a, sp)
+      0004FD 89               [ 2] 1015 	pushw	x
+      0004FE 90 89            [ 2] 1016 	pushw	y
+      000500 CDr00r00         [ 4] 1017 	call	_sprintf
+      000503 5B 06            [ 2] 1018 	addw	sp, #6
+                                   1019 ;	user/nRF24L01.c: 312: VCOM_puts(buff_usart);
+      000505 1E 8E            [ 2] 1020 	ldw	x, (0x8e, sp)
+      000507 89               [ 2] 1021 	pushw	x
+      000508 CDr00r00         [ 4] 1022 	call	_VCOM_puts
+      00050B 85               [ 2] 1023 	popw	x
+                                   1024 ;	user/nRF24L01.c: 313: status = nRF_Read(STATUS);
+      00050C 4B 07            [ 1] 1025 	push	#0x07
+      00050E CDr01rF2         [ 4] 1026 	call	_nRF_Read
+      000511 5B 01            [ 2] 1027 	addw	sp, #1
+                                   1028 ;	user/nRF24L01.c: 314: sprintf(buff_usart,"STATUS: %2x\r\n",status);
+      000513 5F               [ 1] 1029 	clrw	x
+      000514 97               [ 1] 1030 	ld	xl, a
+      000515 90 AEr08rCC      [ 2] 1031 	ldw	y, #___str_7+0
+      000519 17 86            [ 2] 1032 	ldw	(0x86, sp), y
+      00051B 16 8E            [ 2] 1033 	ldw	y, (0x8e, sp)
+      00051D 89               [ 2] 1034 	pushw	x
+      00051E 1E 88            [ 2] 1035 	ldw	x, (0x88, sp)
+      000520 89               [ 2] 1036 	pushw	x
+      000521 90 89            [ 2] 1037 	pushw	y
+      000523 CDr00r00         [ 4] 1038 	call	_sprintf
+      000526 5B 06            [ 2] 1039 	addw	sp, #6
+                                   1040 ;	user/nRF24L01.c: 315: VCOM_puts(buff_usart);
+      000528 1E 8E            [ 2] 1041 	ldw	x, (0x8e, sp)
+      00052A 89               [ 2] 1042 	pushw	x
+      00052B CDr00r00         [ 4] 1043 	call	_VCOM_puts
+      00052E 85               [ 2] 1044 	popw	x
+                                   1045 ;	user/nRF24L01.c: 316: status = nRF_Read(OBSERVE_TX);
+      00052F 4B 08            [ 1] 1046 	push	#0x08
+      000531 CDr01rF2         [ 4] 1047 	call	_nRF_Read
+      000534 5B 01            [ 2] 1048 	addw	sp, #1
+                                   1049 ;	user/nRF24L01.c: 317: sprintf(buff_usart,"OBSERVE_TX: %2x\r\n",status);
+      000536 5F               [ 1] 1050 	clrw	x
+      000537 97               [ 1] 1051 	ld	xl, a
+      000538 90 AEr08rDA      [ 2] 1052 	ldw	y, #___str_8+0
+      00053C 17 7E            [ 2] 1053 	ldw	(0x7e, sp), y
+      00053E 16 8E            [ 2] 1054 	ldw	y, (0x8e, sp)
+      000540 89               [ 2] 1055 	pushw	x
+      000541 1E 80            [ 2] 1056 	ldw	x, (0x80, sp)
+      000543 89               [ 2] 1057 	pushw	x
+      000544 90 89            [ 2] 1058 	pushw	y
+      000546 CDr00r00         [ 4] 1059 	call	_sprintf
+      000549 5B 06            [ 2] 1060 	addw	sp, #6
+                                   1061 ;	user/nRF24L01.c: 318: VCOM_puts(buff_usart);
+      00054B 1E 8E            [ 2] 1062 	ldw	x, (0x8e, sp)
+      00054D 89               [ 2] 1063 	pushw	x
+      00054E CDr00r00         [ 4] 1064 	call	_VCOM_puts
+      000551 85               [ 2] 1065 	popw	x
+                                   1066 ;	user/nRF24L01.c: 319: status = nRF_Read(CD);
+      000552 4B 09            [ 1] 1067 	push	#0x09
+      000554 CDr01rF2         [ 4] 1068 	call	_nRF_Read
+      000557 5B 01            [ 2] 1069 	addw	sp, #1
+                                   1070 ;	user/nRF24L01.c: 320: sprintf(buff_usart,"CD: %2x\r\n",status);
+      000559 5F               [ 1] 1071 	clrw	x
+      00055A 97               [ 1] 1072 	ld	xl, a
+      00055B 90 AEr08rEC      [ 2] 1073 	ldw	y, #___str_9+0
+      00055F 17 76            [ 2] 1074 	ldw	(0x76, sp), y
+      000561 16 8E            [ 2] 1075 	ldw	y, (0x8e, sp)
+      000563 89               [ 2] 1076 	pushw	x
+      000564 1E 78            [ 2] 1077 	ldw	x, (0x78, sp)
+      000566 89               [ 2] 1078 	pushw	x
+      000567 90 89            [ 2] 1079 	pushw	y
+      000569 CDr00r00         [ 4] 1080 	call	_sprintf
+      00056C 5B 06            [ 2] 1081 	addw	sp, #6
+                                   1082 ;	user/nRF24L01.c: 321: VCOM_puts(buff_usart);
+      00056E 1E 8E            [ 2] 1083 	ldw	x, (0x8e, sp)
+      000570 89               [ 2] 1084 	pushw	x
+      000571 CDr00r00         [ 4] 1085 	call	_VCOM_puts
+      000574 85               [ 2] 1086 	popw	x
+                                   1087 ;	user/nRF24L01.c: 322: nRF_SPI_Read_Buf(RX_ADDR_P0,buff,5);
+      000575 96               [ 1] 1088 	ldw	x, sp
+      000576 5C               [ 2] 1089 	incw	x
+      000577 1F 74            [ 2] 1090 	ldw	(0x74, sp), x
+      000579 1E 74            [ 2] 1091 	ldw	x, (0x74, sp)
+      00057B 4B 05            [ 1] 1092 	push	#0x05
+      00057D 89               [ 2] 1093 	pushw	x
+      00057E 4B 0A            [ 1] 1094 	push	#0x0a
+      000580 CDr02r46         [ 4] 1095 	call	_nRF_SPI_Read_Buf
+      000583 5B 04            [ 2] 1096 	addw	sp, #4
+                                   1097 ;	user/nRF24L01.c: 323: sprintf(buff_usart,"RX_ADDR_P0: %2x%2x%2x%2x%2x\r\n",buff[0],buff[1],buff[2],buff[3],buff[4]);
+      000585 1E 74            [ 2] 1098 	ldw	x, (0x74, sp)
+      000587 1C 00 04         [ 2] 1099 	addw	x, #0x0004
+      00058A 1F 8A            [ 2] 1100 	ldw	(0x8a, sp), x
+      00058C 1E 8A            [ 2] 1101 	ldw	x, (0x8a, sp)
+      00058E F6               [ 1] 1102 	ld	a, (x)
+      00058F 6B 85            [ 1] 1103 	ld	(0x85, sp), a
+      000591 0F 84            [ 1] 1104 	clr	(0x84, sp)
+      000593 1E 74            [ 2] 1105 	ldw	x, (0x74, sp)
+      000595 1C 00 03         [ 2] 1106 	addw	x, #0x0003
+      000598 1F 72            [ 2] 1107 	ldw	(0x72, sp), x
+      00059A 1E 72            [ 2] 1108 	ldw	x, (0x72, sp)
+      00059C F6               [ 1] 1109 	ld	a, (x)
+      00059D 5F               [ 1] 1110 	clrw	x
+      00059E 97               [ 1] 1111 	ld	xl, a
+      00059F 16 74            [ 2] 1112 	ldw	y, (0x74, sp)
+      0005A1 90 5C            [ 2] 1113 	incw	y
+      0005A3 90 5C            [ 2] 1114 	incw	y
+      0005A5 17 92            [ 2] 1115 	ldw	(0x92, sp), y
+      0005A7 16 92            [ 2] 1116 	ldw	y, (0x92, sp)
+      0005A9 90 F6            [ 1] 1117 	ld	a, (y)
+      0005AB 6B 91            [ 1] 1118 	ld	(0x91, sp), a
+      0005AD 0F 90            [ 1] 1119 	clr	(0x90, sp)
+      0005AF 16 74            [ 2] 1120 	ldw	y, (0x74, sp)
+      0005B1 90 5C            [ 2] 1121 	incw	y
+      0005B3 17 88            [ 2] 1122 	ldw	(0x88, sp), y
+      0005B5 16 88            [ 2] 1123 	ldw	y, (0x88, sp)
+      0005B7 90 F6            [ 1] 1124 	ld	a, (y)
+      0005B9 6B 5D            [ 1] 1125 	ld	(0x5d, sp), a
+      0005BB 0F 5C            [ 1] 1126 	clr	(0x5c, sp)
+      0005BD 16 74            [ 2] 1127 	ldw	y, (0x74, sp)
+      0005BF 90 F6            [ 1] 1128 	ld	a, (y)
+      0005C1 0F 50            [ 1] 1129 	clr	(0x50, sp)
+      0005C3 90 AEr08rF6      [ 2] 1130 	ldw	y, #___str_10+0
+      0005C7 17 4C            [ 2] 1131 	ldw	(0x4c, sp), y
+      0005C9 16 8E            [ 2] 1132 	ldw	y, (0x8e, sp)
+      0005CB 17 4E            [ 2] 1133 	ldw	(0x4e, sp), y
+      0005CD 16 84            [ 2] 1134 	ldw	y, (0x84, sp)
+      0005CF 90 89            [ 2] 1135 	pushw	y
+      0005D1 89               [ 2] 1136 	pushw	x
+      0005D2 1E 94            [ 2] 1137 	ldw	x, (0x94, sp)
+      0005D4 89               [ 2] 1138 	pushw	x
+      0005D5 1E 62            [ 2] 1139 	ldw	x, (0x62, sp)
+      0005D7 89               [ 2] 1140 	pushw	x
+      0005D8 88               [ 1] 1141 	push	a
+      0005D9 7B 59            [ 1] 1142 	ld	a, (0x59, sp)
+      0005DB 88               [ 1] 1143 	push	a
+      0005DC 1E 56            [ 2] 1144 	ldw	x, (0x56, sp)
+      0005DE 89               [ 2] 1145 	pushw	x
+      0005DF 1E 5A            [ 2] 1146 	ldw	x, (0x5a, sp)
+      0005E1 89               [ 2] 1147 	pushw	x
+      0005E2 CDr00r00         [ 4] 1148 	call	_sprintf
+      0005E5 5B 0E            [ 2] 1149 	addw	sp, #14
+                                   1150 ;	user/nRF24L01.c: 324: VCOM_puts(buff_usart);
+      0005E7 1E 8E            [ 2] 1151 	ldw	x, (0x8e, sp)
+      0005E9 89               [ 2] 1152 	pushw	x
+      0005EA CDr00r00         [ 4] 1153 	call	_VCOM_puts
+      0005ED 85               [ 2] 1154 	popw	x
+                                   1155 ;	user/nRF24L01.c: 325: nRF_SPI_Read_Buf(RX_ADDR_P1,buff,5);
+      0005EE 1E 74            [ 2] 1156 	ldw	x, (0x74, sp)
+      0005F0 4B 05            [ 1] 1157 	push	#0x05
+      0005F2 89               [ 2] 1158 	pushw	x
+      0005F3 4B 0B            [ 1] 1159 	push	#0x0b
+      0005F5 CDr02r46         [ 4] 1160 	call	_nRF_SPI_Read_Buf
+      0005F8 5B 04            [ 2] 1161 	addw	sp, #4
+                                   1162 ;	user/nRF24L01.c: 326: sprintf(buff_usart,"RX_ADDR_P1: %2x%2x%2x%2x%2x\r\n",buff[0],buff[1],buff[2],buff[3],buff[4]);
+      0005FA 1E 8A            [ 2] 1163 	ldw	x, (0x8a, sp)
+      0005FC F6               [ 1] 1164 	ld	a, (x)
+      0005FD 6B 71            [ 1] 1165 	ld	(0x71, sp), a
+      0005FF 0F 70            [ 1] 1166 	clr	(0x70, sp)
+      000601 1E 72            [ 2] 1167 	ldw	x, (0x72, sp)
+      000603 F6               [ 1] 1168 	ld	a, (x)
+      000604 6B 59            [ 1] 1169 	ld	(0x59, sp), a
+      000606 0F 58            [ 1] 1170 	clr	(0x58, sp)
+      000608 1E 92            [ 2] 1171 	ldw	x, (0x92, sp)
+      00060A F6               [ 1] 1172 	ld	a, (x)
+      00060B 6B 67            [ 1] 1173 	ld	(0x67, sp), a
+      00060D 0F 66            [ 1] 1174 	clr	(0x66, sp)
+      00060F 1E 88            [ 2] 1175 	ldw	x, (0x88, sp)
+      000611 F6               [ 1] 1176 	ld	a, (x)
+      000612 6B 6D            [ 1] 1177 	ld	(0x6d, sp), a
+      000614 0F 6C            [ 1] 1178 	clr	(0x6c, sp)
+      000616 1E 74            [ 2] 1179 	ldw	x, (0x74, sp)
+      000618 F6               [ 1] 1180 	ld	a, (x)
+      000619 0F 6A            [ 1] 1181 	clr	(0x6a, sp)
+      00061B AEr09r14         [ 2] 1182 	ldw	x, #___str_11+0
+      00061E 1F 4A            [ 2] 1183 	ldw	(0x4a, sp), x
+      000620 16 8E            [ 2] 1184 	ldw	y, (0x8e, sp)
+      000622 1E 70            [ 2] 1185 	ldw	x, (0x70, sp)
+      000624 89               [ 2] 1186 	pushw	x
+      000625 1E 5A            [ 2] 1187 	ldw	x, (0x5a, sp)
+      000627 89               [ 2] 1188 	pushw	x
+      000628 1E 6A            [ 2] 1189 	ldw	x, (0x6a, sp)
+      00062A 89               [ 2] 1190 	pushw	x
+      00062B 1E 72            [ 2] 1191 	ldw	x, (0x72, sp)
+      00062D 89               [ 2] 1192 	pushw	x
+      00062E 88               [ 1] 1193 	push	a
+      00062F 7B 73            [ 1] 1194 	ld	a, (0x73, sp)
+      000631 88               [ 1] 1195 	push	a
+      000632 1E 54            [ 2] 1196 	ldw	x, (0x54, sp)
+      000634 89               [ 2] 1197 	pushw	x
+      000635 90 89            [ 2] 1198 	pushw	y
+      000637 CDr00r00         [ 4] 1199 	call	_sprintf
+      00063A 5B 0E            [ 2] 1200 	addw	sp, #14
+                                   1201 ;	user/nRF24L01.c: 327: VCOM_puts(buff_usart);
+      00063C 1E 8E            [ 2] 1202 	ldw	x, (0x8e, sp)
+      00063E 89               [ 2] 1203 	pushw	x
+      00063F CDr00r00         [ 4] 1204 	call	_VCOM_puts
+      000642 85               [ 2] 1205 	popw	x
+                                   1206 ;	user/nRF24L01.c: 328: status = nRF_Read(RX_ADDR_P2);
+      000643 4B 0C            [ 1] 1207 	push	#0x0c
+      000645 CDr01rF2         [ 4] 1208 	call	_nRF_Read
+      000648 5B 01            [ 2] 1209 	addw	sp, #1
+                                   1210 ;	user/nRF24L01.c: 329: sprintf(buff_usart,"RX_ADDR_P2: %2x\r\n",status);
+      00064A 5F               [ 1] 1211 	clrw	x
+      00064B 97               [ 1] 1212 	ld	xl, a
+      00064C 90 AEr09r32      [ 2] 1213 	ldw	y, #___str_12+0
+      000650 17 68            [ 2] 1214 	ldw	(0x68, sp), y
+      000652 16 8E            [ 2] 1215 	ldw	y, (0x8e, sp)
+      000654 89               [ 2] 1216 	pushw	x
+      000655 1E 6A            [ 2] 1217 	ldw	x, (0x6a, sp)
+      000657 89               [ 2] 1218 	pushw	x
+      000658 90 89            [ 2] 1219 	pushw	y
+      00065A CDr00r00         [ 4] 1220 	call	_sprintf
+      00065D 5B 06            [ 2] 1221 	addw	sp, #6
+                                   1222 ;	user/nRF24L01.c: 330: VCOM_puts(buff_usart);
+      00065F 1E 8E            [ 2] 1223 	ldw	x, (0x8e, sp)
+      000661 89               [ 2] 1224 	pushw	x
+      000662 CDr00r00         [ 4] 1225 	call	_VCOM_puts
+      000665 85               [ 2] 1226 	popw	x
+                                   1227 ;	user/nRF24L01.c: 331: status = nRF_Read(RX_ADDR_P3);
+      000666 4B 0D            [ 1] 1228 	push	#0x0d
+      000668 CDr01rF2         [ 4] 1229 	call	_nRF_Read
+      00066B 5B 01            [ 2] 1230 	addw	sp, #1
+                                   1231 ;	user/nRF24L01.c: 332: sprintf(buff_usart,"RX_ADDR_P3: %2x\r\n",status);
+      00066D 5F               [ 1] 1232 	clrw	x
+      00066E 97               [ 1] 1233 	ld	xl, a
+      00066F 90 AEr09r44      [ 2] 1234 	ldw	y, #___str_13+0
+      000673 17 44            [ 2] 1235 	ldw	(0x44, sp), y
+      000675 16 8E            [ 2] 1236 	ldw	y, (0x8e, sp)
+      000677 89               [ 2] 1237 	pushw	x
+      000678 1E 46            [ 2] 1238 	ldw	x, (0x46, sp)
+      00067A 89               [ 2] 1239 	pushw	x
+      00067B 90 89            [ 2] 1240 	pushw	y
+      00067D CDr00r00         [ 4] 1241 	call	_sprintf
+      000680 5B 06            [ 2] 1242 	addw	sp, #6
+                                   1243 ;	user/nRF24L01.c: 333: VCOM_puts(buff_usart);
+      000682 1E 8E            [ 2] 1244 	ldw	x, (0x8e, sp)
+      000684 89               [ 2] 1245 	pushw	x
+      000685 CDr00r00         [ 4] 1246 	call	_VCOM_puts
+      000688 85               [ 2] 1247 	popw	x
+                                   1248 ;	user/nRF24L01.c: 334: status = nRF_Read(RX_ADDR_P4);
+      000689 4B 0E            [ 1] 1249 	push	#0x0e
+      00068B CDr01rF2         [ 4] 1250 	call	_nRF_Read
+      00068E 5B 01            [ 2] 1251 	addw	sp, #1
+                                   1252 ;	user/nRF24L01.c: 335: sprintf(buff_usart,"RX_ADDR_P4: %2x\r\n",status);
+      000690 5F               [ 1] 1253 	clrw	x
+      000691 97               [ 1] 1254 	ld	xl, a
+      000692 90 AEr09r56      [ 2] 1255 	ldw	y, #___str_14+0
+      000696 17 38            [ 2] 1256 	ldw	(0x38, sp), y
+      000698 16 8E            [ 2] 1257 	ldw	y, (0x8e, sp)
+      00069A 89               [ 2] 1258 	pushw	x
+      00069B 1E 3A            [ 2] 1259 	ldw	x, (0x3a, sp)
+      00069D 89               [ 2] 1260 	pushw	x
+      00069E 90 89            [ 2] 1261 	pushw	y
+      0006A0 CDr00r00         [ 4] 1262 	call	_sprintf
+      0006A3 5B 06            [ 2] 1263 	addw	sp, #6
+                                   1264 ;	user/nRF24L01.c: 336: VCOM_puts(buff_usart);
+      0006A5 1E 8E            [ 2] 1265 	ldw	x, (0x8e, sp)
+      0006A7 89               [ 2] 1266 	pushw	x
+      0006A8 CDr00r00         [ 4] 1267 	call	_VCOM_puts
+      0006AB 85               [ 2] 1268 	popw	x
+                                   1269 ;	user/nRF24L01.c: 337: status = nRF_Read(RX_ADDR_P5);
+      0006AC 4B 0F            [ 1] 1270 	push	#0x0f
+      0006AE CDr01rF2         [ 4] 1271 	call	_nRF_Read
+      0006B1 5B 01            [ 2] 1272 	addw	sp, #1
+                                   1273 ;	user/nRF24L01.c: 338: sprintf(buff_usart,"RX_ADDR_P5: %2x\r\n",status);
+      0006B3 5F               [ 1] 1274 	clrw	x
+      0006B4 97               [ 1] 1275 	ld	xl, a
+      0006B5 90 AEr09r68      [ 2] 1276 	ldw	y, #___str_15+0
+      0006B9 17 5A            [ 2] 1277 	ldw	(0x5a, sp), y
+      0006BB 16 8E            [ 2] 1278 	ldw	y, (0x8e, sp)
+      0006BD 89               [ 2] 1279 	pushw	x
+      0006BE 1E 5C            [ 2] 1280 	ldw	x, (0x5c, sp)
+      0006C0 89               [ 2] 1281 	pushw	x
+      0006C1 90 89            [ 2] 1282 	pushw	y
+      0006C3 CDr00r00         [ 4] 1283 	call	_sprintf
+      0006C6 5B 06            [ 2] 1284 	addw	sp, #6
+                                   1285 ;	user/nRF24L01.c: 339: VCOM_puts(buff_usart);	
+      0006C8 1E 8E            [ 2] 1286 	ldw	x, (0x8e, sp)
+      0006CA 89               [ 2] 1287 	pushw	x
+      0006CB CDr00r00         [ 4] 1288 	call	_VCOM_puts
+      0006CE 85               [ 2] 1289 	popw	x
+                                   1290 ;	user/nRF24L01.c: 340: nRF_SPI_Read_Buf(TX_ADDR,buff,5);
+      0006CF 1E 74            [ 2] 1291 	ldw	x, (0x74, sp)
+      0006D1 4B 05            [ 1] 1292 	push	#0x05
+      0006D3 89               [ 2] 1293 	pushw	x
+      0006D4 4B 10            [ 1] 1294 	push	#0x10
+      0006D6 CDr02r46         [ 4] 1295 	call	_nRF_SPI_Read_Buf
+      0006D9 5B 04            [ 2] 1296 	addw	sp, #4
+                                   1297 ;	user/nRF24L01.c: 341: sprintf(buff_usart,"TX_ADDR: %2x%2x%2x%2x%2x\r\n",buff[0],buff[1],buff[2],buff[3],buff[4]);
+      0006DB 1E 8A            [ 2] 1298 	ldw	x, (0x8a, sp)
+      0006DD F6               [ 1] 1299 	ld	a, (x)
+      0006DE 6B 41            [ 1] 1300 	ld	(0x41, sp), a
+      0006E0 0F 40            [ 1] 1301 	clr	(0x40, sp)
+      0006E2 1E 72            [ 2] 1302 	ldw	x, (0x72, sp)
+      0006E4 F6               [ 1] 1303 	ld	a, (x)
+      0006E5 6B 6F            [ 1] 1304 	ld	(0x6f, sp), a
+      0006E7 0F 6E            [ 1] 1305 	clr	(0x6e, sp)
+      0006E9 1E 92            [ 2] 1306 	ldw	x, (0x92, sp)
+      0006EB F6               [ 1] 1307 	ld	a, (x)
+      0006EC 6B 63            [ 1] 1308 	ld	(0x63, sp), a
+      0006EE 0F 62            [ 1] 1309 	clr	(0x62, sp)
+      0006F0 1E 88            [ 2] 1310 	ldw	x, (0x88, sp)
+      0006F2 F6               [ 1] 1311 	ld	a, (x)
+      0006F3 6B 3D            [ 1] 1312 	ld	(0x3d, sp), a
+      0006F5 0F 3C            [ 1] 1313 	clr	(0x3c, sp)
+      0006F7 1E 74            [ 2] 1314 	ldw	x, (0x74, sp)
+      0006F9 F6               [ 1] 1315 	ld	a, (x)
+      0006FA 0F 64            [ 1] 1316 	clr	(0x64, sp)
+      0006FC AEr09r7A         [ 2] 1317 	ldw	x, #___str_16+0
+      0006FF 1F 52            [ 2] 1318 	ldw	(0x52, sp), x
+      000701 16 8E            [ 2] 1319 	ldw	y, (0x8e, sp)
+      000703 1E 40            [ 2] 1320 	ldw	x, (0x40, sp)
+      000705 89               [ 2] 1321 	pushw	x
+      000706 1E 70            [ 2] 1322 	ldw	x, (0x70, sp)
+      000708 89               [ 2] 1323 	pushw	x
+      000709 1E 66            [ 2] 1324 	ldw	x, (0x66, sp)
+      00070B 89               [ 2] 1325 	pushw	x
+      00070C 1E 42            [ 2] 1326 	ldw	x, (0x42, sp)
+      00070E 89               [ 2] 1327 	pushw	x
+      00070F 88               [ 1] 1328 	push	a
+      000710 7B 6D            [ 1] 1329 	ld	a, (0x6d, sp)
+      000712 88               [ 1] 1330 	push	a
+      000713 1E 5C            [ 2] 1331 	ldw	x, (0x5c, sp)
+      000715 89               [ 2] 1332 	pushw	x
+      000716 90 89            [ 2] 1333 	pushw	y
+      000718 CDr00r00         [ 4] 1334 	call	_sprintf
+      00071B 5B 0E            [ 2] 1335 	addw	sp, #14
+                                   1336 ;	user/nRF24L01.c: 342: VCOM_puts(buff_usart);
+      00071D 1E 8E            [ 2] 1337 	ldw	x, (0x8e, sp)
+      00071F 89               [ 2] 1338 	pushw	x
+      000720 CDr00r00         [ 4] 1339 	call	_VCOM_puts
+      000723 85               [ 2] 1340 	popw	x
+                                   1341 ;	user/nRF24L01.c: 343: status = nRF_Read(RX_PW_P0);
+      000724 4B 11            [ 1] 1342 	push	#0x11
+      000726 CDr01rF2         [ 4] 1343 	call	_nRF_Read
+      000729 5B 01            [ 2] 1344 	addw	sp, #1
+                                   1345 ;	user/nRF24L01.c: 344: sprintf(buff_usart,"RX_PW_P0: %2x\r\n",status);
+      00072B 5F               [ 1] 1346 	clrw	x
+      00072C 97               [ 1] 1347 	ld	xl, a
+      00072D 90 AEr09r95      [ 2] 1348 	ldw	y, #___str_17+0
+      000731 17 60            [ 2] 1349 	ldw	(0x60, sp), y
+      000733 16 8E            [ 2] 1350 	ldw	y, (0x8e, sp)
+      000735 89               [ 2] 1351 	pushw	x
+      000736 1E 62            [ 2] 1352 	ldw	x, (0x62, sp)
+      000738 89               [ 2] 1353 	pushw	x
+      000739 90 89            [ 2] 1354 	pushw	y
+      00073B CDr00r00         [ 4] 1355 	call	_sprintf
+      00073E 5B 06            [ 2] 1356 	addw	sp, #6
+                                   1357 ;	user/nRF24L01.c: 345: VCOM_puts(buff_usart);
+      000740 1E 8E            [ 2] 1358 	ldw	x, (0x8e, sp)
+      000742 89               [ 2] 1359 	pushw	x
+      000743 CDr00r00         [ 4] 1360 	call	_VCOM_puts
+      000746 85               [ 2] 1361 	popw	x
+                                   1362 ;	user/nRF24L01.c: 346: status = nRF_Read(RX_PW_P1);
+      000747 4B 12            [ 1] 1363 	push	#0x12
+      000749 CDr01rF2         [ 4] 1364 	call	_nRF_Read
+      00074C 5B 01            [ 2] 1365 	addw	sp, #1
+                                   1366 ;	user/nRF24L01.c: 347: sprintf(buff_usart,"RX_PW_P1: %2x\r\n",status);
+      00074E 5F               [ 1] 1367 	clrw	x
+      00074F 97               [ 1] 1368 	ld	xl, a
+      000750 90 AEr09rA5      [ 2] 1369 	ldw	y, #___str_18+0
+      000754 17 3E            [ 2] 1370 	ldw	(0x3e, sp), y
+      000756 16 8E            [ 2] 1371 	ldw	y, (0x8e, sp)
+      000758 89               [ 2] 1372 	pushw	x
+      000759 1E 40            [ 2] 1373 	ldw	x, (0x40, sp)
+      00075B 89               [ 2] 1374 	pushw	x
+      00075C 90 89            [ 2] 1375 	pushw	y
+      00075E CDr00r00         [ 4] 1376 	call	_sprintf
+      000761 5B 06            [ 2] 1377 	addw	sp, #6
+                                   1378 ;	user/nRF24L01.c: 348: VCOM_puts(buff_usart);
+      000763 1E 8E            [ 2] 1379 	ldw	x, (0x8e, sp)
+      000765 89               [ 2] 1380 	pushw	x
+      000766 CDr00r00         [ 4] 1381 	call	_VCOM_puts
+      000769 85               [ 2] 1382 	popw	x
+                                   1383 ;	user/nRF24L01.c: 349: status = nRF_Read(RX_PW_P2);
+      00076A 4B 13            [ 1] 1384 	push	#0x13
+      00076C CDr01rF2         [ 4] 1385 	call	_nRF_Read
+      00076F 5B 01            [ 2] 1386 	addw	sp, #1
+                                   1387 ;	user/nRF24L01.c: 350: sprintf(buff_usart,"RX_PW_P2: %2x\r\n",status);
+      000771 5F               [ 1] 1388 	clrw	x
+      000772 97               [ 1] 1389 	ld	xl, a
+      000773 90 AEr09rB5      [ 2] 1390 	ldw	y, #___str_19+0
+      000777 17 5E            [ 2] 1391 	ldw	(0x5e, sp), y
+      000779 16 8E            [ 2] 1392 	ldw	y, (0x8e, sp)
+      00077B 89               [ 2] 1393 	pushw	x
+      00077C 1E 60            [ 2] 1394 	ldw	x, (0x60, sp)
+      00077E 89               [ 2] 1395 	pushw	x
+      00077F 90 89            [ 2] 1396 	pushw	y
+      000781 CDr00r00         [ 4] 1397 	call	_sprintf
+      000784 5B 06            [ 2] 1398 	addw	sp, #6
+                                   1399 ;	user/nRF24L01.c: 351: VCOM_puts(buff_usart);
+      000786 1E 8E            [ 2] 1400 	ldw	x, (0x8e, sp)
+      000788 89               [ 2] 1401 	pushw	x
+      000789 CDr00r00         [ 4] 1402 	call	_VCOM_puts
+      00078C 85               [ 2] 1403 	popw	x
+                                   1404 ;	user/nRF24L01.c: 352: status = nRF_Read(RX_PW_P3);
+      00078D 4B 14            [ 1] 1405 	push	#0x14
+      00078F CDr01rF2         [ 4] 1406 	call	_nRF_Read
+      000792 5B 01            [ 2] 1407 	addw	sp, #1
+                                   1408 ;	user/nRF24L01.c: 353: sprintf(buff_usart,"RX_PW_P3: %2x\r\n",status);
+      000794 5F               [ 1] 1409 	clrw	x
+      000795 97               [ 1] 1410 	ld	xl, a
+      000796 90 AEr09rC5      [ 2] 1411 	ldw	y, #___str_20+0
+      00079A 17 56            [ 2] 1412 	ldw	(0x56, sp), y
+      00079C 16 8E            [ 2] 1413 	ldw	y, (0x8e, sp)
+      00079E 89               [ 2] 1414 	pushw	x
+      00079F 1E 58            [ 2] 1415 	ldw	x, (0x58, sp)
+      0007A1 89               [ 2] 1416 	pushw	x
+      0007A2 90 89            [ 2] 1417 	pushw	y
+      0007A4 CDr00r00         [ 4] 1418 	call	_sprintf
+      0007A7 5B 06            [ 2] 1419 	addw	sp, #6
+                                   1420 ;	user/nRF24L01.c: 354: VCOM_puts(buff_usart);
+      0007A9 1E 8E            [ 2] 1421 	ldw	x, (0x8e, sp)
+      0007AB 89               [ 2] 1422 	pushw	x
+      0007AC CDr00r00         [ 4] 1423 	call	_VCOM_puts
+      0007AF 85               [ 2] 1424 	popw	x
+                                   1425 ;	user/nRF24L01.c: 355: status = nRF_Read(RX_PW_P4);
+      0007B0 4B 15            [ 1] 1426 	push	#0x15
+      0007B2 CDr01rF2         [ 4] 1427 	call	_nRF_Read
+      0007B5 5B 01            [ 2] 1428 	addw	sp, #1
+                                   1429 ;	user/nRF24L01.c: 356: sprintf(buff_usart,"RX_PW_P4: %2x\r\n",status);
+      0007B7 5F               [ 1] 1430 	clrw	x
+      0007B8 97               [ 1] 1431 	ld	xl, a
+      0007B9 90 AEr09rD5      [ 2] 1432 	ldw	y, #___str_21+0
+      0007BD 17 48            [ 2] 1433 	ldw	(0x48, sp), y
+      0007BF 16 8E            [ 2] 1434 	ldw	y, (0x8e, sp)
+      0007C1 89               [ 2] 1435 	pushw	x
+      0007C2 1E 4A            [ 2] 1436 	ldw	x, (0x4a, sp)
+      0007C4 89               [ 2] 1437 	pushw	x
+      0007C5 90 89            [ 2] 1438 	pushw	y
+      0007C7 CDr00r00         [ 4] 1439 	call	_sprintf
+      0007CA 5B 06            [ 2] 1440 	addw	sp, #6
+                                   1441 ;	user/nRF24L01.c: 357: VCOM_puts(buff_usart);
+      0007CC 1E 8E            [ 2] 1442 	ldw	x, (0x8e, sp)
+      0007CE 89               [ 2] 1443 	pushw	x
+      0007CF CDr00r00         [ 4] 1444 	call	_VCOM_puts
+      0007D2 85               [ 2] 1445 	popw	x
+                                   1446 ;	user/nRF24L01.c: 358: status = nRF_Read(RX_PW_P5);
+      0007D3 4B 16            [ 1] 1447 	push	#0x16
+      0007D5 CDr01rF2         [ 4] 1448 	call	_nRF_Read
+      0007D8 5B 01            [ 2] 1449 	addw	sp, #1
+                                   1450 ;	user/nRF24L01.c: 359: sprintf(buff_usart,"RX_PW_P5: %2x\r\n",status);
+      0007DA 5F               [ 1] 1451 	clrw	x
+      0007DB 97               [ 1] 1452 	ld	xl, a
+      0007DC 90 AEr09rE5      [ 2] 1453 	ldw	y, #___str_22+0
+      0007E0 17 54            [ 2] 1454 	ldw	(0x54, sp), y
+      0007E2 16 8E            [ 2] 1455 	ldw	y, (0x8e, sp)
+      0007E4 89               [ 2] 1456 	pushw	x
+      0007E5 1E 56            [ 2] 1457 	ldw	x, (0x56, sp)
+      0007E7 89               [ 2] 1458 	pushw	x
+      0007E8 90 89            [ 2] 1459 	pushw	y
+      0007EA CDr00r00         [ 4] 1460 	call	_sprintf
+      0007ED 5B 06            [ 2] 1461 	addw	sp, #6
+                                   1462 ;	user/nRF24L01.c: 360: VCOM_puts(buff_usart);
+      0007EF 1E 8E            [ 2] 1463 	ldw	x, (0x8e, sp)
+      0007F1 89               [ 2] 1464 	pushw	x
+      0007F2 CDr00r00         [ 4] 1465 	call	_VCOM_puts
+      0007F5 85               [ 2] 1466 	popw	x
+                                   1467 ;	user/nRF24L01.c: 361: status = nRF_Read(FIFO_STATUS);
+      0007F6 4B 17            [ 1] 1468 	push	#0x17
+      0007F8 CDr01rF2         [ 4] 1469 	call	_nRF_Read
+      0007FB 5B 01            [ 2] 1470 	addw	sp, #1
+                                   1471 ;	user/nRF24L01.c: 362: sprintf(buff_usart,"FIFO_STATUS: %2x\r\n",status);
+      0007FD 5F               [ 1] 1472 	clrw	x
+      0007FE 97               [ 1] 1473 	ld	xl, a
+      0007FF 90 AEr09rF5      [ 2] 1474 	ldw	y, #___str_23+0
+      000803 17 46            [ 2] 1475 	ldw	(0x46, sp), y
+      000805 16 8E            [ 2] 1476 	ldw	y, (0x8e, sp)
+      000807 89               [ 2] 1477 	pushw	x
+      000808 1E 48            [ 2] 1478 	ldw	x, (0x48, sp)
+      00080A 89               [ 2] 1479 	pushw	x
+      00080B 90 89            [ 2] 1480 	pushw	y
+      00080D CDr00r00         [ 4] 1481 	call	_sprintf
+      000810 5B 06            [ 2] 1482 	addw	sp, #6
+                                   1483 ;	user/nRF24L01.c: 363: VCOM_puts(buff_usart);
+      000812 1E 8E            [ 2] 1484 	ldw	x, (0x8e, sp)
+      000814 89               [ 2] 1485 	pushw	x
+      000815 CDr00r00         [ 4] 1486 	call	_VCOM_puts
+      000818 85               [ 2] 1487 	popw	x
+                                   1488 ;	user/nRF24L01.c: 364: status = nRF_Read(DYNPD);
+      000819 4B 1C            [ 1] 1489 	push	#0x1c
+      00081B CDr01rF2         [ 4] 1490 	call	_nRF_Read
+      00081E 5B 01            [ 2] 1491 	addw	sp, #1
+                                   1492 ;	user/nRF24L01.c: 365: sprintf(buff_usart,"DYNPD: %2x\r\n",status);
+      000820 5F               [ 1] 1493 	clrw	x
+      000821 97               [ 1] 1494 	ld	xl, a
+      000822 90 AEr0Ar08      [ 2] 1495 	ldw	y, #___str_24+0
+      000826 17 3A            [ 2] 1496 	ldw	(0x3a, sp), y
+      000828 16 8E            [ 2] 1497 	ldw	y, (0x8e, sp)
+      00082A 89               [ 2] 1498 	pushw	x
+      00082B 1E 3C            [ 2] 1499 	ldw	x, (0x3c, sp)
+      00082D 89               [ 2] 1500 	pushw	x
+      00082E 90 89            [ 2] 1501 	pushw	y
+      000830 CDr00r00         [ 4] 1502 	call	_sprintf
+      000833 5B 06            [ 2] 1503 	addw	sp, #6
+                                   1504 ;	user/nRF24L01.c: 366: VCOM_puts(buff_usart);
+      000835 1E 8E            [ 2] 1505 	ldw	x, (0x8e, sp)
+      000837 89               [ 2] 1506 	pushw	x
+      000838 CDr00r00         [ 4] 1507 	call	_VCOM_puts
+      00083B 85               [ 2] 1508 	popw	x
+                                   1509 ;	user/nRF24L01.c: 367: status = nRF_Read(FEATURE);
+      00083C 4B 1D            [ 1] 1510 	push	#0x1d
+      00083E CDr01rF2         [ 4] 1511 	call	_nRF_Read
+      000841 5B 01            [ 2] 1512 	addw	sp, #1
+                                   1513 ;	user/nRF24L01.c: 368: sprintf(buff_usart,"FEATURE: %2x\r\n",status);
+      000843 5F               [ 1] 1514 	clrw	x
+      000844 97               [ 1] 1515 	ld	xl, a
+      000845 90 AEr0Ar15      [ 2] 1516 	ldw	y, #___str_25+0
+      000849 17 42            [ 2] 1517 	ldw	(0x42, sp), y
+      00084B 16 8E            [ 2] 1518 	ldw	y, (0x8e, sp)
+      00084D 89               [ 2] 1519 	pushw	x
+      00084E 1E 44            [ 2] 1520 	ldw	x, (0x44, sp)
+      000850 89               [ 2] 1521 	pushw	x
+      000851 90 89            [ 2] 1522 	pushw	y
+      000853 CDr00r00         [ 4] 1523 	call	_sprintf
+      000856 5B 06            [ 2] 1524 	addw	sp, #6
+                                   1525 ;	user/nRF24L01.c: 369: VCOM_puts(buff_usart);
+      000858 1E 8E            [ 2] 1526 	ldw	x, (0x8e, sp)
+      00085A 89               [ 2] 1527 	pushw	x
+      00085B CDr00r00         [ 4] 1528 	call	_VCOM_puts
+      00085E 5B 99            [ 2] 1529 	addw	sp, #153
+      000860 81               [ 4] 1530 	ret
+                                   1531 	.area CODE
+      000861                       1532 ___str_0:
+      000861 43 4F 4E 46 49 47 3A  1533 	.ascii "CONFIG: %2x"
+             20 25 32 78
+      00086C 0D                    1534 	.db 0x0d
+      00086D 0A                    1535 	.db 0x0a
+      00086E 00                    1536 	.db 0x00
+      00086F                       1537 ___str_1:
+      00086F 45 4E 5F 41 41 3A 20  1538 	.ascii "EN_AA: %2x"
+             25 32 78
+      000879 0D                    1539 	.db 0x0d
+      00087A 0A                    1540 	.db 0x0a
+      00087B 00                    1541 	.db 0x00
+      00087C                       1542 ___str_2:
+      00087C 45 4E 5F 52 58 41 44  1543 	.ascii "EN_RXADDR: %2x"
+             44 52 3A 20 25 32 78
+      00088A 0D                    1544 	.db 0x0d
+      00088B 0A                    1545 	.db 0x0a
+      00088C 00                    1546 	.db 0x00
+      00088D                       1547 ___str_3:
+      00088D 53 45 54 55 50 5F 41  1548 	.ascii "SETUP_AW: %2x"
+             57 3A 20 25 32 78
+      00089A 0D                    1549 	.db 0x0d
+      00089B 0A                    1550 	.db 0x0a
+      00089C 00                    1551 	.db 0x00
+      00089D                       1552 ___str_4:
+      00089D 53 45 54 55 50 5F 52  1553 	.ascii "SETUP_RETR: %2x"
+             45 54 52 3A 20 25 32
+             78
+      0008AC 0D                    1554 	.db 0x0d
+      0008AD 0A                    1555 	.db 0x0a
+      0008AE 00                    1556 	.db 0x00
+      0008AF                       1557 ___str_5:
+      0008AF 52 46 5F 43 48 3A 20  1558 	.ascii "RF_CH: %2x"
+             25 32 78
+      0008B9 0D                    1559 	.db 0x0d
+      0008BA 0A                    1560 	.db 0x0a
+      0008BB 00                    1561 	.db 0x00
+      0008BC                       1562 ___str_6:
+      0008BC 52 46 5F 53 45 54 55  1563 	.ascii "RF_SETUP: %2x"
+             50 3A 20 25 32 78
+      0008C9 0D                    1564 	.db 0x0d
+      0008CA 0A                    1565 	.db 0x0a
+      0008CB 00                    1566 	.db 0x00
+      0008CC                       1567 ___str_7:
+      0008CC 53 54 41 54 55 53 3A  1568 	.ascii "STATUS: %2x"
+             20 25 32 78
+      0008D7 0D                    1569 	.db 0x0d
+      0008D8 0A                    1570 	.db 0x0a
+      0008D9 00                    1571 	.db 0x00
+      0008DA                       1572 ___str_8:
+      0008DA 4F 42 53 45 52 56 45  1573 	.ascii "OBSERVE_TX: %2x"
+             5F 54 58 3A 20 25 32
+             78
+      0008E9 0D                    1574 	.db 0x0d
+      0008EA 0A                    1575 	.db 0x0a
+      0008EB 00                    1576 	.db 0x00
+      0008EC                       1577 ___str_9:
+      0008EC 43 44 3A 20 25 32 78  1578 	.ascii "CD: %2x"
+      0008F3 0D                    1579 	.db 0x0d
+      0008F4 0A                    1580 	.db 0x0a
+      0008F5 00                    1581 	.db 0x00
+      0008F6                       1582 ___str_10:
+      0008F6 52 58 5F 41 44 44 52  1583 	.ascii "RX_ADDR_P0: %2x%2x%2x%2x%2x"
+             5F 50 30 3A 20 25 32
+             78 25 32 78 25 32 78
+             25 32 78 25 32 78
+      000911 0D                    1584 	.db 0x0d
+      000912 0A                    1585 	.db 0x0a
+      000913 00                    1586 	.db 0x00
+      000914                       1587 ___str_11:
+      000914 52 58 5F 41 44 44 52  1588 	.ascii "RX_ADDR_P1: %2x%2x%2x%2x%2x"
+             5F 50 31 3A 20 25 32
+             78 25 32 78 25 32 78
+             25 32 78 25 32 78
+      00092F 0D                    1589 	.db 0x0d
+      000930 0A                    1590 	.db 0x0a
+      000931 00                    1591 	.db 0x00
+      000932                       1592 ___str_12:
+      000932 52 58 5F 41 44 44 52  1593 	.ascii "RX_ADDR_P2: %2x"
+             5F 50 32 3A 20 25 32
+             78
+      000941 0D                    1594 	.db 0x0d
+      000942 0A                    1595 	.db 0x0a
+      000943 00                    1596 	.db 0x00
+      000944                       1597 ___str_13:
+      000944 52 58 5F 41 44 44 52  1598 	.ascii "RX_ADDR_P3: %2x"
+             5F 50 33 3A 20 25 32
+             78
+      000953 0D                    1599 	.db 0x0d
+      000954 0A                    1600 	.db 0x0a
+      000955 00                    1601 	.db 0x00
+      000956                       1602 ___str_14:
+      000956 52 58 5F 41 44 44 52  1603 	.ascii "RX_ADDR_P4: %2x"
+             5F 50 34 3A 20 25 32
+             78
+      000965 0D                    1604 	.db 0x0d
+      000966 0A                    1605 	.db 0x0a
+      000967 00                    1606 	.db 0x00
+      000968                       1607 ___str_15:
+      000968 52 58 5F 41 44 44 52  1608 	.ascii "RX_ADDR_P5: %2x"
+             5F 50 35 3A 20 25 32
+             78
+      000977 0D                    1609 	.db 0x0d
+      000978 0A                    1610 	.db 0x0a
+      000979 00                    1611 	.db 0x00
+      00097A                       1612 ___str_16:
+      00097A 54 58 5F 41 44 44 52  1613 	.ascii "TX_ADDR: %2x%2x%2x%2x%2x"
+             3A 20 25 32 78 25 32
+             78 25 32 78 25 32 78
+             25 32 78
+      000992 0D                    1614 	.db 0x0d
+      000993 0A                    1615 	.db 0x0a
+      000994 00                    1616 	.db 0x00
+      000995                       1617 ___str_17:
+      000995 52 58 5F 50 57 5F 50  1618 	.ascii "RX_PW_P0: %2x"
+             30 3A 20 25 32 78
+      0009A2 0D                    1619 	.db 0x0d
+      0009A3 0A                    1620 	.db 0x0a
+      0009A4 00                    1621 	.db 0x00
+      0009A5                       1622 ___str_18:
+      0009A5 52 58 5F 50 57 5F 50  1623 	.ascii "RX_PW_P1: %2x"
+             31 3A 20 25 32 78
+      0009B2 0D                    1624 	.db 0x0d
+      0009B3 0A                    1625 	.db 0x0a
+      0009B4 00                    1626 	.db 0x00
+      0009B5                       1627 ___str_19:
+      0009B5 52 58 5F 50 57 5F 50  1628 	.ascii "RX_PW_P2: %2x"
+             32 3A 20 25 32 78
+      0009C2 0D                    1629 	.db 0x0d
+      0009C3 0A                    1630 	.db 0x0a
+      0009C4 00                    1631 	.db 0x00
+      0009C5                       1632 ___str_20:
+      0009C5 52 58 5F 50 57 5F 50  1633 	.ascii "RX_PW_P3: %2x"
+             33 3A 20 25 32 78
+      0009D2 0D                    1634 	.db 0x0d
+      0009D3 0A                    1635 	.db 0x0a
+      0009D4 00                    1636 	.db 0x00
+      0009D5                       1637 ___str_21:
+      0009D5 52 58 5F 50 57 5F 50  1638 	.ascii "RX_PW_P4: %2x"
+             34 3A 20 25 32 78
+      0009E2 0D                    1639 	.db 0x0d
+      0009E3 0A                    1640 	.db 0x0a
+      0009E4 00                    1641 	.db 0x00
+      0009E5                       1642 ___str_22:
+      0009E5 52 58 5F 50 57 5F 50  1643 	.ascii "RX_PW_P5: %2x"
+             35 3A 20 25 32 78
+      0009F2 0D                    1644 	.db 0x0d
+      0009F3 0A                    1645 	.db 0x0a
+      0009F4 00                    1646 	.db 0x00
+      0009F5                       1647 ___str_23:
+      0009F5 46 49 46 4F 5F 53 54  1648 	.ascii "FIFO_STATUS: %2x"
+             41 54 55 53 3A 20 25
+             32 78
+      000A05 0D                    1649 	.db 0x0d
+      000A06 0A                    1650 	.db 0x0a
+      000A07 00                    1651 	.db 0x00
+      000A08                       1652 ___str_24:
+      000A08 44 59 4E 50 44 3A 20  1653 	.ascii "DYNPD: %2x"
+             25 32 78
+      000A12 0D                    1654 	.db 0x0d
+      000A13 0A                    1655 	.db 0x0a
+      000A14 00                    1656 	.db 0x00
+      000A15                       1657 ___str_25:
+      000A15 46 45 41 54 55 52 45  1658 	.ascii "FEATURE: %2x"
+             3A 20 25 32 78
+      000A21 0D                    1659 	.db 0x0d
+      000A22 0A                    1660 	.db 0x0a
+      000A23 00                    1661 	.db 0x00
+                                   1662 	.area INITIALIZER
+                                   1663 	.area CABS (ABS)

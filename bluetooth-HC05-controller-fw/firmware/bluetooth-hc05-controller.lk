@@ -1,0 +1,24 @@
+-muwx
+-i firmware/bluetooth-hc05-controller.ihx
+-Y
+-b HOME = 0x8000
+-b DATA = 0x0001
+-k c:\Program Files\SDCC\bin\..\lib\stm8
+-l stm8
+-l stm8
+build/user/device.rel
+build/user/hc05.rel
+build/user/keypad.rel
+build/user/main.rel
+build/user/nRF24L01.rel
+build/user/ringbuf.rel
+build/user/sw_uart.rel
+build/user/timerTick.rel
+build/lib/stm8s_clk.rel
+build/lib/stm8s_gpio.rel
+build/lib/stm8s_iwdg.rel
+build/lib/stm8s_spi.rel
+build/lib/stm8s_tim4.rel
+build/lib/stm8s_uart1.rel
+
+-e

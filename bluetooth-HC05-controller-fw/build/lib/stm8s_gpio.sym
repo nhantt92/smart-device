@@ -1,0 +1,36 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 1.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  002710 L
+    .__.ABS.                                                    =  000000 G
+    .__.CPU.                                                    =  000000 L
+    .__.H$L.                                                    =  000001 L
+  7 _GPIO_ExternalPullUpConfig                                     0000C0 GR
+  7 _GPIO_Init                                                     000000 GR
+  7 _GPIO_ReadInputData                                            0000B4 GR
+  7 _GPIO_ReadInputPin                                             0000B9 GR
+  7 _GPIO_ReadOutputData                                           0000B0 GR
+  7 _GPIO_Write                                                    00008E GR
+  7 _GPIO_WriteHigh                                                000094 GR
+  7 _GPIO_WriteLow                                                 00009B GR
+  7 _GPIO_WriteReverse                                             0000A9 GR
+
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 2.
+Hexadecimal [24-Bits]
+
+Area Table
+
+   0 _CODE                                      size      0   flags    0
+   1 DATA                                       size      0   flags    0
+   2 INITIALIZED                                size      0   flags    0
+   3 DABS                                       size      0   flags    8
+   4 HOME                                       size      0   flags    0
+   5 GSINIT                                     size      0   flags    0
+   6 GSFINAL                                    size      0   flags    0
+   7 CODE                                       size     DB   flags    0
+   8 INITIALIZER                                size      0   flags    0
+   9 CABS                                       size      0   flags    8
+

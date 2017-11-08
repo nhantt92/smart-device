@@ -1,0 +1,252 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 3.6.0 #9615 (MINGW64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module ringbuf
+                                      6 	.optsdcc -mstm8
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _RINGBUF_Init
+                                     12 	.globl _RINGBUF_Put
+                                     13 	.globl _RINGBUF_Get
+                                     14 	.globl _RINGBUF_GetAddress
+                                     15 ;--------------------------------------------------------
+                                     16 ; ram data
+                                     17 ;--------------------------------------------------------
+                                     18 	.area DATA
+                                     19 ;--------------------------------------------------------
+                                     20 ; ram data
+                                     21 ;--------------------------------------------------------
+                                     22 	.area INITIALIZED
+                                     23 ;--------------------------------------------------------
+                                     24 ; absolute external ram data
+                                     25 ;--------------------------------------------------------
+                                     26 	.area DABS (ABS)
+                                     27 ;--------------------------------------------------------
+                                     28 ; global & static initialisations
+                                     29 ;--------------------------------------------------------
+                                     30 	.area HOME
+                                     31 	.area GSINIT
+                                     32 	.area GSFINAL
+                                     33 	.area GSINIT
+                                     34 ;--------------------------------------------------------
+                                     35 ; Home
+                                     36 ;--------------------------------------------------------
+                                     37 	.area HOME
+                                     38 	.area HOME
+                                     39 ;--------------------------------------------------------
+                                     40 ; code
+                                     41 ;--------------------------------------------------------
+                                     42 	.area CODE
+                                     43 ;	user/ringbuf.c: 4: int RINGBUF_Init(RINGBUF *r, uint8_t* buf, int size)
+                                     44 ;	-----------------------------------------
+                                     45 ;	 function RINGBUF_Init
+                                     46 ;	-----------------------------------------
+      000000                         47 _RINGBUF_Init:
+      000000 52 04            [ 2]   48 	sub	sp, #4
+                                     49 ;	user/ringbuf.c: 6: if(r == NULL || buf == NULL || size < 2) return -1; 
+      000002 1E 07            [ 2]   50 	ldw	x, (0x07, sp)
+      000004 27 0B            [ 1]   51 	jreq	00101$
+      000006 1E 09            [ 2]   52 	ldw	x, (0x09, sp)
+      000008 27 07            [ 1]   53 	jreq	00101$
+      00000A 1E 0B            [ 2]   54 	ldw	x, (0x0b, sp)
+      00000C A3 00 02         [ 2]   55 	cpw	x, #0x0002
+      00000F 2E 05            [ 1]   56 	jrsge	00102$
+      000011                         57 00101$:
+      000011 AE FF FF         [ 2]   58 	ldw	x, #0xffff
+      000014 20 29            [ 2]   59 	jra	00105$
+      000016                         60 00102$:
+                                     61 ;	user/ringbuf.c: 7: r->p_o = r->p_r = r->p_w = buf;
+      000016 16 07            [ 2]   62 	ldw	y, (0x07, sp)
+      000018 17 03            [ 2]   63 	ldw	(0x03, sp), y
+      00001A 1E 03            [ 2]   64 	ldw	x, (0x03, sp)
+      00001C 5C               [ 2]   65 	incw	x
+      00001D 5C               [ 2]   66 	incw	x
+      00001E 1F 01            [ 2]   67 	ldw	(0x01, sp), x
+      000020 1E 03            [ 2]   68 	ldw	x, (0x03, sp)
+      000022 16 09            [ 2]   69 	ldw	y, (0x09, sp)
+      000024 EF 04            [ 2]   70 	ldw	(0x0004, x), y
+      000026 1E 01            [ 2]   71 	ldw	x, (0x01, sp)
+      000028 16 09            [ 2]   72 	ldw	y, (0x09, sp)
+      00002A FF               [ 2]   73 	ldw	(x), y
+      00002B 1E 03            [ 2]   74 	ldw	x, (0x03, sp)
+      00002D 16 09            [ 2]   75 	ldw	y, (0x09, sp)
+      00002F FF               [ 2]   76 	ldw	(x), y
+                                     77 ;	user/ringbuf.c: 8: r->fill_cnt = 0;
+      000030 1E 03            [ 2]   78 	ldw	x, (0x03, sp)
+      000032 1C 00 06         [ 2]   79 	addw	x, #0x0006
+      000035 6F 01            [ 1]   80 	clr	(0x1, x)
+      000037 7F               [ 1]   81 	clr	(x)
+                                     82 ;	user/ringbuf.c: 9: r->size = size; 
+      000038 1E 03            [ 2]   83 	ldw	x, (0x03, sp)
+      00003A 16 0B            [ 2]   84 	ldw	y, (0x0b, sp)
+      00003C EF 08            [ 2]   85 	ldw	(0x0008, x), y
+                                     86 ;	user/ringbuf.c: 10: return 0;
+      00003E 5F               [ 1]   87 	clrw	x
+      00003F                         88 00105$:
+      00003F 5B 04            [ 2]   89 	addw	sp, #4
+      000041 81               [ 4]   90 	ret
+                                     91 ;	user/ringbuf.c: 13: int RINGBUF_Put(RINGBUF *r, uint8_t c)
+                                     92 ;	-----------------------------------------
+                                     93 ;	 function RINGBUF_Put
+                                     94 ;	-----------------------------------------
+      000042                         95 _RINGBUF_Put:
+      000042 52 10            [ 2]   96 	sub	sp, #16
+                                     97 ;	user/ringbuf.c: 15: if(r->fill_cnt>=r->size)return -1;		// ring buffer is full, this should be atomic operation
+      000044 16 13            [ 2]   98 	ldw	y, (0x13, sp)
+      000046 17 0D            [ 2]   99 	ldw	(0x0d, sp), y
+      000048 1E 0D            [ 2]  100 	ldw	x, (0x0d, sp)
+      00004A 1C 00 06         [ 2]  101 	addw	x, #0x0006
+      00004D 1F 07            [ 2]  102 	ldw	(0x07, sp), x
+      00004F 1E 07            [ 2]  103 	ldw	x, (0x07, sp)
+      000051 FE               [ 2]  104 	ldw	x, (x)
+      000052 16 0D            [ 2]  105 	ldw	y, (0x0d, sp)
+      000054 72 A9 00 08      [ 2]  106 	addw	y, #0x0008
+      000058 17 09            [ 2]  107 	ldw	(0x09, sp), y
+      00005A 16 09            [ 2]  108 	ldw	y, (0x09, sp)
+      00005C 90 FE            [ 2]  109 	ldw	y, (y)
+      00005E 17 01            [ 2]  110 	ldw	(0x01, sp), y
+      000060 13 01            [ 2]  111 	cpw	x, (0x01, sp)
+      000062 2F 05            [ 1]  112 	jrslt	00102$
+      000064 AE FF FF         [ 2]  113 	ldw	x, #0xffff
+      000067 20 3E            [ 2]  114 	jra	00105$
+      000069                        115 00102$:
+                                    116 ;	user/ringbuf.c: 17: disableInterrupts();				// enter critical session
+      000069 9B               [ 1]  117 	sim
+                                    118 ;	user/ringbuf.c: 18: r->fill_cnt++;				// increase filled slots count, this should be atomic operation
+      00006A 1E 07            [ 2]  119 	ldw	x, (0x07, sp)
+      00006C FE               [ 2]  120 	ldw	x, (x)
+      00006D 5C               [ 2]  121 	incw	x
+      00006E 16 07            [ 2]  122 	ldw	y, (0x07, sp)
+      000070 90 FF            [ 2]  123 	ldw	(y), x
+                                    124 ;	user/ringbuf.c: 19: enableInterrupts();				// leave critical session
+      000072 9A               [ 1]  125 	rim
+                                    126 ;	user/ringbuf.c: 21: *r->p_w++ = c;				// put character into buffer
+      000073 1E 0D            [ 2]  127 	ldw	x, (0x0d, sp)
+      000075 1C 00 04         [ 2]  128 	addw	x, #0x0004
+      000078 1F 0B            [ 2]  129 	ldw	(0x0b, sp), x
+      00007A 1E 0B            [ 2]  130 	ldw	x, (0x0b, sp)
+      00007C FE               [ 2]  131 	ldw	x, (x)
+      00007D 1F 0F            [ 2]  132 	ldw	(0x0f, sp), x
+      00007F 1E 0F            [ 2]  133 	ldw	x, (0x0f, sp)
+      000081 5C               [ 2]  134 	incw	x
+      000082 16 0B            [ 2]  135 	ldw	y, (0x0b, sp)
+      000084 90 FF            [ 2]  136 	ldw	(y), x
+      000086 1E 0F            [ 2]  137 	ldw	x, (0x0f, sp)
+      000088 7B 15            [ 1]  138 	ld	a, (0x15, sp)
+      00008A F7               [ 1]  139 	ld	(x), a
+                                    140 ;	user/ringbuf.c: 23: if(r->p_w >= r->p_o + r->size)	        // rollback if write pointer go pass
+      00008B 1E 0B            [ 2]  141 	ldw	x, (0x0b, sp)
+      00008D FE               [ 2]  142 	ldw	x, (x)
+      00008E 16 0D            [ 2]  143 	ldw	y, (0x0d, sp)
+      000090 90 FE            [ 2]  144 	ldw	y, (y)
+      000092 17 05            [ 2]  145 	ldw	(0x05, sp), y
+      000094 16 09            [ 2]  146 	ldw	y, (0x09, sp)
+      000096 90 FE            [ 2]  147 	ldw	y, (y)
+      000098 72 F9 05         [ 2]  148 	addw	y, (0x05, sp)
+      00009B 17 03            [ 2]  149 	ldw	(0x03, sp), y
+      00009D 13 03            [ 2]  150 	cpw	x, (0x03, sp)
+      00009F 25 05            [ 1]  151 	jrc	00104$
+                                    152 ;	user/ringbuf.c: 24: r->p_w = r->p_o;			// the physical boundary 
+      0000A1 1E 0B            [ 2]  153 	ldw	x, (0x0b, sp)
+      0000A3 16 05            [ 2]  154 	ldw	y, (0x05, sp)
+      0000A5 FF               [ 2]  155 	ldw	(x), y
+      0000A6                        156 00104$:
+                                    157 ;	user/ringbuf.c: 25: return 0;
+      0000A6 5F               [ 1]  158 	clrw	x
+      0000A7                        159 00105$:
+      0000A7 5B 10            [ 2]  160 	addw	sp, #16
+      0000A9 81               [ 4]  161 	ret
+                                    162 ;	user/ringbuf.c: 28: int RINGBUF_Get(RINGBUF *r, uint8_t* c)
+                                    163 ;	-----------------------------------------
+                                    164 ;	 function RINGBUF_Get
+                                    165 ;	-----------------------------------------
+      0000AA                        166 _RINGBUF_Get:
+      0000AA 52 0E            [ 2]  167 	sub	sp, #14
+                                    168 ;	user/ringbuf.c: 30: if(r->fill_cnt<=0)return -1;			// ring buffer is empty, this should be atomic operation
+      0000AC 16 11            [ 2]  169 	ldw	y, (0x11, sp)
+      0000AE 17 0D            [ 2]  170 	ldw	(0x0d, sp), y
+      0000B0 1E 0D            [ 2]  171 	ldw	x, (0x0d, sp)
+      0000B2 1C 00 06         [ 2]  172 	addw	x, #0x0006
+      0000B5 1F 0B            [ 2]  173 	ldw	(0x0b, sp), x
+      0000B7 1E 0B            [ 2]  174 	ldw	x, (0x0b, sp)
+      0000B9 FE               [ 2]  175 	ldw	x, (x)
+      0000BA A3 00 00         [ 2]  176 	cpw	x, #0x0000
+      0000BD 2C 05            [ 1]  177 	jrsgt	00102$
+      0000BF AE FF FF         [ 2]  178 	ldw	x, #0xffff
+      0000C2 20 43            [ 2]  179 	jra	00105$
+      0000C4                        180 00102$:
+                                    181 ;	user/ringbuf.c: 32: disableInterrupts();				// enter critical session
+      0000C4 9B               [ 1]  182 	sim
+                                    183 ;	user/ringbuf.c: 33: r->fill_cnt--;				// decrease filled slots count
+      0000C5 1E 0B            [ 2]  184 	ldw	x, (0x0b, sp)
+      0000C7 FE               [ 2]  185 	ldw	x, (x)
+      0000C8 5A               [ 2]  186 	decw	x
+      0000C9 16 0B            [ 2]  187 	ldw	y, (0x0b, sp)
+      0000CB 90 FF            [ 2]  188 	ldw	(y), x
+                                    189 ;	user/ringbuf.c: 34: enableInterrupts();			        // leave critical session
+      0000CD 9A               [ 1]  190 	rim
+                                    191 ;	user/ringbuf.c: 36: *c = *r->p_r++;				// get the character out
+      0000CE 16 13            [ 2]  192 	ldw	y, (0x13, sp)
+      0000D0 17 07            [ 2]  193 	ldw	(0x07, sp), y
+      0000D2 1E 0D            [ 2]  194 	ldw	x, (0x0d, sp)
+      0000D4 5C               [ 2]  195 	incw	x
+      0000D5 5C               [ 2]  196 	incw	x
+      0000D6 1F 09            [ 2]  197 	ldw	(0x09, sp), x
+      0000D8 1E 09            [ 2]  198 	ldw	x, (0x09, sp)
+      0000DA FE               [ 2]  199 	ldw	x, (x)
+      0000DB 1F 05            [ 2]  200 	ldw	(0x05, sp), x
+      0000DD 1E 05            [ 2]  201 	ldw	x, (0x05, sp)
+      0000DF 5C               [ 2]  202 	incw	x
+      0000E0 16 09            [ 2]  203 	ldw	y, (0x09, sp)
+      0000E2 90 FF            [ 2]  204 	ldw	(y), x
+      0000E4 1E 05            [ 2]  205 	ldw	x, (0x05, sp)
+      0000E6 F6               [ 1]  206 	ld	a, (x)
+      0000E7 1E 07            [ 2]  207 	ldw	x, (0x07, sp)
+      0000E9 F7               [ 1]  208 	ld	(x), a
+                                    209 ;	user/ringbuf.c: 38: if(r->p_r >= r->p_o + r->size)		// rollback if write pointer go pass
+      0000EA 1E 09            [ 2]  210 	ldw	x, (0x09, sp)
+      0000EC FE               [ 2]  211 	ldw	x, (x)
+      0000ED 16 0D            [ 2]  212 	ldw	y, (0x0d, sp)
+      0000EF 90 FE            [ 2]  213 	ldw	y, (y)
+      0000F1 17 03            [ 2]  214 	ldw	(0x03, sp), y
+      0000F3 16 0D            [ 2]  215 	ldw	y, (0x0d, sp)
+      0000F5 90 EE 08         [ 2]  216 	ldw	y, (0x8, y)
+      0000F8 72 F9 03         [ 2]  217 	addw	y, (0x03, sp)
+      0000FB 17 01            [ 2]  218 	ldw	(0x01, sp), y
+      0000FD 13 01            [ 2]  219 	cpw	x, (0x01, sp)
+      0000FF 25 05            [ 1]  220 	jrc	00104$
+                                    221 ;	user/ringbuf.c: 39: r->p_r = r->p_o;			// the physical boundary
+      000101 1E 09            [ 2]  222 	ldw	x, (0x09, sp)
+      000103 16 03            [ 2]  223 	ldw	y, (0x03, sp)
+      000105 FF               [ 2]  224 	ldw	(x), y
+      000106                        225 00104$:
+                                    226 ;	user/ringbuf.c: 41: return 0;
+      000106 5F               [ 1]  227 	clrw	x
+      000107                        228 00105$:
+      000107 5B 0E            [ 2]  229 	addw	sp, #14
+      000109 81               [ 4]  230 	ret
+                                    231 ;	user/ringbuf.c: 43: uint8_t* RINGBUF_GetAddress(RINGBUF *r) 
+                                    232 ;	-----------------------------------------
+                                    233 ;	 function RINGBUF_GetAddress
+                                    234 ;	-----------------------------------------
+      00010A                        235 _RINGBUF_GetAddress:
+      00010A 89               [ 2]  236 	pushw	x
+                                    237 ;	user/ringbuf.c: 45: return (uint8_t*)(r->fill_cnt + r);
+      00010B 16 05            [ 2]  238 	ldw	y, (0x05, sp)
+      00010D 17 01            [ 2]  239 	ldw	(0x01, sp), y
+      00010F 1E 01            [ 2]  240 	ldw	x, (0x01, sp)
+      000111 EE 06            [ 2]  241 	ldw	x, (0x6, x)
+      000113 89               [ 2]  242 	pushw	x
+      000114 4B 0A            [ 1]  243 	push	#0x0a
+      000116 4B 00            [ 1]  244 	push	#0x00
+      000118 CDr00r00         [ 4]  245 	call	__mulint
+      00011B 5B 04            [ 2]  246 	addw	sp, #4
+      00011D 72 FB 01         [ 2]  247 	addw	x, (0x01, sp)
+      000120 5B 02            [ 2]  248 	addw	sp, #2
+      000122 81               [ 4]  249 	ret
+                                    250 	.area CODE
+                                    251 	.area INITIALIZER
+                                    252 	.area CABS (ABS)

@@ -1,0 +1,926 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 3.6.0 #9615 (MINGW64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module hc05
+                                      6 	.optsdcc -mstm8
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _strlen
+                                     12 	.globl _memset
+                                     13 	.globl _strcmp
+                                     14 	.globl _strcpy
+                                     15 	.globl _memcpy
+                                     16 	.globl _UART1_GetFlagStatus
+                                     17 	.globl _UART1_SendData8
+                                     18 	.globl _UART1_ReceiveData8
+                                     19 	.globl _UART1_ITConfig
+                                     20 	.globl _UART1_Cmd
+                                     21 	.globl _UART1_Init
+                                     22 	.globl _UART1_DeInit
+                                     23 	.globl _IWDG_ReloadCounter
+                                     24 	.globl _GPIO_Init
+                                     25 	.globl _new_HC05_msg
+                                     26 	.globl _HC05_rx_counter
+                                     27 	.globl _HC05_msg
+                                     28 	.globl _HC05_rx_buffer
+                                     29 	.globl _HC05_Init
+                                     30 	.globl _HC05_Read
+                                     31 	.globl _HC05_PutChar
+                                     32 	.globl _HC05_PutStr
+                                     33 	.globl _HC05_ClearRxBuffer
+                                     34 	.globl _HC05_Test
+                                     35 	.globl _HC05_SetBaud
+                                     36 	.globl _HC05_SetName
+                                     37 	.globl _HC05_SetPin
+                                     38 ;--------------------------------------------------------
+                                     39 ; ram data
+                                     40 ;--------------------------------------------------------
+                                     41 	.area DATA
+      000001                         42 _HC05_rx_buffer::
+      000001                         43 	.ds 40
+      000029                         44 _HC05_msg::
+      000029                         45 	.ds 40
+                                     46 ;--------------------------------------------------------
+                                     47 ; ram data
+                                     48 ;--------------------------------------------------------
+                                     49 	.area INITIALIZED
+      0000B8                         50 _HC05_rx_counter::
+      0000B8                         51 	.ds 1
+      0000B9                         52 _new_HC05_msg::
+      0000B9                         53 	.ds 1
+                                     54 ;--------------------------------------------------------
+                                     55 ; absolute external ram data
+                                     56 ;--------------------------------------------------------
+                                     57 	.area DABS (ABS)
+                                     58 ;--------------------------------------------------------
+                                     59 ; global & static initialisations
+                                     60 ;--------------------------------------------------------
+                                     61 	.area HOME
+                                     62 	.area GSINIT
+                                     63 	.area GSFINAL
+                                     64 	.area GSINIT
+                                     65 ;--------------------------------------------------------
+                                     66 ; Home
+                                     67 ;--------------------------------------------------------
+                                     68 	.area HOME
+                                     69 	.area HOME
+                                     70 ;--------------------------------------------------------
+                                     71 ; code
+                                     72 ;--------------------------------------------------------
+                                     73 	.area CODE
+                                     74 ;	user/hc05.c: 18: void HC05_Init(uint32_t baudrate)
+                                     75 ;	-----------------------------------------
+                                     76 ;	 function HC05_Init
+                                     77 ;	-----------------------------------------
+      0080BA                         78 _HC05_Init:
+                                     79 ;	user/hc05.c: 21: GPIO_Init(GPIOD, GPIO_PIN_5, GPIO_MODE_OUT_OD_HIZ_FAST);
+      0080BA 4B B0            [ 1]   80 	push	#0xb0
+      0080BC 4B 20            [ 1]   81 	push	#0x20
+      0080BE 4B 0F            [ 1]   82 	push	#0x0f
+      0080C0 4B 50            [ 1]   83 	push	#0x50
+      0080C2 CD 98 0F         [ 4]   84 	call	_GPIO_Init
+      0080C5 5B 04            [ 2]   85 	addw	sp, #4
+                                     86 ;	user/hc05.c: 22: GPIO_Init(GPIOD, GPIO_PIN_6, GPIO_MODE_IN_PU_NO_IT);
+      0080C7 4B 40            [ 1]   87 	push	#0x40
+      0080C9 4B 40            [ 1]   88 	push	#0x40
+      0080CB 4B 0F            [ 1]   89 	push	#0x0f
+      0080CD 4B 50            [ 1]   90 	push	#0x50
+      0080CF CD 98 0F         [ 4]   91 	call	_GPIO_Init
+      0080D2 5B 04            [ 2]   92 	addw	sp, #4
+                                     93 ;	user/hc05.c: 24: UART1_DeInit();
+      0080D4 CD 9A DE         [ 4]   94 	call	_UART1_DeInit
+                                     95 ;	user/hc05.c: 35: UART1_Init((uint32_t)baudrate, UART1_WORDLENGTH_8D, UART1_STOPBITS_1, UART1_PARITY_NO, UART1_SYNCMODE_CLOCK_DISABLE, UART1_MODE_TXRX_ENABLE);
+      0080D7 4B 0C            [ 1]   96 	push	#0x0c
+      0080D9 4B 80            [ 1]   97 	push	#0x80
+      0080DB 4B 00            [ 1]   98 	push	#0x00
+      0080DD 4B 00            [ 1]   99 	push	#0x00
+      0080DF 4B 00            [ 1]  100 	push	#0x00
+      0080E1 1E 0A            [ 2]  101 	ldw	x, (0x0a, sp)
+      0080E3 89               [ 2]  102 	pushw	x
+      0080E4 1E 0A            [ 2]  103 	ldw	x, (0x0a, sp)
+      0080E6 89               [ 2]  104 	pushw	x
+      0080E7 CD 9B 0B         [ 4]  105 	call	_UART1_Init
+      0080EA 5B 09            [ 2]  106 	addw	sp, #9
+                                    107 ;	user/hc05.c: 38: UART1_ITConfig(UART1_IT_RXNE_OR, ENABLE);
+      0080EC 4B 01            [ 1]  108 	push	#0x01
+      0080EE 4B 05            [ 1]  109 	push	#0x05
+      0080F0 4B 02            [ 1]  110 	push	#0x02
+      0080F2 CD 9C AB         [ 4]  111 	call	_UART1_ITConfig
+      0080F5 5B 03            [ 2]  112 	addw	sp, #3
+                                    113 ;	user/hc05.c: 41: UART1_Cmd(ENABLE);
+      0080F7 4B 01            [ 1]  114 	push	#0x01
+      0080F9 CD 9C 97         [ 4]  115 	call	_UART1_Cmd
+      0080FC 84               [ 1]  116 	pop	a
+                                    117 ;	user/hc05.c: 51: HC05_PutStr("\r\n");
+      0080FD AE 85 52         [ 2]  118 	ldw	x, #___str_0+0
+      008100 89               [ 2]  119 	pushw	x
+      008101 CD 81 BE         [ 4]  120 	call	_HC05_PutStr
+      008104 85               [ 2]  121 	popw	x
+                                    122 ;	user/hc05.c: 52: HC05_ClearRxBuffer();
+      008105 CD 82 26         [ 4]  123 	call	_HC05_ClearRxBuffer
+                                    124 ;	user/hc05.c: 53: HC05_Delay(1000);
+      008108 4B E8            [ 1]  125 	push	#0xe8
+      00810A 4B 03            [ 1]  126 	push	#0x03
+      00810C 5F               [ 1]  127 	clrw	x
+      00810D 89               [ 2]  128 	pushw	x
+      00810E CD 81 14         [ 4]  129 	call	_HC05_Delay
+      008111 5B 04            [ 2]  130 	addw	sp, #4
+      008113 81               [ 4]  131 	ret
+                                    132 ;	user/hc05.c: 56: static void HC05_Delay(uint32_t delay)
+                                    133 ;	-----------------------------------------
+                                    134 ;	 function HC05_Delay
+                                    135 ;	-----------------------------------------
+      008114                        136 _HC05_Delay:
+      008114 52 08            [ 2]  137 	sub	sp, #8
+                                    138 ;	user/hc05.c: 58: while(delay--);
+      008116 16 0B            [ 2]  139 	ldw	y, (0x0b, sp)
+      008118 17 05            [ 2]  140 	ldw	(0x05, sp), y
+      00811A 1E 0D            [ 2]  141 	ldw	x, (0x0d, sp)
+      00811C                        142 00101$:
+      00811C 1F 03            [ 2]  143 	ldw	(0x03, sp), x
+      00811E 16 05            [ 2]  144 	ldw	y, (0x05, sp)
+      008120 17 01            [ 2]  145 	ldw	(0x01, sp), y
+      008122 1D 00 01         [ 2]  146 	subw	x, #0x0001
+      008125 7B 06            [ 1]  147 	ld	a, (0x06, sp)
+      008127 A2 00            [ 1]  148 	sbc	a, #0x00
+      008129 6B 06            [ 1]  149 	ld	(0x06, sp), a
+      00812B 7B 05            [ 1]  150 	ld	a, (0x05, sp)
+      00812D A2 00            [ 1]  151 	sbc	a, #0x00
+      00812F 6B 05            [ 1]  152 	ld	(0x05, sp), a
+      008131 16 03            [ 2]  153 	ldw	y, (0x03, sp)
+      008133 26 E7            [ 1]  154 	jrne	00101$
+      008135 16 01            [ 2]  155 	ldw	y, (0x01, sp)
+      008137 26 E3            [ 1]  156 	jrne	00101$
+      008139 5B 08            [ 2]  157 	addw	sp, #8
+      00813B 81               [ 4]  158 	ret
+                                    159 ;	user/hc05.c: 61: void HC05_Read(void)
+                                    160 ;	-----------------------------------------
+                                    161 ;	 function HC05_Read
+                                    162 ;	-----------------------------------------
+      00813C                        163 _HC05_Read:
+      00813C 52 04            [ 2]  164 	sub	sp, #4
+                                    165 ;	user/hc05.c: 63: while (UART1_GetFlagStatus(UART1_FLAG_RXNE) == RESET);
+      00813E                        166 00101$:
+      00813E 4B 20            [ 1]  167 	push	#0x20
+      008140 4B 00            [ 1]  168 	push	#0x00
+      008142 CD 9E 65         [ 4]  169 	call	_UART1_GetFlagStatus
+      008145 85               [ 2]  170 	popw	x
+      008146 4D               [ 1]  171 	tnz	a
+      008147 27 F5            [ 1]  172 	jreq	00101$
+                                    173 ;	user/hc05.c: 64: HC05_rx_buffer[HC05_rx_counter] == UART1_ReceiveData8();
+      008149 CD 9D EF         [ 4]  174 	call	_UART1_ReceiveData8
+                                    175 ;	user/hc05.c: 65: if((HC05_rx_counter+1 == HC05_RX_BUFFER_LENGTH) || (HC05_rx_buffer[HC05_rx_counter] == 0x0a))
+      00814C 5F               [ 1]  176 	clrw	x
+      00814D C6 00 B8         [ 1]  177 	ld	a, _HC05_rx_counter+0
+      008150 97               [ 1]  178 	ld	xl, a
+      008151 5C               [ 2]  179 	incw	x
+      008152 A3 00 28         [ 2]  180 	cpw	x, #0x0028
+      008155 27 10            [ 1]  181 	jreq	00104$
+      008157 AE 00 01         [ 2]  182 	ldw	x, #_HC05_rx_buffer+0
+      00815A 9F               [ 1]  183 	ld	a, xl
+      00815B CB 00 B8         [ 1]  184 	add	a, _HC05_rx_counter+0
+      00815E 02               [ 1]  185 	rlwa	x
+      00815F A9 00            [ 1]  186 	adc	a, #0x00
+      008161 95               [ 1]  187 	ld	xh, a
+      008162 F6               [ 1]  188 	ld	a, (x)
+      008163 A1 0A            [ 1]  189 	cp	a, #0x0a
+      008165 26 37            [ 1]  190 	jrne	00105$
+      008167                        191 00104$:
+                                    192 ;	user/hc05.c: 67: memcpy(HC05_msg, HC05_rx_buffer, HC05_rx_counter);
+      008167 5F               [ 1]  193 	clrw	x
+      008168 C6 00 B8         [ 1]  194 	ld	a, _HC05_rx_counter+0
+      00816B 97               [ 1]  195 	ld	xl, a
+      00816C 90 AE 00 01      [ 2]  196 	ldw	y, #_HC05_rx_buffer+0
+      008170 17 03            [ 2]  197 	ldw	(0x03, sp), y
+      008172 16 03            [ 2]  198 	ldw	y, (0x03, sp)
+      008174 17 01            [ 2]  199 	ldw	(0x01, sp), y
+      008176 90 AE 00 29      [ 2]  200 	ldw	y, #_HC05_msg+0
+      00817A 89               [ 2]  201 	pushw	x
+      00817B 1E 03            [ 2]  202 	ldw	x, (0x03, sp)
+      00817D 89               [ 2]  203 	pushw	x
+      00817E 90 89            [ 2]  204 	pushw	y
+      008180 CD A0 54         [ 4]  205 	call	_memcpy
+      008183 5B 06            [ 2]  206 	addw	sp, #6
+                                    207 ;	user/hc05.c: 68: memset(HC05_rx_buffer, 0, HC05_RX_BUFFER_LENGTH);
+      008185 16 03            [ 2]  208 	ldw	y, (0x03, sp)
+      008187 4B 28            [ 1]  209 	push	#0x28
+      008189 4B 00            [ 1]  210 	push	#0x00
+      00818B 5F               [ 1]  211 	clrw	x
+      00818C 89               [ 2]  212 	pushw	x
+      00818D 90 89            [ 2]  213 	pushw	y
+      00818F CD A0 33         [ 4]  214 	call	_memset
+      008192 5B 06            [ 2]  215 	addw	sp, #6
+                                    216 ;	user/hc05.c: 69: HC05_rx_counter = 0;
+      008194 72 5F 00 B8      [ 1]  217 	clr	_HC05_rx_counter+0
+                                    218 ;	user/hc05.c: 70: new_HC05_msg = 1;
+      008198 35 01 00 B9      [ 1]  219 	mov	_new_HC05_msg+0, #0x01
+      00819C 20 07            [ 2]  220 	jra	00108$
+      00819E                        221 00105$:
+                                    222 ;	user/hc05.c: 74: HC05_rx_counter++;
+      00819E C6 00 B8         [ 1]  223 	ld	a, _HC05_rx_counter+0
+      0081A1 4C               [ 1]  224 	inc	a
+      0081A2 C7 00 B8         [ 1]  225 	ld	_HC05_rx_counter+0, a
+      0081A5                        226 00108$:
+      0081A5 5B 04            [ 2]  227 	addw	sp, #4
+      0081A7 81               [ 4]  228 	ret
+                                    229 ;	user/hc05.c: 78: void HC05_PutChar(uint8_t c)
+                                    230 ;	-----------------------------------------
+                                    231 ;	 function HC05_PutChar
+                                    232 ;	-----------------------------------------
+      0081A8                        233 _HC05_PutChar:
+                                    234 ;	user/hc05.c: 80: while(UART1_GetFlagStatus(UART1_FLAG_TXE) == RESET);
+      0081A8                        235 00101$:
+      0081A8 4B 80            [ 1]  236 	push	#0x80
+      0081AA 4B 00            [ 1]  237 	push	#0x00
+      0081AC CD 9E 65         [ 4]  238 	call	_UART1_GetFlagStatus
+      0081AF 85               [ 2]  239 	popw	x
+      0081B0 4D               [ 1]  240 	tnz	a
+      0081B1 27 F5            [ 1]  241 	jreq	00101$
+                                    242 ;	user/hc05.c: 81: IWDG_ReloadCounter();
+      0081B3 CD 98 FF         [ 4]  243 	call	_IWDG_ReloadCounter
+                                    244 ;	user/hc05.c: 82: UART1_SendData8(c);
+      0081B6 7B 03            [ 1]  245 	ld	a, (0x03, sp)
+      0081B8 88               [ 1]  246 	push	a
+      0081B9 CD 9E 16         [ 4]  247 	call	_UART1_SendData8
+      0081BC 84               [ 1]  248 	pop	a
+      0081BD 81               [ 4]  249 	ret
+                                    250 ;	user/hc05.c: 86: void HC05_PutStr(uint8_t *str)
+                                    251 ;	-----------------------------------------
+                                    252 ;	 function HC05_PutStr
+                                    253 ;	-----------------------------------------
+      0081BE                        254 _HC05_PutStr:
+      0081BE 52 11            [ 2]  255 	sub	sp, #17
+                                    256 ;	user/hc05.c: 89: uint32_t tick = 0xFFFF;
+      0081C0 AE FF FF         [ 2]  257 	ldw	x, #0xffff
+      0081C3 1F 05            [ 2]  258 	ldw	(0x05, sp), x
+      0081C5 5F               [ 1]  259 	clrw	x
+      0081C6 1F 03            [ 2]  260 	ldw	(0x03, sp), x
+                                    261 ;	user/hc05.c: 90: while(str[ad_send] != 0)
+      0081C8 5F               [ 1]  262 	clrw	x
+      0081C9 1F 01            [ 2]  263 	ldw	(0x01, sp), x
+      0081CB                        264 00105$:
+      0081CB 1E 14            [ 2]  265 	ldw	x, (0x14, sp)
+      0081CD 72 FB 01         [ 2]  266 	addw	x, (0x01, sp)
+      0081D0 1F 10            [ 2]  267 	ldw	(0x10, sp), x
+      0081D2 1E 10            [ 2]  268 	ldw	x, (0x10, sp)
+      0081D4 F6               [ 1]  269 	ld	a, (x)
+      0081D5 4D               [ 1]  270 	tnz	a
+      0081D6 27 4B            [ 1]  271 	jreq	00108$
+                                    272 ;	user/hc05.c: 92: while((UART1_GetFlagStatus(UART1_FLAG_TXE) == RESET)&&(tick-- != 0));
+      0081D8 16 03            [ 2]  273 	ldw	y, (0x03, sp)
+      0081DA 17 0B            [ 2]  274 	ldw	(0x0b, sp), y
+      0081DC 1E 05            [ 2]  275 	ldw	x, (0x05, sp)
+      0081DE                        276 00102$:
+      0081DE 89               [ 2]  277 	pushw	x
+      0081DF 4B 80            [ 1]  278 	push	#0x80
+      0081E1 4B 00            [ 1]  279 	push	#0x00
+      0081E3 CD 9E 65         [ 4]  280 	call	_UART1_GetFlagStatus
+      0081E6 85               [ 2]  281 	popw	x
+      0081E7 6B 11            [ 1]  282 	ld	(0x11, sp), a
+      0081E9 85               [ 2]  283 	popw	x
+      0081EA 0D 0F            [ 1]  284 	tnz	(0x0f, sp)
+      0081EC 26 1D            [ 1]  285 	jrne	00113$
+      0081EE 1F 09            [ 2]  286 	ldw	(0x09, sp), x
+      0081F0 16 0B            [ 2]  287 	ldw	y, (0x0b, sp)
+      0081F2 17 07            [ 2]  288 	ldw	(0x07, sp), y
+      0081F4 1D 00 01         [ 2]  289 	subw	x, #0x0001
+      0081F7 7B 0C            [ 1]  290 	ld	a, (0x0c, sp)
+      0081F9 A2 00            [ 1]  291 	sbc	a, #0x00
+      0081FB 6B 0C            [ 1]  292 	ld	(0x0c, sp), a
+      0081FD 7B 0B            [ 1]  293 	ld	a, (0x0b, sp)
+      0081FF A2 00            [ 1]  294 	sbc	a, #0x00
+      008201 6B 0B            [ 1]  295 	ld	(0x0b, sp), a
+      008203 16 09            [ 2]  296 	ldw	y, (0x09, sp)
+      008205 26 D7            [ 1]  297 	jrne	00102$
+      008207 16 07            [ 2]  298 	ldw	y, (0x07, sp)
+      008209 26 D3            [ 1]  299 	jrne	00102$
+      00820B                        300 00113$:
+      00820B 1F 05            [ 2]  301 	ldw	(0x05, sp), x
+      00820D 16 0B            [ 2]  302 	ldw	y, (0x0b, sp)
+      00820F 17 03            [ 2]  303 	ldw	(0x03, sp), y
+                                    304 ;	user/hc05.c: 93: IWDG_ReloadCounter();
+      008211 CD 98 FF         [ 4]  305 	call	_IWDG_ReloadCounter
+                                    306 ;	user/hc05.c: 94: UART1_SendData8(str[ad_send]);
+      008214 1E 10            [ 2]  307 	ldw	x, (0x10, sp)
+      008216 F6               [ 1]  308 	ld	a, (x)
+      008217 88               [ 1]  309 	push	a
+      008218 CD 9E 16         [ 4]  310 	call	_UART1_SendData8
+      00821B 84               [ 1]  311 	pop	a
+                                    312 ;	user/hc05.c: 95: ad_send++;
+      00821C 1E 01            [ 2]  313 	ldw	x, (0x01, sp)
+      00821E 5C               [ 2]  314 	incw	x
+      00821F 1F 01            [ 2]  315 	ldw	(0x01, sp), x
+      008221 20 A8            [ 2]  316 	jra	00105$
+      008223                        317 00108$:
+      008223 5B 11            [ 2]  318 	addw	sp, #17
+      008225 81               [ 4]  319 	ret
+                                    320 ;	user/hc05.c: 99: void HC05_ClearRxBuffer(void)
+                                    321 ;	-----------------------------------------
+                                    322 ;	 function HC05_ClearRxBuffer
+                                    323 ;	-----------------------------------------
+      008226                        324 _HC05_ClearRxBuffer:
+                                    325 ;	user/hc05.c: 101: memset(HC05_rx_buffer, 0, HC05_RX_BUFFER_LENGTH);
+      008226 AE 00 01         [ 2]  326 	ldw	x, #_HC05_rx_buffer+0
+      008229 4B 28            [ 1]  327 	push	#0x28
+      00822B 4B 00            [ 1]  328 	push	#0x00
+      00822D 4B 00            [ 1]  329 	push	#0x00
+      00822F 4B 00            [ 1]  330 	push	#0x00
+      008231 89               [ 2]  331 	pushw	x
+      008232 CD A0 33         [ 4]  332 	call	_memset
+      008235 5B 06            [ 2]  333 	addw	sp, #6
+                                    334 ;	user/hc05.c: 102: HC05_rx_counter = 0;
+      008237 72 5F 00 B8      [ 1]  335 	clr	_HC05_rx_counter+0
+                                    336 ;	user/hc05.c: 103: new_HC05_msg = 0;
+      00823B 72 5F 00 B9      [ 1]  337 	clr	_new_HC05_msg+0
+      00823F 81               [ 4]  338 	ret
+                                    339 ;	user/hc05.c: 106: uint8_t HC05_Test(void)
+                                    340 ;	-----------------------------------------
+                                    341 ;	 function HC05_Test
+                                    342 ;	-----------------------------------------
+      008240                        343 _HC05_Test:
+      008240 52 04            [ 2]  344 	sub	sp, #4
+                                    345 ;	user/hc05.c: 109: HC05_ClearRxBuffer();
+      008242 CD 82 26         [ 4]  346 	call	_HC05_ClearRxBuffer
+                                    347 ;	user/hc05.c: 110: HC05_PutStr("AT");
+      008245 AE 85 55         [ 2]  348 	ldw	x, #___str_1+0
+      008248 89               [ 2]  349 	pushw	x
+      008249 CD 81 BE         [ 4]  350 	call	_HC05_PutStr
+      00824C 85               [ 2]  351 	popw	x
+                                    352 ;	user/hc05.c: 111: while(HC05_rx_counter < 2)
+      00824D AE 6F 30         [ 2]  353 	ldw	x, #0x6f30
+      008250 1F 03            [ 2]  354 	ldw	(0x03, sp), x
+      008252 AE 00 01         [ 2]  355 	ldw	x, #0x0001
+      008255 1F 01            [ 2]  356 	ldw	(0x01, sp), x
+      008257                        357 00103$:
+      008257 C6 00 B8         [ 1]  358 	ld	a, _HC05_rx_counter+0
+      00825A A1 02            [ 1]  359 	cp	a, #0x02
+      00825C 24 2A            [ 1]  360 	jrnc	00105$
+                                    361 ;	user/hc05.c: 113: timeout--;
+      00825E 1E 03            [ 2]  362 	ldw	x, (0x03, sp)
+      008260 1D 00 01         [ 2]  363 	subw	x, #0x0001
+      008263 1F 03            [ 2]  364 	ldw	(0x03, sp), x
+      008265 7B 02            [ 1]  365 	ld	a, (0x02, sp)
+      008267 A2 00            [ 1]  366 	sbc	a, #0x00
+      008269 6B 02            [ 1]  367 	ld	(0x02, sp), a
+      00826B 7B 01            [ 1]  368 	ld	a, (0x01, sp)
+      00826D A2 00            [ 1]  369 	sbc	a, #0x00
+      00826F 6B 01            [ 1]  370 	ld	(0x01, sp), a
+                                    371 ;	user/hc05.c: 114: HC05_Delay(1000);
+      008271 4B E8            [ 1]  372 	push	#0xe8
+      008273 4B 03            [ 1]  373 	push	#0x03
+      008275 5F               [ 1]  374 	clrw	x
+      008276 89               [ 2]  375 	pushw	x
+      008277 CD 81 14         [ 4]  376 	call	_HC05_Delay
+      00827A 5B 04            [ 2]  377 	addw	sp, #4
+                                    378 ;	user/hc05.c: 115: if(timeout == 0) return 0x01;
+      00827C 1E 03            [ 2]  379 	ldw	x, (0x03, sp)
+      00827E 26 D7            [ 1]  380 	jrne	00103$
+      008280 1E 01            [ 2]  381 	ldw	x, (0x01, sp)
+      008282 26 D3            [ 1]  382 	jrne	00103$
+      008284 A6 01            [ 1]  383 	ld	a, #0x01
+      008286 20 17            [ 2]  384 	jra	00109$
+      008288                        385 00105$:
+                                    386 ;	user/hc05.c: 117: if(strcmp(HC05_rx_buffer, "OK") == 0) return 0x00;
+      008288 90 AE 85 58      [ 2]  387 	ldw	y, #___str_2+0
+      00828C AE 00 01         [ 2]  388 	ldw	x, #_HC05_rx_buffer+0
+      00828F 90 89            [ 2]  389 	pushw	y
+      008291 89               [ 2]  390 	pushw	x
+      008292 CD A0 92         [ 4]  391 	call	_strcmp
+      008295 5B 04            [ 2]  392 	addw	sp, #4
+      008297 5D               [ 2]  393 	tnzw	x
+      008298 26 03            [ 1]  394 	jrne	00107$
+      00829A 4F               [ 1]  395 	clr	a
+      00829B 20 02            [ 2]  396 	jra	00109$
+      00829D                        397 00107$:
+                                    398 ;	user/hc05.c: 118: else return 0x02;
+      00829D A6 02            [ 1]  399 	ld	a, #0x02
+      00829F                        400 00109$:
+      00829F 5B 04            [ 2]  401 	addw	sp, #4
+      0082A1 81               [ 4]  402 	ret
+                                    403 ;	user/hc05.c: 121: uint8_t HC05_SetBaud(uint32_t speed)
+                                    404 ;	-----------------------------------------
+                                    405 ;	 function HC05_SetBaud
+                                    406 ;	-----------------------------------------
+      0082A2                        407 _HC05_SetBaud:
+      0082A2 52 1C            [ 2]  408 	sub	sp, #28
+                                    409 ;	user/hc05.c: 126: HC05_ClearRxBuffer(); //clear rx buffer
+      0082A4 CD 82 26         [ 4]  410 	call	_HC05_ClearRxBuffer
+                                    411 ;	user/hc05.c: 128: if(speed == 1200)
+      0082A7 1E 21            [ 2]  412 	ldw	x, (0x21, sp)
+      0082A9 A3 04 B0         [ 2]  413 	cpw	x, #0x04b0
+      0082AC 26 20            [ 1]  414 	jrne	00126$
+      0082AE 1E 1F            [ 2]  415 	ldw	x, (0x1f, sp)
+      0082B0 A3 00 00         [ 2]  416 	cpw	x, #0x0000
+      0082B3 26 19            [ 1]  417 	jrne	00126$
+                                    418 ;	user/hc05.c: 130: strcpy(buf, "OK1200");
+      0082B5 90 AE 85 5B      [ 2]  419 	ldw	y, #___str_3+0
+      0082B9 96               [ 1]  420 	ldw	x, sp
+      0082BA 5C               [ 2]  421 	incw	x
+      0082BB 90 89            [ 2]  422 	pushw	y
+      0082BD 89               [ 2]  423 	pushw	x
+      0082BE CD 9F 5D         [ 4]  424 	call	_strcpy
+      0082C1 5B 04            [ 2]  425 	addw	sp, #4
+                                    426 ;	user/hc05.c: 131: HC05_PutStr("AT+BAUD1");                          
+      0082C3 AE 85 62         [ 2]  427 	ldw	x, #___str_4+0
+      0082C6 89               [ 2]  428 	pushw	x
+      0082C7 CD 81 BE         [ 4]  429 	call	_HC05_PutStr
+      0082CA 85               [ 2]  430 	popw	x
+      0082CB CC 84 06         [ 2]  431 	jp	00148$
+      0082CE                        432 00126$:
+                                    433 ;	user/hc05.c: 133: else if(speed == 2400)
+      0082CE 1E 21            [ 2]  434 	ldw	x, (0x21, sp)
+      0082D0 A3 09 60         [ 2]  435 	cpw	x, #0x0960
+      0082D3 26 20            [ 1]  436 	jrne	00123$
+      0082D5 1E 1F            [ 2]  437 	ldw	x, (0x1f, sp)
+      0082D7 A3 00 00         [ 2]  438 	cpw	x, #0x0000
+      0082DA 26 19            [ 1]  439 	jrne	00123$
+                                    440 ;	user/hc05.c: 135: strcpy(buf, "OK2400");
+      0082DC 90 AE 85 6B      [ 2]  441 	ldw	y, #___str_5+0
+      0082E0 96               [ 1]  442 	ldw	x, sp
+      0082E1 5C               [ 2]  443 	incw	x
+      0082E2 90 89            [ 2]  444 	pushw	y
+      0082E4 89               [ 2]  445 	pushw	x
+      0082E5 CD 9F 5D         [ 4]  446 	call	_strcpy
+      0082E8 5B 04            [ 2]  447 	addw	sp, #4
+                                    448 ;	user/hc05.c: 136: HC05_PutStr("AT+BAUD2");                          
+      0082EA AE 85 72         [ 2]  449 	ldw	x, #___str_6+0
+      0082ED 89               [ 2]  450 	pushw	x
+      0082EE CD 81 BE         [ 4]  451 	call	_HC05_PutStr
+      0082F1 85               [ 2]  452 	popw	x
+      0082F2 CC 84 06         [ 2]  453 	jp	00148$
+      0082F5                        454 00123$:
+                                    455 ;	user/hc05.c: 138: else if(speed == 4800)
+      0082F5 1E 21            [ 2]  456 	ldw	x, (0x21, sp)
+      0082F7 A3 12 C0         [ 2]  457 	cpw	x, #0x12c0
+      0082FA 26 20            [ 1]  458 	jrne	00120$
+      0082FC 1E 1F            [ 2]  459 	ldw	x, (0x1f, sp)
+      0082FE A3 00 00         [ 2]  460 	cpw	x, #0x0000
+      008301 26 19            [ 1]  461 	jrne	00120$
+                                    462 ;	user/hc05.c: 140: strcpy(buf, "OK4800");
+      008303 90 AE 85 7B      [ 2]  463 	ldw	y, #___str_7+0
+      008307 96               [ 1]  464 	ldw	x, sp
+      008308 5C               [ 2]  465 	incw	x
+      008309 90 89            [ 2]  466 	pushw	y
+      00830B 89               [ 2]  467 	pushw	x
+      00830C CD 9F 5D         [ 4]  468 	call	_strcpy
+      00830F 5B 04            [ 2]  469 	addw	sp, #4
+                                    470 ;	user/hc05.c: 141: HC05_PutStr("AT+BAUD3");                          
+      008311 AE 85 82         [ 2]  471 	ldw	x, #___str_8+0
+      008314 89               [ 2]  472 	pushw	x
+      008315 CD 81 BE         [ 4]  473 	call	_HC05_PutStr
+      008318 85               [ 2]  474 	popw	x
+      008319 CC 84 06         [ 2]  475 	jp	00148$
+      00831C                        476 00120$:
+                                    477 ;	user/hc05.c: 143: else if(speed == 9600)
+      00831C 1E 21            [ 2]  478 	ldw	x, (0x21, sp)
+      00831E A3 25 80         [ 2]  479 	cpw	x, #0x2580
+      008321 26 20            [ 1]  480 	jrne	00117$
+      008323 1E 1F            [ 2]  481 	ldw	x, (0x1f, sp)
+      008325 A3 00 00         [ 2]  482 	cpw	x, #0x0000
+      008328 26 19            [ 1]  483 	jrne	00117$
+                                    484 ;	user/hc05.c: 145: strcpy(buf, "OK9600");
+      00832A 90 AE 85 8B      [ 2]  485 	ldw	y, #___str_9+0
+      00832E 96               [ 1]  486 	ldw	x, sp
+      00832F 5C               [ 2]  487 	incw	x
+      008330 90 89            [ 2]  488 	pushw	y
+      008332 89               [ 2]  489 	pushw	x
+      008333 CD 9F 5D         [ 4]  490 	call	_strcpy
+      008336 5B 04            [ 2]  491 	addw	sp, #4
+                                    492 ;	user/hc05.c: 146: HC05_PutStr("AT+BAUD4");                          
+      008338 AE 85 92         [ 2]  493 	ldw	x, #___str_10+0
+      00833B 89               [ 2]  494 	pushw	x
+      00833C CD 81 BE         [ 4]  495 	call	_HC05_PutStr
+      00833F 85               [ 2]  496 	popw	x
+      008340 CC 84 06         [ 2]  497 	jp	00148$
+      008343                        498 00117$:
+                                    499 ;	user/hc05.c: 148: else if(speed == 19200)
+      008343 1E 21            [ 2]  500 	ldw	x, (0x21, sp)
+      008345 A3 4B 00         [ 2]  501 	cpw	x, #0x4b00
+      008348 26 20            [ 1]  502 	jrne	00114$
+      00834A 1E 1F            [ 2]  503 	ldw	x, (0x1f, sp)
+      00834C A3 00 00         [ 2]  504 	cpw	x, #0x0000
+      00834F 26 19            [ 1]  505 	jrne	00114$
+                                    506 ;	user/hc05.c: 150: strcpy(buf, "OK19200");
+      008351 90 AE 85 9B      [ 2]  507 	ldw	y, #___str_11+0
+      008355 96               [ 1]  508 	ldw	x, sp
+      008356 5C               [ 2]  509 	incw	x
+      008357 90 89            [ 2]  510 	pushw	y
+      008359 89               [ 2]  511 	pushw	x
+      00835A CD 9F 5D         [ 4]  512 	call	_strcpy
+      00835D 5B 04            [ 2]  513 	addw	sp, #4
+                                    514 ;	user/hc05.c: 151: HC05_PutStr("AT+BAUD5");                          
+      00835F AE 85 A3         [ 2]  515 	ldw	x, #___str_12+0
+      008362 89               [ 2]  516 	pushw	x
+      008363 CD 81 BE         [ 4]  517 	call	_HC05_PutStr
+      008366 85               [ 2]  518 	popw	x
+      008367 CC 84 06         [ 2]  519 	jp	00148$
+      00836A                        520 00114$:
+                                    521 ;	user/hc05.c: 153: else if(speed == 38400)
+      00836A 1E 21            [ 2]  522 	ldw	x, (0x21, sp)
+      00836C A3 96 00         [ 2]  523 	cpw	x, #0x9600
+      00836F 26 1F            [ 1]  524 	jrne	00111$
+      008371 1E 1F            [ 2]  525 	ldw	x, (0x1f, sp)
+      008373 A3 00 00         [ 2]  526 	cpw	x, #0x0000
+      008376 26 18            [ 1]  527 	jrne	00111$
+                                    528 ;	user/hc05.c: 155: strcpy(buf, "OK38400");
+      008378 90 AE 85 AC      [ 2]  529 	ldw	y, #___str_13+0
+      00837C 96               [ 1]  530 	ldw	x, sp
+      00837D 5C               [ 2]  531 	incw	x
+      00837E 90 89            [ 2]  532 	pushw	y
+      008380 89               [ 2]  533 	pushw	x
+      008381 CD 9F 5D         [ 4]  534 	call	_strcpy
+      008384 5B 04            [ 2]  535 	addw	sp, #4
+                                    536 ;	user/hc05.c: 156: HC05_PutStr("AT+BAUD6");                          
+      008386 AE 85 B4         [ 2]  537 	ldw	x, #___str_14+0
+      008389 89               [ 2]  538 	pushw	x
+      00838A CD 81 BE         [ 4]  539 	call	_HC05_PutStr
+      00838D 85               [ 2]  540 	popw	x
+      00838E 20 76            [ 2]  541 	jra	00148$
+      008390                        542 00111$:
+                                    543 ;	user/hc05.c: 158: else if(speed == 57600)
+      008390 1E 21            [ 2]  544 	ldw	x, (0x21, sp)
+      008392 A3 E1 00         [ 2]  545 	cpw	x, #0xe100
+      008395 26 1F            [ 1]  546 	jrne	00108$
+      008397 1E 1F            [ 2]  547 	ldw	x, (0x1f, sp)
+      008399 A3 00 00         [ 2]  548 	cpw	x, #0x0000
+      00839C 26 18            [ 1]  549 	jrne	00108$
+                                    550 ;	user/hc05.c: 160: strcpy(buf, "OK57600");
+      00839E 90 AE 85 BD      [ 2]  551 	ldw	y, #___str_15+0
+      0083A2 96               [ 1]  552 	ldw	x, sp
+      0083A3 5C               [ 2]  553 	incw	x
+      0083A4 90 89            [ 2]  554 	pushw	y
+      0083A6 89               [ 2]  555 	pushw	x
+      0083A7 CD 9F 5D         [ 4]  556 	call	_strcpy
+      0083AA 5B 04            [ 2]  557 	addw	sp, #4
+                                    558 ;	user/hc05.c: 161: HC05_PutStr("AT+BAUD7");                          
+      0083AC AE 85 C5         [ 2]  559 	ldw	x, #___str_16+0
+      0083AF 89               [ 2]  560 	pushw	x
+      0083B0 CD 81 BE         [ 4]  561 	call	_HC05_PutStr
+      0083B3 85               [ 2]  562 	popw	x
+      0083B4 20 50            [ 2]  563 	jra	00148$
+      0083B6                        564 00108$:
+                                    565 ;	user/hc05.c: 163: else if(speed == 115200)
+      0083B6 1E 21            [ 2]  566 	ldw	x, (0x21, sp)
+      0083B8 A3 C2 00         [ 2]  567 	cpw	x, #0xc200
+      0083BB 26 1F            [ 1]  568 	jrne	00105$
+      0083BD 1E 1F            [ 2]  569 	ldw	x, (0x1f, sp)
+      0083BF A3 00 01         [ 2]  570 	cpw	x, #0x0001
+      0083C2 26 18            [ 1]  571 	jrne	00105$
+                                    572 ;	user/hc05.c: 165: strcpy(buf, "OK115200");
+      0083C4 90 AE 85 CE      [ 2]  573 	ldw	y, #___str_17+0
+      0083C8 96               [ 1]  574 	ldw	x, sp
+      0083C9 5C               [ 2]  575 	incw	x
+      0083CA 90 89            [ 2]  576 	pushw	y
+      0083CC 89               [ 2]  577 	pushw	x
+      0083CD CD 9F 5D         [ 4]  578 	call	_strcpy
+      0083D0 5B 04            [ 2]  579 	addw	sp, #4
+                                    580 ;	user/hc05.c: 166: HC05_PutStr("AT+BAUD8");                          
+      0083D2 AE 85 D7         [ 2]  581 	ldw	x, #___str_18+0
+      0083D5 89               [ 2]  582 	pushw	x
+      0083D6 CD 81 BE         [ 4]  583 	call	_HC05_PutStr
+      0083D9 85               [ 2]  584 	popw	x
+      0083DA 20 2A            [ 2]  585 	jra	00148$
+      0083DC                        586 00105$:
+                                    587 ;	user/hc05.c: 168: else if(speed == 230400)
+      0083DC 1E 21            [ 2]  588 	ldw	x, (0x21, sp)
+      0083DE A3 84 00         [ 2]  589 	cpw	x, #0x8400
+      0083E1 26 1F            [ 1]  590 	jrne	00102$
+      0083E3 1E 1F            [ 2]  591 	ldw	x, (0x1f, sp)
+      0083E5 A3 00 03         [ 2]  592 	cpw	x, #0x0003
+      0083E8 26 18            [ 1]  593 	jrne	00102$
+                                    594 ;	user/hc05.c: 170: strcpy(buf, "OK230400");
+      0083EA 90 AE 85 E0      [ 2]  595 	ldw	y, #___str_19+0
+      0083EE 96               [ 1]  596 	ldw	x, sp
+      0083EF 5C               [ 2]  597 	incw	x
+      0083F0 90 89            [ 2]  598 	pushw	y
+      0083F2 89               [ 2]  599 	pushw	x
+      0083F3 CD 9F 5D         [ 4]  600 	call	_strcpy
+      0083F6 5B 04            [ 2]  601 	addw	sp, #4
+                                    602 ;	user/hc05.c: 171: HC05_PutStr("AT+BAUD9");                          
+      0083F8 AE 85 E9         [ 2]  603 	ldw	x, #___str_20+0
+      0083FB 89               [ 2]  604 	pushw	x
+      0083FC CD 81 BE         [ 4]  605 	call	_HC05_PutStr
+      0083FF 85               [ 2]  606 	popw	x
+      008400 20 04            [ 2]  607 	jra	00148$
+      008402                        608 00102$:
+                                    609 ;	user/hc05.c: 175: return 0x01; //error - incorrect speed
+      008402 A6 01            [ 1]  610 	ld	a, #0x01
+      008404 20 60            [ 2]  611 	jra	00136$
+                                    612 ;	user/hc05.c: 178: while(HC05_rx_counter < strlen(buf)) //wait for "OK" message
+      008406                        613 00148$:
+      008406 96               [ 1]  614 	ldw	x, sp
+      008407 5C               [ 2]  615 	incw	x
+      008408 1F 1B            [ 2]  616 	ldw	(0x1b, sp), x
+      00840A AE 6F 30         [ 2]  617 	ldw	x, #0x6f30
+      00840D 1F 17            [ 2]  618 	ldw	(0x17, sp), x
+      00840F AE 00 01         [ 2]  619 	ldw	x, #0x0001
+      008412 1F 15            [ 2]  620 	ldw	(0x15, sp), x
+      008414                        621 00130$:
+      008414 1E 1B            [ 2]  622 	ldw	x, (0x1b, sp)
+      008416 89               [ 2]  623 	pushw	x
+      008417 CD A0 83         [ 4]  624 	call	_strlen
+      00841A 5B 02            [ 2]  625 	addw	sp, #2
+      00841C 1F 19            [ 2]  626 	ldw	(0x19, sp), x
+      00841E 5F               [ 1]  627 	clrw	x
+      00841F C6 00 B8         [ 1]  628 	ld	a, _HC05_rx_counter+0
+      008422 97               [ 1]  629 	ld	xl, a
+      008423 13 19            [ 2]  630 	cpw	x, (0x19, sp)
+      008425 24 2A            [ 1]  631 	jrnc	00132$
+                                    632 ;	user/hc05.c: 180: timeout--;
+      008427 1E 17            [ 2]  633 	ldw	x, (0x17, sp)
+      008429 1D 00 01         [ 2]  634 	subw	x, #0x0001
+      00842C 1F 17            [ 2]  635 	ldw	(0x17, sp), x
+      00842E 7B 16            [ 1]  636 	ld	a, (0x16, sp)
+      008430 A2 00            [ 1]  637 	sbc	a, #0x00
+      008432 6B 16            [ 1]  638 	ld	(0x16, sp), a
+      008434 7B 15            [ 1]  639 	ld	a, (0x15, sp)
+      008436 A2 00            [ 1]  640 	sbc	a, #0x00
+      008438 6B 15            [ 1]  641 	ld	(0x15, sp), a
+                                    642 ;	user/hc05.c: 181: HC05_Delay(1000); //wait +/- 100us just to give interrupt time to service incoming message
+      00843A 4B E8            [ 1]  643 	push	#0xe8
+      00843C 4B 03            [ 1]  644 	push	#0x03
+      00843E 5F               [ 1]  645 	clrw	x
+      00843F 89               [ 2]  646 	pushw	x
+      008440 CD 81 14         [ 4]  647 	call	_HC05_Delay
+      008443 5B 04            [ 2]  648 	addw	sp, #4
+                                    649 ;	user/hc05.c: 182: if (timeout == 0) 
+      008445 1E 17            [ 2]  650 	ldw	x, (0x17, sp)
+      008447 26 CB            [ 1]  651 	jrne	00130$
+      008449 1E 15            [ 2]  652 	ldw	x, (0x15, sp)
+      00844B 26 C7            [ 1]  653 	jrne	00130$
+                                    654 ;	user/hc05.c: 183: return 0x02; //if the timeout delay is exeeded, exit with error code
+      00844D A6 02            [ 1]  655 	ld	a, #0x02
+      00844F 20 15            [ 2]  656 	jra	00136$
+      008451                        657 00132$:
+                                    658 ;	user/hc05.c: 185: if(strcmp(HC05_rx_buffer, buf) == 0)
+      008451 16 1B            [ 2]  659 	ldw	y, (0x1b, sp)
+      008453 AE 00 01         [ 2]  660 	ldw	x, #_HC05_rx_buffer+0
+      008456 90 89            [ 2]  661 	pushw	y
+      008458 89               [ 2]  662 	pushw	x
+      008459 CD A0 92         [ 4]  663 	call	_strcmp
+      00845C 5B 04            [ 2]  664 	addw	sp, #4
+      00845E 5D               [ 2]  665 	tnzw	x
+      00845F 26 03            [ 1]  666 	jrne	00134$
+                                    667 ;	user/hc05.c: 186: return 0x00; //success
+      008461 4F               [ 1]  668 	clr	a
+      008462 20 02            [ 2]  669 	jra	00136$
+      008464                        670 00134$:
+                                    671 ;	user/hc05.c: 188: return 0x03; //unknown return AT msg from HC06
+      008464 A6 03            [ 1]  672 	ld	a, #0x03
+      008466                        673 00136$:
+      008466 5B 1C            [ 2]  674 	addw	sp, #28
+      008468 81               [ 4]  675 	ret
+                                    676 ;	user/hc05.c: 191: uint8_t HC05_SetName(char *name)
+                                    677 ;	-----------------------------------------
+                                    678 ;	 function HC05_SetName
+                                    679 ;	-----------------------------------------
+      008469                        680 _HC05_SetName:
+      008469 52 14            [ 2]  681 	sub	sp, #20
+                                    682 ;	user/hc05.c: 196: HC05_ClearRxBuffer(); //clear rx buffer
+      00846B CD 82 26         [ 4]  683 	call	_HC05_ClearRxBuffer
+                                    684 ;	user/hc05.c: 198: if(strlen(name) > 13) //error - name more than 20 characters
+      00846E 1E 17            [ 2]  685 	ldw	x, (0x17, sp)
+      008470 89               [ 2]  686 	pushw	x
+      008471 CD A0 83         [ 4]  687 	call	_strlen
+      008474 5B 02            [ 2]  688 	addw	sp, #2
+      008476 A3 00 0D         [ 2]  689 	cpw	x, #0x000d
+      008479 23 04            [ 2]  690 	jrule	00102$
+                                    691 ;	user/hc05.c: 199: return 0x01;
+      00847B A6 01            [ 1]  692 	ld	a, #0x01
+      00847D 20 55            [ 2]  693 	jra	00111$
+      00847F                        694 00102$:
+                                    695 ;	user/hc05.c: 202: HC05_PutStr(cmd); //AT command for SET NAME
+      00847F 96               [ 1]  696 	ldw	x, sp
+      008480 5C               [ 2]  697 	incw	x
+      008481 89               [ 2]  698 	pushw	x
+      008482 CD 81 BE         [ 4]  699 	call	_HC05_PutStr
+      008485 85               [ 2]  700 	popw	x
+                                    701 ;	user/hc05.c: 204: while(HC05_rx_counter < 9) //wait for "OKsetname" message, i.e. 9 chars
+      008486 90 AE 6F 30      [ 2]  702 	ldw	y, #0x6f30
+      00848A AE 00 01         [ 2]  703 	ldw	x, #0x0001
+      00848D                        704 00105$:
+      00848D C6 00 B8         [ 1]  705 	ld	a, _HC05_rx_counter+0
+      008490 A1 09            [ 1]  706 	cp	a, #0x09
+      008492 24 29            [ 1]  707 	jrnc	00107$
+                                    708 ;	user/hc05.c: 206: timeout--;
+      008494 72 A2 00 01      [ 2]  709 	subw	y, #0x0001
+      008498 9F               [ 1]  710 	ld	a, xl
+      008499 A2 00            [ 1]  711 	sbc	a, #0x00
+      00849B 02               [ 1]  712 	rlwa	x
+      00849C A2 00            [ 1]  713 	sbc	a, #0x00
+      00849E 95               [ 1]  714 	ld	xh, a
+                                    715 ;	user/hc05.c: 207: HC05_Delay(1000); //wait +/- 100us just to give interrupt time to service incoming message
+      00849F 89               [ 2]  716 	pushw	x
+      0084A0 90 89            [ 2]  717 	pushw	y
+      0084A2 4B E8            [ 1]  718 	push	#0xe8
+      0084A4 4B 03            [ 1]  719 	push	#0x03
+      0084A6 4B 00            [ 1]  720 	push	#0x00
+      0084A8 4B 00            [ 1]  721 	push	#0x00
+      0084AA CD 81 14         [ 4]  722 	call	_HC05_Delay
+      0084AD 5B 04            [ 2]  723 	addw	sp, #4
+      0084AF 90 85            [ 2]  724 	popw	y
+      0084B1 85               [ 2]  725 	popw	x
+                                    726 ;	user/hc05.c: 208: if (timeout == 0) 
+      0084B2 90 5D            [ 2]  727 	tnzw	y
+      0084B4 26 D7            [ 1]  728 	jrne	00105$
+      0084B6 5D               [ 2]  729 	tnzw	x
+      0084B7 26 D4            [ 1]  730 	jrne	00105$
+                                    731 ;	user/hc05.c: 209: return 0x02; //if the timeout delay is exeeded, exit with error code
+      0084B9 A6 02            [ 1]  732 	ld	a, #0x02
+      0084BB 20 17            [ 2]  733 	jra	00111$
+      0084BD                        734 00107$:
+                                    735 ;	user/hc05.c: 211: if(strcmp(HC05_rx_buffer, "OKsetname") == 0)
+      0084BD 90 AE 85 F2      [ 2]  736 	ldw	y, #___str_21+0
+      0084C1 AE 00 01         [ 2]  737 	ldw	x, #_HC05_rx_buffer+0
+      0084C4 90 89            [ 2]  738 	pushw	y
+      0084C6 89               [ 2]  739 	pushw	x
+      0084C7 CD A0 92         [ 4]  740 	call	_strcmp
+      0084CA 5B 04            [ 2]  741 	addw	sp, #4
+      0084CC 5D               [ 2]  742 	tnzw	x
+      0084CD 26 03            [ 1]  743 	jrne	00109$
+                                    744 ;	user/hc05.c: 212: return 0x00; //success
+      0084CF 4F               [ 1]  745 	clr	a
+      0084D0 20 02            [ 2]  746 	jra	00111$
+      0084D2                        747 00109$:
+                                    748 ;	user/hc05.c: 214: return 0x03; //unknown return AT msg from HC06
+      0084D2 A6 03            [ 1]  749 	ld	a, #0x03
+      0084D4                        750 00111$:
+      0084D4 5B 14            [ 2]  751 	addw	sp, #20
+      0084D6 81               [ 4]  752 	ret
+                                    753 ;	user/hc05.c: 217: uint8_t HC05_SetPin(uint8_t *pin)
+                                    754 ;	-----------------------------------------
+                                    755 ;	 function HC05_SetPin
+                                    756 ;	-----------------------------------------
+      0084D7                        757 _HC05_SetPin:
+      0084D7 52 14            [ 2]  758 	sub	sp, #20
+                                    759 ;	user/hc05.c: 222: HC05_ClearRxBuffer(); //clear rx buffer
+      0084D9 CD 82 26         [ 4]  760 	call	_HC05_ClearRxBuffer
+                                    761 ;	user/hc05.c: 224: if((strlen(pin) < 4) || (strlen(pin) > 4))
+      0084DC 1E 17            [ 2]  762 	ldw	x, (0x17, sp)
+      0084DE 89               [ 2]  763 	pushw	x
+      0084DF CD A0 83         [ 4]  764 	call	_strlen
+      0084E2 5B 02            [ 2]  765 	addw	sp, #2
+      0084E4 A3 00 04         [ 2]  766 	cpw	x, #0x0004
+      0084E7 25 0D            [ 1]  767 	jrc	00101$
+      0084E9 1E 17            [ 2]  768 	ldw	x, (0x17, sp)
+      0084EB 89               [ 2]  769 	pushw	x
+      0084EC CD A0 83         [ 4]  770 	call	_strlen
+      0084EF 5B 02            [ 2]  771 	addw	sp, #2
+      0084F1 A3 00 04         [ 2]  772 	cpw	x, #0x0004
+      0084F4 23 04            [ 2]  773 	jrule	00102$
+      0084F6                        774 00101$:
+                                    775 ;	user/hc05.c: 225: return 0x01; //error - too few or many characetrs in pin
+      0084F6 A6 01            [ 1]  776 	ld	a, #0x01
+      0084F8 20 55            [ 2]  777 	jra	00112$
+      0084FA                        778 00102$:
+                                    779 ;	user/hc05.c: 228: HC05_PutStr(buf); //AT command for SET PIN
+      0084FA 96               [ 1]  780 	ldw	x, sp
+      0084FB 5C               [ 2]  781 	incw	x
+      0084FC 89               [ 2]  782 	pushw	x
+      0084FD CD 81 BE         [ 4]  783 	call	_HC05_PutStr
+      008500 85               [ 2]  784 	popw	x
+                                    785 ;	user/hc05.c: 230: while(HC05_rx_counter < 8) //wait for "OKsetpin" message, i.e. 8 chars
+      008501 90 AE 6F 30      [ 2]  786 	ldw	y, #0x6f30
+      008505 AE 00 01         [ 2]  787 	ldw	x, #0x0001
+      008508                        788 00106$:
+      008508 C6 00 B8         [ 1]  789 	ld	a, _HC05_rx_counter+0
+      00850B A1 08            [ 1]  790 	cp	a, #0x08
+      00850D 24 29            [ 1]  791 	jrnc	00108$
+                                    792 ;	user/hc05.c: 232: timeout--;
+      00850F 72 A2 00 01      [ 2]  793 	subw	y, #0x0001
+      008513 9F               [ 1]  794 	ld	a, xl
+      008514 A2 00            [ 1]  795 	sbc	a, #0x00
+      008516 02               [ 1]  796 	rlwa	x
+      008517 A2 00            [ 1]  797 	sbc	a, #0x00
+      008519 95               [ 1]  798 	ld	xh, a
+                                    799 ;	user/hc05.c: 233: HC05_Delay(1000); //wait +/- 100us just to give interrupt time to service incoming message
+      00851A 89               [ 2]  800 	pushw	x
+      00851B 90 89            [ 2]  801 	pushw	y
+      00851D 4B E8            [ 1]  802 	push	#0xe8
+      00851F 4B 03            [ 1]  803 	push	#0x03
+      008521 4B 00            [ 1]  804 	push	#0x00
+      008523 4B 00            [ 1]  805 	push	#0x00
+      008525 CD 81 14         [ 4]  806 	call	_HC05_Delay
+      008528 5B 04            [ 2]  807 	addw	sp, #4
+      00852A 90 85            [ 2]  808 	popw	y
+      00852C 85               [ 2]  809 	popw	x
+                                    810 ;	user/hc05.c: 234: if (timeout == 0) 
+      00852D 90 5D            [ 2]  811 	tnzw	y
+      00852F 26 D7            [ 1]  812 	jrne	00106$
+      008531 5D               [ 2]  813 	tnzw	x
+      008532 26 D4            [ 1]  814 	jrne	00106$
+                                    815 ;	user/hc05.c: 235: return 0x02; //if the timeout delay is exeeded, exit with error code
+      008534 A6 02            [ 1]  816 	ld	a, #0x02
+      008536 20 17            [ 2]  817 	jra	00112$
+      008538                        818 00108$:
+                                    819 ;	user/hc05.c: 237: if(strcmp(HC05_rx_buffer, "OKsetPIN") == 0)
+      008538 90 AE 85 FC      [ 2]  820 	ldw	y, #___str_22+0
+      00853C AE 00 01         [ 2]  821 	ldw	x, #_HC05_rx_buffer+0
+      00853F 90 89            [ 2]  822 	pushw	y
+      008541 89               [ 2]  823 	pushw	x
+      008542 CD A0 92         [ 4]  824 	call	_strcmp
+      008545 5B 04            [ 2]  825 	addw	sp, #4
+      008547 5D               [ 2]  826 	tnzw	x
+      008548 26 03            [ 1]  827 	jrne	00110$
+                                    828 ;	user/hc05.c: 238: return 0x00; //success
+      00854A 4F               [ 1]  829 	clr	a
+      00854B 20 02            [ 2]  830 	jra	00112$
+      00854D                        831 00110$:
+                                    832 ;	user/hc05.c: 240: return 0x03; //unknown return AT msg from HC06
+      00854D A6 03            [ 1]  833 	ld	a, #0x03
+      00854F                        834 00112$:
+      00854F 5B 14            [ 2]  835 	addw	sp, #20
+      008551 81               [ 4]  836 	ret
+                                    837 	.area CODE
+      008552                        838 ___str_0:
+      008552 0D                     839 	.db 0x0d
+      008553 0A                     840 	.db 0x0a
+      008554 00                     841 	.db 0x00
+      008555                        842 ___str_1:
+      008555 41 54                  843 	.ascii "AT"
+      008557 00                     844 	.db 0x00
+      008558                        845 ___str_2:
+      008558 4F 4B                  846 	.ascii "OK"
+      00855A 00                     847 	.db 0x00
+      00855B                        848 ___str_3:
+      00855B 4F 4B 31 32 30 30      849 	.ascii "OK1200"
+      008561 00                     850 	.db 0x00
+      008562                        851 ___str_4:
+      008562 41 54 2B 42 41 55 44   852 	.ascii "AT+BAUD1"
+             31
+      00856A 00                     853 	.db 0x00
+      00856B                        854 ___str_5:
+      00856B 4F 4B 32 34 30 30      855 	.ascii "OK2400"
+      008571 00                     856 	.db 0x00
+      008572                        857 ___str_6:
+      008572 41 54 2B 42 41 55 44   858 	.ascii "AT+BAUD2"
+             32
+      00857A 00                     859 	.db 0x00
+      00857B                        860 ___str_7:
+      00857B 4F 4B 34 38 30 30      861 	.ascii "OK4800"
+      008581 00                     862 	.db 0x00
+      008582                        863 ___str_8:
+      008582 41 54 2B 42 41 55 44   864 	.ascii "AT+BAUD3"
+             33
+      00858A 00                     865 	.db 0x00
+      00858B                        866 ___str_9:
+      00858B 4F 4B 39 36 30 30      867 	.ascii "OK9600"
+      008591 00                     868 	.db 0x00
+      008592                        869 ___str_10:
+      008592 41 54 2B 42 41 55 44   870 	.ascii "AT+BAUD4"
+             34
+      00859A 00                     871 	.db 0x00
+      00859B                        872 ___str_11:
+      00859B 4F 4B 31 39 32 30 30   873 	.ascii "OK19200"
+      0085A2 00                     874 	.db 0x00
+      0085A3                        875 ___str_12:
+      0085A3 41 54 2B 42 41 55 44   876 	.ascii "AT+BAUD5"
+             35
+      0085AB 00                     877 	.db 0x00
+      0085AC                        878 ___str_13:
+      0085AC 4F 4B 33 38 34 30 30   879 	.ascii "OK38400"
+      0085B3 00                     880 	.db 0x00
+      0085B4                        881 ___str_14:
+      0085B4 41 54 2B 42 41 55 44   882 	.ascii "AT+BAUD6"
+             36
+      0085BC 00                     883 	.db 0x00
+      0085BD                        884 ___str_15:
+      0085BD 4F 4B 35 37 36 30 30   885 	.ascii "OK57600"
+      0085C4 00                     886 	.db 0x00
+      0085C5                        887 ___str_16:
+      0085C5 41 54 2B 42 41 55 44   888 	.ascii "AT+BAUD7"
+             37
+      0085CD 00                     889 	.db 0x00
+      0085CE                        890 ___str_17:
+      0085CE 4F 4B 31 31 35 32 30   891 	.ascii "OK115200"
+             30
+      0085D6 00                     892 	.db 0x00
+      0085D7                        893 ___str_18:
+      0085D7 41 54 2B 42 41 55 44   894 	.ascii "AT+BAUD8"
+             38
+      0085DF 00                     895 	.db 0x00
+      0085E0                        896 ___str_19:
+      0085E0 4F 4B 32 33 30 34 30   897 	.ascii "OK230400"
+             30
+      0085E8 00                     898 	.db 0x00
+      0085E9                        899 ___str_20:
+      0085E9 41 54 2B 42 41 55 44   900 	.ascii "AT+BAUD9"
+             39
+      0085F1 00                     901 	.db 0x00
+      0085F2                        902 ___str_21:
+      0085F2 4F 4B 73 65 74 6E 61   903 	.ascii "OKsetname"
+             6D 65
+      0085FB 00                     904 	.db 0x00
+      0085FC                        905 ___str_22:
+      0085FC 4F 4B 73 65 74 50 49   906 	.ascii "OKsetPIN"
+             4E
+      008604 00                     907 	.db 0x00
+                                    908 	.area INITIALIZER
+      00A883                        909 __xinit__HC05_rx_counter:
+      00A883 00                     910 	.db #0x00	; 0
+      00A884                        911 __xinit__new_HC05_msg:
+      00A884 00                     912 	.db #0x00	; 0
+                                    913 	.area CABS (ABS)

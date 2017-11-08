@@ -1,0 +1,29 @@
+XH3
+H A areas 5 global symbols
+M device
+O -mstm8
+S _GPIO_Init Ref000000
+S .__.ABS. Def000000
+S _GPIO_WriteLow Ref000000
+A _CODE size 0 flags 0 addr 0
+A DATA size 0 flags 0 addr 0
+A INITIALIZED size 0 flags 0 addr 0
+A DABS size 0 flags 8 addr 0
+A HOME size 0 flags 0 addr 0
+A GSINIT size 0 flags 0 addr 0
+A GSFINAL size 0 flags 0 addr 0
+A CODE size 1A flags 0 addr 0
+S _Dev_Manager Def000019
+S _Dev_Init Def000000
+A INITIALIZER size 0 flags 0 addr 0
+A CABS size 0 flags 8 addr 0
+T 00 00 00
+R 00 00 00 07
+T 00 00 00 4B F0 4B FF 4B 05 4B 50 CD 00 00 5B 04
+R 00 00 00 07 02 0C 00 00
+T 00 00 0D 4B FF 4B 05 4B 50 CD 00 00 5B 03 81
+R 00 00 00 07 02 0A 00 02
+T 00 00 19
+R 00 00 00 07
+T 00 00 19 81
+R 00 00 00 07

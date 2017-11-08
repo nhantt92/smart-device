@@ -1,0 +1,84 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 1.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  002710 L
+    .__.ABS.                                                    =  000000 G
+    .__.CPU.                                                    =  000000 L
+    .__.H$L.                                                    =  000001 L
+    _GPIO_Init                                                     ****** GX
+  7 _HC05_ClearRxBuffer                                            00016C GR
+  7 _HC05_Delay                                                    00005A R
+  7 _HC05_Init                                                     000000 GR
+  7 _HC05_PutChar                                                  0000EE GR
+  7 _HC05_PutStr                                                   000104 GR
+  7 _HC05_Read                                                     000082 GR
+  7 _HC05_SetBaud                                                  0001E8 GR
+  7 _HC05_SetName                                                  0003AF GR
+  7 _HC05_SetPin                                                   00041D GR
+  7 _HC05_Test                                                     000186 GR
+  1 _HC05_msg                                                      000028 GR
+  1 _HC05_rx_buffer                                                000000 GR
+  2 _HC05_rx_counter                                               000000 GR
+    _IWDG_ReloadCounter                                            ****** GX
+    _UART1_Cmd                                                     ****** GX
+    _UART1_DeInit                                                  ****** GX
+    _UART1_GetFlagStatus                                           ****** GX
+    _UART1_ITConfig                                                ****** GX
+    _UART1_Init                                                    ****** GX
+    _UART1_ReceiveData8                                            ****** GX
+    _UART1_SendData8                                               ****** GX
+  7 ___str_0                                                       000498 R
+  7 ___str_1                                                       00049B R
+  7 ___str_10                                                      0004D8 R
+  7 ___str_11                                                      0004E1 R
+  7 ___str_12                                                      0004E9 R
+  7 ___str_13                                                      0004F2 R
+  7 ___str_14                                                      0004FA R
+  7 ___str_15                                                      000503 R
+  7 ___str_16                                                      00050B R
+  7 ___str_17                                                      000514 R
+  7 ___str_18                                                      00051D R
+  7 ___str_19                                                      000526 R
+  7 ___str_2                                                       00049E R
+  7 ___str_20                                                      00052F R
+  7 ___str_21                                                      000538 R
+  7 ___str_22                                                      000542 R
+  7 ___str_3                                                       0004A1 R
+  7 ___str_4                                                       0004A8 R
+  7 ___str_5                                                       0004B1 R
+  7 ___str_6                                                       0004B8 R
+  7 ___str_7                                                       0004C1 R
+  7 ___str_8                                                       0004C8 R
+  7 ___str_9                                                       0004D1 R
+  8 __xinit__HC05_rx_counter                                       000000 R
+  8 __xinit__new_HC05_msg                                          000001 R
+    _memcpy                                                        ****** GX
+    _memset                                                        ****** GX
+  2 _new_HC05_msg                                                  000001 GR
+    _strcmp                                                        ****** GX
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 2.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    _strcpy                                                        ****** GX
+    _strlen                                                        ****** GX
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 3.
+Hexadecimal [24-Bits]
+
+Area Table
+
+   0 _CODE                                      size      0   flags    0
+   1 DATA                                       size     50   flags    0
+   2 INITIALIZED                                size      2   flags    0
+   3 DABS                                       size      0   flags    8
+   4 HOME                                       size      0   flags    0
+   5 GSINIT                                     size      0   flags    0
+   6 GSFINAL                                    size      0   flags    0
+   7 CODE                                       size    54B   flags    0
+   8 INITIALIZER                                size      2   flags    0
+   9 CABS                                       size      0   flags    8
+

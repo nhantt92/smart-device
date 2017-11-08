@@ -1,0 +1,432 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 3.6.0 #9615 (MINGW64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module stm8s_spi
+                                      6 	.optsdcc -mstm8
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _SPI_DeInit
+                                     12 	.globl _SPI_Init
+                                     13 	.globl _SPI_Cmd
+                                     14 	.globl _SPI_ITConfig
+                                     15 	.globl _SPI_SendData
+                                     16 	.globl _SPI_ReceiveData
+                                     17 	.globl _SPI_NSSInternalSoftwareCmd
+                                     18 	.globl _SPI_TransmitCRC
+                                     19 	.globl _SPI_CalculateCRCCmd
+                                     20 	.globl _SPI_GetCRC
+                                     21 	.globl _SPI_ResetCRC
+                                     22 	.globl _SPI_GetCRCPolynomial
+                                     23 	.globl _SPI_BiDirectionalLineConfig
+                                     24 	.globl _SPI_GetFlagStatus
+                                     25 	.globl _SPI_ClearFlag
+                                     26 	.globl _SPI_GetITStatus
+                                     27 	.globl _SPI_ClearITPendingBit
+                                     28 ;--------------------------------------------------------
+                                     29 ; ram data
+                                     30 ;--------------------------------------------------------
+                                     31 	.area DATA
+                                     32 ;--------------------------------------------------------
+                                     33 ; ram data
+                                     34 ;--------------------------------------------------------
+                                     35 	.area INITIALIZED
+                                     36 ;--------------------------------------------------------
+                                     37 ; absolute external ram data
+                                     38 ;--------------------------------------------------------
+                                     39 	.area DABS (ABS)
+                                     40 ;--------------------------------------------------------
+                                     41 ; global & static initialisations
+                                     42 ;--------------------------------------------------------
+                                     43 	.area HOME
+                                     44 	.area GSINIT
+                                     45 	.area GSFINAL
+                                     46 	.area GSINIT
+                                     47 ;--------------------------------------------------------
+                                     48 ; Home
+                                     49 ;--------------------------------------------------------
+                                     50 	.area HOME
+                                     51 	.area HOME
+                                     52 ;--------------------------------------------------------
+                                     53 ; code
+                                     54 ;--------------------------------------------------------
+                                     55 	.area CODE
+                                     56 ;	lib/stm8s_spi.c: 13: void SPI_DeInit(void)
+                                     57 ;	-----------------------------------------
+                                     58 ;	 function SPI_DeInit
+                                     59 ;	-----------------------------------------
+      000000                         60 _SPI_DeInit:
+                                     61 ;	lib/stm8s_spi.c: 15: SPI->CR1    = SPI_CR1_RESET_VALUE;
+      000000 35 00 52 00      [ 1]   62 	mov	0x5200+0, #0x00
+                                     63 ;	lib/stm8s_spi.c: 16: SPI->CR2    = SPI_CR2_RESET_VALUE;
+      000004 35 00 52 01      [ 1]   64 	mov	0x5201+0, #0x00
+                                     65 ;	lib/stm8s_spi.c: 17: SPI->ICR    = SPI_ICR_RESET_VALUE;
+      000008 35 00 52 02      [ 1]   66 	mov	0x5202+0, #0x00
+                                     67 ;	lib/stm8s_spi.c: 18: SPI->SR     = SPI_SR_RESET_VALUE;
+      00000C 35 02 52 03      [ 1]   68 	mov	0x5203+0, #0x02
+                                     69 ;	lib/stm8s_spi.c: 19: SPI->CRCPR  = SPI_CRCPR_RESET_VALUE;
+      000010 35 07 52 05      [ 1]   70 	mov	0x5205+0, #0x07
+      000014 81               [ 4]   71 	ret
+                                     72 ;	lib/stm8s_spi.c: 22: void SPI_Init(SPI_FirstBit_TypeDef FirstBit, SPI_BaudRatePrescaler_TypeDef BaudRatePrescaler, SPI_Mode_TypeDef Mode, SPI_ClockPolarity_TypeDef ClockPolarity, SPI_ClockPhase_TypeDef ClockPhase, SPI_DataDirection_TypeDef Data_Direction, SPI_NSS_TypeDef Slave_Management, uint8_t CRCPolynomial)
+                                     73 ;	-----------------------------------------
+                                     74 ;	 function SPI_Init
+                                     75 ;	-----------------------------------------
+      000015                         76 _SPI_Init:
+      000015 88               [ 1]   77 	push	a
+                                     78 ;	lib/stm8s_spi.c: 25: SPI->CR1 = (uint8_t)((uint8_t)((uint8_t)FirstBit | BaudRatePrescaler) |
+      000016 7B 04            [ 1]   79 	ld	a, (0x04, sp)
+      000018 1A 05            [ 1]   80 	or	a, (0x05, sp)
+      00001A 6B 01            [ 1]   81 	ld	(0x01, sp), a
+                                     82 ;	lib/stm8s_spi.c: 26: (uint8_t)((uint8_t)ClockPolarity | ClockPhase));
+      00001C 7B 07            [ 1]   83 	ld	a, (0x07, sp)
+      00001E 1A 08            [ 1]   84 	or	a, (0x08, sp)
+      000020 1A 01            [ 1]   85 	or	a, (0x01, sp)
+      000022 AE 52 00         [ 2]   86 	ldw	x, #0x5200
+      000025 F7               [ 1]   87 	ld	(x), a
+                                     88 ;	lib/stm8s_spi.c: 29: SPI->CR2 = (uint8_t)((uint8_t)(Data_Direction) | (uint8_t)(Slave_Management));
+      000026 7B 09            [ 1]   89 	ld	a, (0x09, sp)
+      000028 1A 0A            [ 1]   90 	or	a, (0x0a, sp)
+      00002A AE 52 01         [ 2]   91 	ldw	x, #0x5201
+      00002D F7               [ 1]   92 	ld	(x), a
+                                     93 ;	lib/stm8s_spi.c: 31: if (Mode == SPI_MODE_MASTER)
+      00002E 7B 06            [ 1]   94 	ld	a, (0x06, sp)
+      000030 A1 04            [ 1]   95 	cp	a, #0x04
+      000032 26 06            [ 1]   96 	jrne	00102$
+                                     97 ;	lib/stm8s_spi.c: 33: SPI->CR2 |= (uint8_t)SPI_CR2_SSI;
+      000034 72 10 52 01      [ 1]   98 	bset	0x5201, #0
+      000038 20 04            [ 2]   99 	jra	00103$
+      00003A                        100 00102$:
+                                    101 ;	lib/stm8s_spi.c: 37: SPI->CR2 &= (uint8_t)~(SPI_CR2_SSI);
+      00003A 72 11 52 01      [ 1]  102 	bres	0x5201, #0
+      00003E                        103 00103$:
+                                    104 ;	lib/stm8s_spi.c: 41: SPI->CR1 |= (uint8_t)(Mode);
+      00003E AE 52 00         [ 2]  105 	ldw	x, #0x5200
+      000041 F6               [ 1]  106 	ld	a, (x)
+      000042 1A 06            [ 1]  107 	or	a, (0x06, sp)
+      000044 AE 52 00         [ 2]  108 	ldw	x, #0x5200
+      000047 F7               [ 1]  109 	ld	(x), a
+                                    110 ;	lib/stm8s_spi.c: 44: SPI->CRCPR = (uint8_t)CRCPolynomial;
+      000048 AE 52 05         [ 2]  111 	ldw	x, #0x5205
+      00004B 7B 0B            [ 1]  112 	ld	a, (0x0b, sp)
+      00004D F7               [ 1]  113 	ld	(x), a
+      00004E 84               [ 1]  114 	pop	a
+      00004F 81               [ 4]  115 	ret
+                                    116 ;	lib/stm8s_spi.c: 47: void SPI_Cmd(FunctionalState NewState)
+                                    117 ;	-----------------------------------------
+                                    118 ;	 function SPI_Cmd
+                                    119 ;	-----------------------------------------
+      000050                        120 _SPI_Cmd:
+                                    121 ;	lib/stm8s_spi.c: 50: if (NewState != DISABLE)
+      000050 0D 03            [ 1]  122 	tnz	(0x03, sp)
+      000052 27 08            [ 1]  123 	jreq	00102$
+                                    124 ;	lib/stm8s_spi.c: 52: SPI->CR1 |= SPI_CR1_SPE; /* Enable the SPI peripheral*/
+      000054 AE 52 00         [ 2]  125 	ldw	x, #0x5200
+      000057 F6               [ 1]  126 	ld	a, (x)
+      000058 AA 40            [ 1]  127 	or	a, #0x40
+      00005A F7               [ 1]  128 	ld	(x), a
+      00005B 81               [ 4]  129 	ret
+      00005C                        130 00102$:
+                                    131 ;	lib/stm8s_spi.c: 56: SPI->CR1 &= (uint8_t)(~SPI_CR1_SPE); /* Disable the SPI peripheral*/
+      00005C AE 52 00         [ 2]  132 	ldw	x, #0x5200
+      00005F F6               [ 1]  133 	ld	a, (x)
+      000060 A4 BF            [ 1]  134 	and	a, #0xbf
+      000062 F7               [ 1]  135 	ld	(x), a
+      000063 81               [ 4]  136 	ret
+                                    137 ;	lib/stm8s_spi.c: 60: void SPI_ITConfig(SPI_IT_TypeDef SPI_IT, FunctionalState NewState)
+                                    138 ;	-----------------------------------------
+                                    139 ;	 function SPI_ITConfig
+                                    140 ;	-----------------------------------------
+      000064                        141 _SPI_ITConfig:
+      000064 89               [ 2]  142 	pushw	x
+                                    143 ;	lib/stm8s_spi.c: 65: itpos = (uint8_t)((uint8_t)1 << (uint8_t)((uint8_t)SPI_IT & (uint8_t)0x0F));
+      000065 7B 05            [ 1]  144 	ld	a, (0x05, sp)
+      000067 A4 0F            [ 1]  145 	and	a, #0x0f
+      000069 97               [ 1]  146 	ld	xl, a
+      00006A A6 01            [ 1]  147 	ld	a, #0x01
+      00006C 88               [ 1]  148 	push	a
+      00006D 9F               [ 1]  149 	ld	a, xl
+      00006E 4D               [ 1]  150 	tnz	a
+      00006F 27 05            [ 1]  151 	jreq	00111$
+      000071                        152 00110$:
+      000071 08 01            [ 1]  153 	sll	(1, sp)
+      000073 4A               [ 1]  154 	dec	a
+      000074 26 FB            [ 1]  155 	jrne	00110$
+      000076                        156 00111$:
+      000076 84               [ 1]  157 	pop	a
+      000077 6B 01            [ 1]  158 	ld	(0x01, sp), a
+                                    159 ;	lib/stm8s_spi.c: 67: if (NewState != DISABLE)
+      000079 0D 06            [ 1]  160 	tnz	(0x06, sp)
+      00007B 27 0C            [ 1]  161 	jreq	00102$
+                                    162 ;	lib/stm8s_spi.c: 69: SPI->ICR |= itpos; /* Enable interrupt*/
+      00007D AE 52 02         [ 2]  163 	ldw	x, #0x5202
+      000080 F6               [ 1]  164 	ld	a, (x)
+      000081 1A 01            [ 1]  165 	or	a, (0x01, sp)
+      000083 AE 52 02         [ 2]  166 	ldw	x, #0x5202
+      000086 F7               [ 1]  167 	ld	(x), a
+      000087 20 0F            [ 2]  168 	jra	00104$
+      000089                        169 00102$:
+                                    170 ;	lib/stm8s_spi.c: 73: SPI->ICR &= (uint8_t)(~itpos); /* Disable interrupt*/
+      000089 AE 52 02         [ 2]  171 	ldw	x, #0x5202
+      00008C F6               [ 1]  172 	ld	a, (x)
+      00008D 6B 02            [ 1]  173 	ld	(0x02, sp), a
+      00008F 7B 01            [ 1]  174 	ld	a, (0x01, sp)
+      000091 43               [ 1]  175 	cpl	a
+      000092 14 02            [ 1]  176 	and	a, (0x02, sp)
+      000094 AE 52 02         [ 2]  177 	ldw	x, #0x5202
+      000097 F7               [ 1]  178 	ld	(x), a
+      000098                        179 00104$:
+      000098 85               [ 2]  180 	popw	x
+      000099 81               [ 4]  181 	ret
+                                    182 ;	lib/stm8s_spi.c: 77: void SPI_SendData(uint8_t Data)
+                                    183 ;	-----------------------------------------
+                                    184 ;	 function SPI_SendData
+                                    185 ;	-----------------------------------------
+      00009A                        186 _SPI_SendData:
+                                    187 ;	lib/stm8s_spi.c: 79: SPI->DR = Data; 
+      00009A AE 52 04         [ 2]  188 	ldw	x, #0x5204
+      00009D 7B 03            [ 1]  189 	ld	a, (0x03, sp)
+      00009F F7               [ 1]  190 	ld	(x), a
+      0000A0 81               [ 4]  191 	ret
+                                    192 ;	lib/stm8s_spi.c: 82: uint8_t SPI_ReceiveData(void)
+                                    193 ;	-----------------------------------------
+                                    194 ;	 function SPI_ReceiveData
+                                    195 ;	-----------------------------------------
+      0000A1                        196 _SPI_ReceiveData:
+                                    197 ;	lib/stm8s_spi.c: 84: return ((uint8_t)SPI->DR); 
+      0000A1 AE 52 04         [ 2]  198 	ldw	x, #0x5204
+      0000A4 F6               [ 1]  199 	ld	a, (x)
+      0000A5 81               [ 4]  200 	ret
+                                    201 ;	lib/stm8s_spi.c: 87: void SPI_NSSInternalSoftwareCmd(FunctionalState NewState)
+                                    202 ;	-----------------------------------------
+                                    203 ;	 function SPI_NSSInternalSoftwareCmd
+                                    204 ;	-----------------------------------------
+      0000A6                        205 _SPI_NSSInternalSoftwareCmd:
+                                    206 ;	lib/stm8s_spi.c: 89: if (NewState != DISABLE)
+      0000A6 0D 03            [ 1]  207 	tnz	(0x03, sp)
+      0000A8 27 05            [ 1]  208 	jreq	00102$
+                                    209 ;	lib/stm8s_spi.c: 91: SPI->CR2 |= SPI_CR2_SSI; /* Set NSS pin internally by software*/
+      0000AA 72 10 52 01      [ 1]  210 	bset	0x5201, #0
+      0000AE 81               [ 4]  211 	ret
+      0000AF                        212 00102$:
+                                    213 ;	lib/stm8s_spi.c: 95: SPI->CR2 &= (uint8_t)(~SPI_CR2_SSI); /* Reset NSS pin internally by software*/
+      0000AF 72 11 52 01      [ 1]  214 	bres	0x5201, #0
+      0000B3 81               [ 4]  215 	ret
+                                    216 ;	lib/stm8s_spi.c: 99: void SPI_TransmitCRC(void)
+                                    217 ;	-----------------------------------------
+                                    218 ;	 function SPI_TransmitCRC
+                                    219 ;	-----------------------------------------
+      0000B4                        220 _SPI_TransmitCRC:
+                                    221 ;	lib/stm8s_spi.c: 101: SPI->CR2 |= SPI_CR2_CRCNEXT; /* Enable the CRC transmission*/
+      0000B4 AE 52 01         [ 2]  222 	ldw	x, #0x5201
+      0000B7 F6               [ 1]  223 	ld	a, (x)
+      0000B8 AA 10            [ 1]  224 	or	a, #0x10
+      0000BA F7               [ 1]  225 	ld	(x), a
+      0000BB 81               [ 4]  226 	ret
+                                    227 ;	lib/stm8s_spi.c: 104: void SPI_CalculateCRCCmd(FunctionalState NewState)
+                                    228 ;	-----------------------------------------
+                                    229 ;	 function SPI_CalculateCRCCmd
+                                    230 ;	-----------------------------------------
+      0000BC                        231 _SPI_CalculateCRCCmd:
+                                    232 ;	lib/stm8s_spi.c: 107: if (NewState != DISABLE)
+      0000BC 0D 03            [ 1]  233 	tnz	(0x03, sp)
+      0000BE 27 08            [ 1]  234 	jreq	00102$
+                                    235 ;	lib/stm8s_spi.c: 109: SPI->CR2 |= SPI_CR2_CRCEN; /* Enable the CRC calculation*/
+      0000C0 AE 52 01         [ 2]  236 	ldw	x, #0x5201
+      0000C3 F6               [ 1]  237 	ld	a, (x)
+      0000C4 AA 20            [ 1]  238 	or	a, #0x20
+      0000C6 F7               [ 1]  239 	ld	(x), a
+      0000C7 81               [ 4]  240 	ret
+      0000C8                        241 00102$:
+                                    242 ;	lib/stm8s_spi.c: 113: SPI->CR2 &= (uint8_t)(~SPI_CR2_CRCEN); /* Disable the CRC calculation*/
+      0000C8 AE 52 01         [ 2]  243 	ldw	x, #0x5201
+      0000CB F6               [ 1]  244 	ld	a, (x)
+      0000CC A4 DF            [ 1]  245 	and	a, #0xdf
+      0000CE F7               [ 1]  246 	ld	(x), a
+      0000CF 81               [ 4]  247 	ret
+                                    248 ;	lib/stm8s_spi.c: 117: uint8_t SPI_GetCRC(SPI_CRC_TypeDef SPI_CRC)
+                                    249 ;	-----------------------------------------
+                                    250 ;	 function SPI_GetCRC
+                                    251 ;	-----------------------------------------
+      0000D0                        252 _SPI_GetCRC:
+                                    253 ;	lib/stm8s_spi.c: 122: if (SPI_CRC != SPI_CRC_RX)
+      0000D0 0D 03            [ 1]  254 	tnz	(0x03, sp)
+      0000D2 27 05            [ 1]  255 	jreq	00102$
+                                    256 ;	lib/stm8s_spi.c: 124: crcreg = SPI->TXCRCR;  /* Get the Tx CRC register*/
+      0000D4 AE 52 07         [ 2]  257 	ldw	x, #0x5207
+      0000D7 F6               [ 1]  258 	ld	a, (x)
+      0000D8 81               [ 4]  259 	ret
+      0000D9                        260 00102$:
+                                    261 ;	lib/stm8s_spi.c: 128: crcreg = SPI->RXCRCR; /* Get the Rx CRC register*/
+      0000D9 AE 52 06         [ 2]  262 	ldw	x, #0x5206
+      0000DC F6               [ 1]  263 	ld	a, (x)
+                                    264 ;	lib/stm8s_spi.c: 132: return crcreg;
+      0000DD 81               [ 4]  265 	ret
+                                    266 ;	lib/stm8s_spi.c: 135: void SPI_ResetCRC(void)
+                                    267 ;	-----------------------------------------
+                                    268 ;	 function SPI_ResetCRC
+                                    269 ;	-----------------------------------------
+      0000DE                        270 _SPI_ResetCRC:
+                                    271 ;	lib/stm8s_spi.c: 139: SPI_CalculateCRCCmd(ENABLE);
+      0000DE 4B 01            [ 1]  272 	push	#0x01
+      0000E0 CDr00rBC         [ 4]  273 	call	_SPI_CalculateCRCCmd
+      0000E3 84               [ 1]  274 	pop	a
+                                    275 ;	lib/stm8s_spi.c: 142: SPI_Cmd(ENABLE);
+      0000E4 4B 01            [ 1]  276 	push	#0x01
+      0000E6 CDr00r50         [ 4]  277 	call	_SPI_Cmd
+      0000E9 84               [ 1]  278 	pop	a
+      0000EA 81               [ 4]  279 	ret
+                                    280 ;	lib/stm8s_spi.c: 150: uint8_t SPI_GetCRCPolynomial(void)
+                                    281 ;	-----------------------------------------
+                                    282 ;	 function SPI_GetCRCPolynomial
+                                    283 ;	-----------------------------------------
+      0000EB                        284 _SPI_GetCRCPolynomial:
+                                    285 ;	lib/stm8s_spi.c: 152: return SPI->CRCPR; /* Return the CRC polynomial register */
+      0000EB AE 52 05         [ 2]  286 	ldw	x, #0x5205
+      0000EE F6               [ 1]  287 	ld	a, (x)
+      0000EF 81               [ 4]  288 	ret
+                                    289 ;	lib/stm8s_spi.c: 160: void SPI_BiDirectionalLineConfig(SPI_Direction_TypeDef SPI_Direction)
+                                    290 ;	-----------------------------------------
+                                    291 ;	 function SPI_BiDirectionalLineConfig
+                                    292 ;	-----------------------------------------
+      0000F0                        293 _SPI_BiDirectionalLineConfig:
+                                    294 ;	lib/stm8s_spi.c: 163: if (SPI_Direction != SPI_DIRECTION_RX)
+      0000F0 0D 03            [ 1]  295 	tnz	(0x03, sp)
+      0000F2 27 08            [ 1]  296 	jreq	00102$
+                                    297 ;	lib/stm8s_spi.c: 165: SPI->CR2 |= SPI_CR2_BDOE; /* Set the Tx only mode*/
+      0000F4 AE 52 01         [ 2]  298 	ldw	x, #0x5201
+      0000F7 F6               [ 1]  299 	ld	a, (x)
+      0000F8 AA 40            [ 1]  300 	or	a, #0x40
+      0000FA F7               [ 1]  301 	ld	(x), a
+      0000FB 81               [ 4]  302 	ret
+      0000FC                        303 00102$:
+                                    304 ;	lib/stm8s_spi.c: 169: SPI->CR2 &= (uint8_t)(~SPI_CR2_BDOE); /* Set the Rx only mode*/
+      0000FC AE 52 01         [ 2]  305 	ldw	x, #0x5201
+      0000FF F6               [ 1]  306 	ld	a, (x)
+      000100 A4 BF            [ 1]  307 	and	a, #0xbf
+      000102 F7               [ 1]  308 	ld	(x), a
+      000103 81               [ 4]  309 	ret
+                                    310 ;	lib/stm8s_spi.c: 174: FlagStatus SPI_GetFlagStatus(SPI_Flag_TypeDef SPI_FLAG)
+                                    311 ;	-----------------------------------------
+                                    312 ;	 function SPI_GetFlagStatus
+                                    313 ;	-----------------------------------------
+      000104                        314 _SPI_GetFlagStatus:
+                                    315 ;	lib/stm8s_spi.c: 178: if ((SPI->SR & (uint8_t)SPI_FLAG) != (uint8_t)RESET)
+      000104 AE 52 03         [ 2]  316 	ldw	x, #0x5203
+      000107 F6               [ 1]  317 	ld	a, (x)
+      000108 14 03            [ 1]  318 	and	a, (0x03, sp)
+      00010A 4D               [ 1]  319 	tnz	a
+      00010B 27 03            [ 1]  320 	jreq	00102$
+                                    321 ;	lib/stm8s_spi.c: 180: status = SET; /* SPI_FLAG is set */
+      00010D A6 01            [ 1]  322 	ld	a, #0x01
+      00010F 81               [ 4]  323 	ret
+      000110                        324 00102$:
+                                    325 ;	lib/stm8s_spi.c: 184: status = RESET; /* SPI_FLAG is reset*/
+      000110 4F               [ 1]  326 	clr	a
+                                    327 ;	lib/stm8s_spi.c: 188: return status;
+      000111 81               [ 4]  328 	ret
+                                    329 ;	lib/stm8s_spi.c: 191: void SPI_ClearFlag(SPI_Flag_TypeDef SPI_FLAG)
+                                    330 ;	-----------------------------------------
+                                    331 ;	 function SPI_ClearFlag
+                                    332 ;	-----------------------------------------
+      000112                        333 _SPI_ClearFlag:
+                                    334 ;	lib/stm8s_spi.c: 193: SPI->SR = (uint8_t)(~SPI_FLAG);
+      000112 7B 03            [ 1]  335 	ld	a, (0x03, sp)
+      000114 43               [ 1]  336 	cpl	a
+      000115 AE 52 03         [ 2]  337 	ldw	x, #0x5203
+      000118 F7               [ 1]  338 	ld	(x), a
+      000119 81               [ 4]  339 	ret
+                                    340 ;	lib/stm8s_spi.c: 196: ITStatus SPI_GetITStatus(SPI_IT_TypeDef SPI_IT)
+                                    341 ;	-----------------------------------------
+                                    342 ;	 function SPI_GetITStatus
+                                    343 ;	-----------------------------------------
+      00011A                        344 _SPI_GetITStatus:
+      00011A 52 03            [ 2]  345 	sub	sp, #3
+                                    346 ;	lib/stm8s_spi.c: 204: itpos = (uint8_t)((uint8_t)1 << ((uint8_t)SPI_IT & (uint8_t)0x0F));
+      00011C 7B 06            [ 1]  347 	ld	a, (0x06, sp)
+      00011E A4 0F            [ 1]  348 	and	a, #0x0f
+      000120 97               [ 1]  349 	ld	xl, a
+      000121 A6 01            [ 1]  350 	ld	a, #0x01
+      000123 88               [ 1]  351 	push	a
+      000124 9F               [ 1]  352 	ld	a, xl
+      000125 4D               [ 1]  353 	tnz	a
+      000126 27 05            [ 1]  354 	jreq	00116$
+      000128                        355 00115$:
+      000128 08 01            [ 1]  356 	sll	(1, sp)
+      00012A 4A               [ 1]  357 	dec	a
+      00012B 26 FB            [ 1]  358 	jrne	00115$
+      00012D                        359 00116$:
+      00012D 84               [ 1]  360 	pop	a
+      00012E 6B 03            [ 1]  361 	ld	(0x03, sp), a
+                                    362 ;	lib/stm8s_spi.c: 207: itmask1 = (uint8_t)((uint8_t)SPI_IT >> (uint8_t)4);
+      000130 7B 06            [ 1]  363 	ld	a, (0x06, sp)
+      000132 4E               [ 1]  364 	swap	a
+      000133 A4 0F            [ 1]  365 	and	a, #0x0f
+      000135 97               [ 1]  366 	ld	xl, a
+                                    367 ;	lib/stm8s_spi.c: 209: itmask2 = (uint8_t)((uint8_t)1 << itmask1);
+      000136 A6 01            [ 1]  368 	ld	a, #0x01
+      000138 88               [ 1]  369 	push	a
+      000139 9F               [ 1]  370 	ld	a, xl
+      00013A 4D               [ 1]  371 	tnz	a
+      00013B 27 05            [ 1]  372 	jreq	00118$
+      00013D                        373 00117$:
+      00013D 08 01            [ 1]  374 	sll	(1, sp)
+      00013F 4A               [ 1]  375 	dec	a
+      000140 26 FB            [ 1]  376 	jrne	00117$
+      000142                        377 00118$:
+      000142 84               [ 1]  378 	pop	a
+      000143 6B 01            [ 1]  379 	ld	(0x01, sp), a
+                                    380 ;	lib/stm8s_spi.c: 211: enablestatus = (uint8_t)((uint8_t)SPI->SR & itmask2);
+      000145 AE 52 03         [ 2]  381 	ldw	x, #0x5203
+      000148 F6               [ 1]  382 	ld	a, (x)
+      000149 14 01            [ 1]  383 	and	a, (0x01, sp)
+      00014B 6B 02            [ 1]  384 	ld	(0x02, sp), a
+                                    385 ;	lib/stm8s_spi.c: 213: if (((SPI->ICR & itpos) != RESET) && enablestatus)
+      00014D AE 52 02         [ 2]  386 	ldw	x, #0x5202
+      000150 F6               [ 1]  387 	ld	a, (x)
+      000151 14 03            [ 1]  388 	and	a, (0x03, sp)
+      000153 4D               [ 1]  389 	tnz	a
+      000154 27 07            [ 1]  390 	jreq	00102$
+      000156 0D 02            [ 1]  391 	tnz	(0x02, sp)
+      000158 27 03            [ 1]  392 	jreq	00102$
+                                    393 ;	lib/stm8s_spi.c: 216: pendingbitstatus = SET;
+      00015A A6 01            [ 1]  394 	ld	a, #0x01
+                                    395 ;	lib/stm8s_spi.c: 221: pendingbitstatus = RESET;
+      00015C 21                     396 	.byte 0x21
+      00015D                        397 00102$:
+      00015D 4F               [ 1]  398 	clr	a
+      00015E                        399 00103$:
+                                    400 ;	lib/stm8s_spi.c: 224: return  pendingbitstatus;
+      00015E 5B 03            [ 2]  401 	addw	sp, #3
+      000160 81               [ 4]  402 	ret
+                                    403 ;	lib/stm8s_spi.c: 227: void SPI_ClearITPendingBit(SPI_IT_TypeDef SPI_IT)
+                                    404 ;	-----------------------------------------
+                                    405 ;	 function SPI_ClearITPendingBit
+                                    406 ;	-----------------------------------------
+      000161                        407 _SPI_ClearITPendingBit:
+                                    408 ;	lib/stm8s_spi.c: 234: itpos = (uint8_t)((uint8_t)1 << (uint8_t)((uint8_t)(SPI_IT & (uint8_t)0xF0) >> 4));
+      000161 7B 03            [ 1]  409 	ld	a, (0x03, sp)
+      000163 A4 F0            [ 1]  410 	and	a, #0xf0
+      000165 4E               [ 1]  411 	swap	a
+      000166 A4 0F            [ 1]  412 	and	a, #0x0f
+      000168 97               [ 1]  413 	ld	xl, a
+      000169 A6 01            [ 1]  414 	ld	a, #0x01
+      00016B 88               [ 1]  415 	push	a
+      00016C 9F               [ 1]  416 	ld	a, xl
+      00016D 4D               [ 1]  417 	tnz	a
+      00016E 27 05            [ 1]  418 	jreq	00104$
+      000170                        419 00103$:
+      000170 08 01            [ 1]  420 	sll	(1, sp)
+      000172 4A               [ 1]  421 	dec	a
+      000173 26 FB            [ 1]  422 	jrne	00103$
+      000175                        423 00104$:
+      000175 84               [ 1]  424 	pop	a
+                                    425 ;	lib/stm8s_spi.c: 236: SPI->SR = (uint8_t)(~itpos);
+      000176 43               [ 1]  426 	cpl	a
+      000177 AE 52 03         [ 2]  427 	ldw	x, #0x5203
+      00017A F7               [ 1]  428 	ld	(x), a
+      00017B 81               [ 4]  429 	ret
+                                    430 	.area CODE
+                                    431 	.area INITIALIZER
+                                    432 	.area CABS (ABS)

@@ -1,0 +1,12 @@
+#include "device.h"
+
+void Dev_Init(void)
+{
+	GPIO_Init(DEV_PORT, DEV1_PIN | DEV2_PIN | DEV3_PIN | DEV4_PIN | DEV5_PIN | DEV6_PIN | DEV7_PIN | DEV8_PIN, GPIO_MODE_OUT_PP_HIGH_FAST);
+	GPIO_WriteLow(DEV_PORT, DEV1_PIN|DEV2_PIN|DEV3_PIN|DEV4_PIN|DEV5_PIN|DEV6_PIN|DEV7_PIN|DEV8_PIN);
+}
+
+void Dev_Manager(void)
+{
+	
+}

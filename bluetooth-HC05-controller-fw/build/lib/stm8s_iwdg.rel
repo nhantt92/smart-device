@@ -1,0 +1,40 @@
+XH3
+H A areas 6 global symbols
+M stm8s_iwdg
+O -mstm8
+S .__.ABS. Def000000
+A _CODE size 0 flags 0 addr 0
+A DATA size 0 flags 0 addr 0
+A INITIALIZED size 0 flags 0 addr 0
+A DABS size 0 flags 8 addr 0
+A HOME size 0 flags 0 addr 0
+A GSINIT size 0 flags 0 addr 0
+A GSFINAL size 0 flags 0 addr 0
+A CODE size 1F flags 0 addr 0
+S _IWDG_WriteAccessCmd Def000000
+S _IWDG_ReloadCounter Def000015
+S _IWDG_SetReload Def00000E
+S _IWDG_Enable Def00001A
+S _IWDG_SetPrescaler Def000007
+A INITIALIZER size 0 flags 0 addr 0
+A CABS size 0 flags 8 addr 0
+T 00 00 00
+R 00 00 00 07
+T 00 00 00 AE 50 E0 7B 03 F7 81
+R 00 00 00 07
+T 00 00 07
+R 00 00 00 07
+T 00 00 07 AE 50 E1 7B 03 F7 81
+R 00 00 00 07
+T 00 00 0E
+R 00 00 00 07
+T 00 00 0E AE 50 E2 7B 03 F7 81
+R 00 00 00 07
+T 00 00 15
+R 00 00 00 07
+T 00 00 15 35 AA 50 E0 81
+R 00 00 00 07
+T 00 00 1A
+R 00 00 00 07
+T 00 00 1A 35 CC 50 E0 81
+R 00 00 00 07

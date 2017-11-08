@@ -1,0 +1,452 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 3.6.0 #9615 (MINGW64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module sw_uart
+                                      6 	.optsdcc -mstm8
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _delaytest
+                                     12 	.globl _Vcomdelay
+                                     13 	.globl _GPIO_WriteLow
+                                     14 	.globl _GPIO_WriteHigh
+                                     15 	.globl _GPIO_Init
+                                     16 	.globl _sprintf
+                                     17 	.globl _DELAYTIME
+                                     18 	.globl _vcomstr
+                                     19 	.globl _VCOM_Init
+                                     20 	.globl _VCOM_puts
+                                     21 	.globl _VCOM_TestSpeed
+                                     22 ;--------------------------------------------------------
+                                     23 ; ram data
+                                     24 ;--------------------------------------------------------
+                                     25 	.area DATA
+      000000                         26 _vcomstr::
+      000000                         27 	.ds 30
+                                     28 ;--------------------------------------------------------
+                                     29 ; ram data
+                                     30 ;--------------------------------------------------------
+                                     31 	.area INITIALIZED
+      000000                         32 _DELAYTIME::
+      000000                         33 	.ds 2
+                                     34 ;--------------------------------------------------------
+                                     35 ; absolute external ram data
+                                     36 ;--------------------------------------------------------
+                                     37 	.area DABS (ABS)
+                                     38 ;--------------------------------------------------------
+                                     39 ; global & static initialisations
+                                     40 ;--------------------------------------------------------
+                                     41 	.area HOME
+                                     42 	.area GSINIT
+                                     43 	.area GSFINAL
+                                     44 	.area GSINIT
+                                     45 ;--------------------------------------------------------
+                                     46 ; Home
+                                     47 ;--------------------------------------------------------
+                                     48 	.area HOME
+                                     49 	.area HOME
+                                     50 ;--------------------------------------------------------
+                                     51 ; code
+                                     52 ;--------------------------------------------------------
+                                     53 	.area CODE
+                                     54 ;	user/sw_uart.c: 15: void Vcomdelay(int dtime)
+                                     55 ;	-----------------------------------------
+                                     56 ;	 function Vcomdelay
+                                     57 ;	-----------------------------------------
+      000000                         58 _Vcomdelay:
+      000000 1E 03            [ 2]   59 	ldw	x, (0x03, sp)
+      000002                         60 00103$:
+                                     61 ;	user/sw_uart.c: 18: for ( ; dtime >= 0; dtime--);
+      000002 5D               [ 2]   62 	tnzw	x
+      000003 2A 01            [ 1]   63 	jrpl	00116$
+      000005 81               [ 4]   64 	ret
+      000006                         65 00116$:
+      000006 5A               [ 2]   66 	decw	x
+      000007 20 F9            [ 2]   67 	jra	00103$
+      000009 81               [ 4]   68 	ret
+                                     69 ;	user/sw_uart.c: 21: void VCOM_Init(void)
+                                     70 ;	-----------------------------------------
+                                     71 ;	 function VCOM_Init
+                                     72 ;	-----------------------------------------
+      00000A                         73 _VCOM_Init:
+                                     74 ;	user/sw_uart.c: 23: GPIO_Init(vTxGPIO, vTxPIN, GPIO_MODE_OUT_PP_HIGH_FAST);
+      00000A 4B F0            [ 1]   75 	push	#0xf0
+      00000C 4B 20            [ 1]   76 	push	#0x20
+      00000E 4B 0F            [ 1]   77 	push	#0x0f
+      000010 4B 50            [ 1]   78 	push	#0x50
+      000012 CDr00r00         [ 4]   79 	call	_GPIO_Init
+      000015 5B 04            [ 2]   80 	addw	sp, #4
+                                     81 ;	user/sw_uart.c: 24: vTx_H();
+      000017 4B 20            [ 1]   82 	push	#0x20
+      000019 4B 0F            [ 1]   83 	push	#0x0f
+      00001B 4B 50            [ 1]   84 	push	#0x50
+      00001D CDr00r00         [ 4]   85 	call	_GPIO_WriteHigh
+      000020 5B 03            [ 2]   86 	addw	sp, #3
+      000022 81               [ 4]   87 	ret
+                                     88 ;	user/sw_uart.c: 28: void VCOM_puts(char *str)
+                                     89 ;	-----------------------------------------
+                                     90 ;	 function VCOM_puts
+                                     91 ;	-----------------------------------------
+      000023                         92 _VCOM_puts:
+      000023 52 05            [ 2]   93 	sub	sp, #5
+                                     94 ;	user/sw_uart.c: 32: disableInterrupts();
+      000025 9B               [ 1]   95 	sim
+                                     96 ;	user/sw_uart.c: 33: while ((c=*str) && maxlen--)
+      000026 AE 00 FF         [ 2]   97 	ldw	x, #0x00ff
+      000029 1F 01            [ 2]   98 	ldw	(0x01, sp), x
+      00002B 16 08            [ 2]   99 	ldw	y, (0x08, sp)
+      00002D 17 04            [ 2]  100 	ldw	(0x04, sp), y
+      00002F                        101 00126$:
+      00002F 1E 04            [ 2]  102 	ldw	x, (0x04, sp)
+      000031 F6               [ 1]  103 	ld	a, (x)
+      000032 6B 03            [ 1]  104 	ld	(0x03, sp), a
+      000034 4D               [ 1]  105 	tnz	a
+      000035 26 03            [ 1]  106 	jrne	00176$
+      000037 CCr01rA4         [ 2]  107 	jp	00128$
+      00003A                        108 00176$:
+      00003A 1E 01            [ 2]  109 	ldw	x, (0x01, sp)
+      00003C 16 01            [ 2]  110 	ldw	y, (0x01, sp)
+      00003E 90 5A            [ 2]  111 	decw	y
+      000040 17 01            [ 2]  112 	ldw	(0x01, sp), y
+      000042 5D               [ 2]  113 	tnzw	x
+      000043 26 03            [ 1]  114 	jrne	00177$
+      000045 CCr01rA4         [ 2]  115 	jp	00128$
+      000048                        116 00177$:
+                                    117 ;	user/sw_uart.c: 35: vTx_L();                                              // start bit
+      000048 4B 20            [ 1]  118 	push	#0x20
+      00004A 4B 0F            [ 1]  119 	push	#0x0f
+      00004C 4B 50            [ 1]  120 	push	#0x50
+      00004E CDr00r00         [ 4]  121 	call	_GPIO_WriteLow
+      000051 5B 03            [ 2]  122 	addw	sp, #3
+                                    123 ;	user/sw_uart.c: 36: Vcomdelay(DELAYTIME);          
+      000053 CEu00u00         [ 2]  124 	ldw	x, _DELAYTIME+0
+      000056 89               [ 2]  125 	pushw	x
+      000057 CDr00r00         [ 4]  126 	call	_Vcomdelay
+      00005A 85               [ 2]  127 	popw	x
+                                    128 ;	user/sw_uart.c: 37: if (c&0x01) vTx_H(); else vTx_L();   Vcomdelay(DELAYTIME); 
+      00005B 7B 03            [ 1]  129 	ld	a, (0x03, sp)
+      00005D 44               [ 1]  130 	srl	a
+      00005E 24 0D            [ 1]  131 	jrnc	00102$
+      000060 4B 20            [ 1]  132 	push	#0x20
+      000062 4B 0F            [ 1]  133 	push	#0x0f
+      000064 4B 50            [ 1]  134 	push	#0x50
+      000066 CDr00r00         [ 4]  135 	call	_GPIO_WriteHigh
+      000069 5B 03            [ 2]  136 	addw	sp, #3
+      00006B 20 0B            [ 2]  137 	jra	00103$
+      00006D                        138 00102$:
+      00006D 4B 20            [ 1]  139 	push	#0x20
+      00006F 4B 0F            [ 1]  140 	push	#0x0f
+      000071 4B 50            [ 1]  141 	push	#0x50
+      000073 CDr00r00         [ 4]  142 	call	_GPIO_WriteLow
+      000076 5B 03            [ 2]  143 	addw	sp, #3
+      000078                        144 00103$:
+      000078 CEu00u00         [ 2]  145 	ldw	x, _DELAYTIME+0
+      00007B 89               [ 2]  146 	pushw	x
+      00007C CDr00r00         [ 4]  147 	call	_Vcomdelay
+      00007F 85               [ 2]  148 	popw	x
+                                    149 ;	user/sw_uart.c: 38: if (c&0x02) vTx_H(); else vTx_L();   Vcomdelay(DELAYTIME);
+      000080 7B 03            [ 1]  150 	ld	a, (0x03, sp)
+      000082 A5 02            [ 1]  151 	bcp	a, #0x02
+      000084 27 0D            [ 1]  152 	jreq	00105$
+      000086 4B 20            [ 1]  153 	push	#0x20
+      000088 4B 0F            [ 1]  154 	push	#0x0f
+      00008A 4B 50            [ 1]  155 	push	#0x50
+      00008C CDr00r00         [ 4]  156 	call	_GPIO_WriteHigh
+      00008F 5B 03            [ 2]  157 	addw	sp, #3
+      000091 20 0B            [ 2]  158 	jra	00106$
+      000093                        159 00105$:
+      000093 4B 20            [ 1]  160 	push	#0x20
+      000095 4B 0F            [ 1]  161 	push	#0x0f
+      000097 4B 50            [ 1]  162 	push	#0x50
+      000099 CDr00r00         [ 4]  163 	call	_GPIO_WriteLow
+      00009C 5B 03            [ 2]  164 	addw	sp, #3
+      00009E                        165 00106$:
+      00009E CEu00u00         [ 2]  166 	ldw	x, _DELAYTIME+0
+      0000A1 89               [ 2]  167 	pushw	x
+      0000A2 CDr00r00         [ 4]  168 	call	_Vcomdelay
+      0000A5 85               [ 2]  169 	popw	x
+                                    170 ;	user/sw_uart.c: 39: if (c&0x04) vTx_H(); else vTx_L();   Vcomdelay(DELAYTIME);
+      0000A6 7B 03            [ 1]  171 	ld	a, (0x03, sp)
+      0000A8 A5 04            [ 1]  172 	bcp	a, #0x04
+      0000AA 27 0D            [ 1]  173 	jreq	00108$
+      0000AC 4B 20            [ 1]  174 	push	#0x20
+      0000AE 4B 0F            [ 1]  175 	push	#0x0f
+      0000B0 4B 50            [ 1]  176 	push	#0x50
+      0000B2 CDr00r00         [ 4]  177 	call	_GPIO_WriteHigh
+      0000B5 5B 03            [ 2]  178 	addw	sp, #3
+      0000B7 20 0B            [ 2]  179 	jra	00109$
+      0000B9                        180 00108$:
+      0000B9 4B 20            [ 1]  181 	push	#0x20
+      0000BB 4B 0F            [ 1]  182 	push	#0x0f
+      0000BD 4B 50            [ 1]  183 	push	#0x50
+      0000BF CDr00r00         [ 4]  184 	call	_GPIO_WriteLow
+      0000C2 5B 03            [ 2]  185 	addw	sp, #3
+      0000C4                        186 00109$:
+      0000C4 CEu00u00         [ 2]  187 	ldw	x, _DELAYTIME+0
+      0000C7 89               [ 2]  188 	pushw	x
+      0000C8 CDr00r00         [ 4]  189 	call	_Vcomdelay
+      0000CB 85               [ 2]  190 	popw	x
+                                    191 ;	user/sw_uart.c: 40: if (c&0x08) vTx_H(); else vTx_L();   Vcomdelay(DELAYTIME);
+      0000CC 7B 03            [ 1]  192 	ld	a, (0x03, sp)
+      0000CE A5 08            [ 1]  193 	bcp	a, #0x08
+      0000D0 27 0D            [ 1]  194 	jreq	00111$
+      0000D2 4B 20            [ 1]  195 	push	#0x20
+      0000D4 4B 0F            [ 1]  196 	push	#0x0f
+      0000D6 4B 50            [ 1]  197 	push	#0x50
+      0000D8 CDr00r00         [ 4]  198 	call	_GPIO_WriteHigh
+      0000DB 5B 03            [ 2]  199 	addw	sp, #3
+      0000DD 20 0B            [ 2]  200 	jra	00112$
+      0000DF                        201 00111$:
+      0000DF 4B 20            [ 1]  202 	push	#0x20
+      0000E1 4B 0F            [ 1]  203 	push	#0x0f
+      0000E3 4B 50            [ 1]  204 	push	#0x50
+      0000E5 CDr00r00         [ 4]  205 	call	_GPIO_WriteLow
+      0000E8 5B 03            [ 2]  206 	addw	sp, #3
+      0000EA                        207 00112$:
+      0000EA CEu00u00         [ 2]  208 	ldw	x, _DELAYTIME+0
+      0000ED 89               [ 2]  209 	pushw	x
+      0000EE CDr00r00         [ 4]  210 	call	_Vcomdelay
+      0000F1 85               [ 2]  211 	popw	x
+                                    212 ;	user/sw_uart.c: 41: if (c&0x10) vTx_H(); else vTx_L();   Vcomdelay(DELAYTIME);
+      0000F2 7B 03            [ 1]  213 	ld	a, (0x03, sp)
+      0000F4 A5 10            [ 1]  214 	bcp	a, #0x10
+      0000F6 27 0D            [ 1]  215 	jreq	00114$
+      0000F8 4B 20            [ 1]  216 	push	#0x20
+      0000FA 4B 0F            [ 1]  217 	push	#0x0f
+      0000FC 4B 50            [ 1]  218 	push	#0x50
+      0000FE CDr00r00         [ 4]  219 	call	_GPIO_WriteHigh
+      000101 5B 03            [ 2]  220 	addw	sp, #3
+      000103 20 0B            [ 2]  221 	jra	00115$
+      000105                        222 00114$:
+      000105 4B 20            [ 1]  223 	push	#0x20
+      000107 4B 0F            [ 1]  224 	push	#0x0f
+      000109 4B 50            [ 1]  225 	push	#0x50
+      00010B CDr00r00         [ 4]  226 	call	_GPIO_WriteLow
+      00010E 5B 03            [ 2]  227 	addw	sp, #3
+      000110                        228 00115$:
+      000110 CEu00u00         [ 2]  229 	ldw	x, _DELAYTIME+0
+      000113 89               [ 2]  230 	pushw	x
+      000114 CDr00r00         [ 4]  231 	call	_Vcomdelay
+      000117 85               [ 2]  232 	popw	x
+                                    233 ;	user/sw_uart.c: 42: if (c&0x20) vTx_H(); else vTx_L();   Vcomdelay(DELAYTIME);
+      000118 7B 03            [ 1]  234 	ld	a, (0x03, sp)
+      00011A A5 20            [ 1]  235 	bcp	a, #0x20
+      00011C 27 0D            [ 1]  236 	jreq	00117$
+      00011E 4B 20            [ 1]  237 	push	#0x20
+      000120 4B 0F            [ 1]  238 	push	#0x0f
+      000122 4B 50            [ 1]  239 	push	#0x50
+      000124 CDr00r00         [ 4]  240 	call	_GPIO_WriteHigh
+      000127 5B 03            [ 2]  241 	addw	sp, #3
+      000129 20 0B            [ 2]  242 	jra	00118$
+      00012B                        243 00117$:
+      00012B 4B 20            [ 1]  244 	push	#0x20
+      00012D 4B 0F            [ 1]  245 	push	#0x0f
+      00012F 4B 50            [ 1]  246 	push	#0x50
+      000131 CDr00r00         [ 4]  247 	call	_GPIO_WriteLow
+      000134 5B 03            [ 2]  248 	addw	sp, #3
+      000136                        249 00118$:
+      000136 CEu00u00         [ 2]  250 	ldw	x, _DELAYTIME+0
+      000139 89               [ 2]  251 	pushw	x
+      00013A CDr00r00         [ 4]  252 	call	_Vcomdelay
+      00013D 85               [ 2]  253 	popw	x
+                                    254 ;	user/sw_uart.c: 43: if (c&0x40) vTx_H(); else vTx_L();   Vcomdelay(DELAYTIME);
+      00013E 7B 03            [ 1]  255 	ld	a, (0x03, sp)
+      000140 A5 40            [ 1]  256 	bcp	a, #0x40
+      000142 27 0D            [ 1]  257 	jreq	00120$
+      000144 4B 20            [ 1]  258 	push	#0x20
+      000146 4B 0F            [ 1]  259 	push	#0x0f
+      000148 4B 50            [ 1]  260 	push	#0x50
+      00014A CDr00r00         [ 4]  261 	call	_GPIO_WriteHigh
+      00014D 5B 03            [ 2]  262 	addw	sp, #3
+      00014F 20 0B            [ 2]  263 	jra	00121$
+      000151                        264 00120$:
+      000151 4B 20            [ 1]  265 	push	#0x20
+      000153 4B 0F            [ 1]  266 	push	#0x0f
+      000155 4B 50            [ 1]  267 	push	#0x50
+      000157 CDr00r00         [ 4]  268 	call	_GPIO_WriteLow
+      00015A 5B 03            [ 2]  269 	addw	sp, #3
+      00015C                        270 00121$:
+      00015C CEu00u00         [ 2]  271 	ldw	x, _DELAYTIME+0
+      00015F 89               [ 2]  272 	pushw	x
+      000160 CDr00r00         [ 4]  273 	call	_Vcomdelay
+      000163 85               [ 2]  274 	popw	x
+                                    275 ;	user/sw_uart.c: 44: if (c&0x80) vTx_H(); else vTx_L();   Vcomdelay(DELAYTIME);
+      000164 0D 03            [ 1]  276 	tnz	(0x03, sp)
+      000166 2A 0D            [ 1]  277 	jrpl	00123$
+      000168 4B 20            [ 1]  278 	push	#0x20
+      00016A 4B 0F            [ 1]  279 	push	#0x0f
+      00016C 4B 50            [ 1]  280 	push	#0x50
+      00016E CDr00r00         [ 4]  281 	call	_GPIO_WriteHigh
+      000171 5B 03            [ 2]  282 	addw	sp, #3
+      000173 20 0B            [ 2]  283 	jra	00124$
+      000175                        284 00123$:
+      000175 4B 20            [ 1]  285 	push	#0x20
+      000177 4B 0F            [ 1]  286 	push	#0x0f
+      000179 4B 50            [ 1]  287 	push	#0x50
+      00017B CDr00r00         [ 4]  288 	call	_GPIO_WriteLow
+      00017E 5B 03            [ 2]  289 	addw	sp, #3
+      000180                        290 00124$:
+      000180 CEu00u00         [ 2]  291 	ldw	x, _DELAYTIME+0
+      000183 89               [ 2]  292 	pushw	x
+      000184 CDr00r00         [ 4]  293 	call	_Vcomdelay
+      000187 85               [ 2]  294 	popw	x
+                                    295 ;	user/sw_uart.c: 45: vTx_H();                                             // stop bit    (1.5bit for sure)
+      000188 4B 20            [ 1]  296 	push	#0x20
+      00018A 4B 0F            [ 1]  297 	push	#0x0f
+      00018C 4B 50            [ 1]  298 	push	#0x50
+      00018E CDr00r00         [ 4]  299 	call	_GPIO_WriteHigh
+      000191 5B 03            [ 2]  300 	addw	sp, #3
+                                    301 ;	user/sw_uart.c: 46: Vcomdelay(DELAYTIME<<1);             
+      000193 CEu00u00         [ 2]  302 	ldw	x, _DELAYTIME+0
+      000196 58               [ 2]  303 	sllw	x
+      000197 89               [ 2]  304 	pushw	x
+      000198 CDr00r00         [ 4]  305 	call	_Vcomdelay
+      00019B 85               [ 2]  306 	popw	x
+                                    307 ;	user/sw_uart.c: 47: str++;
+      00019C 1E 04            [ 2]  308 	ldw	x, (0x04, sp)
+      00019E 5C               [ 2]  309 	incw	x
+      00019F 1F 04            [ 2]  310 	ldw	(0x04, sp), x
+      0001A1 CCr00r2F         [ 2]  311 	jp	00126$
+      0001A4                        312 00128$:
+                                    313 ;	user/sw_uart.c: 49: enableInterrupts();
+      0001A4 9A               [ 1]  314 	rim
+      0001A5 5B 05            [ 2]  315 	addw	sp, #5
+      0001A7 81               [ 4]  316 	ret
+                                    317 ;	user/sw_uart.c: 52: void delaytest(uint32_t x)
+                                    318 ;	-----------------------------------------
+                                    319 ;	 function delaytest
+                                    320 ;	-----------------------------------------
+      0001A8                        321 _delaytest:
+      0001A8 52 10            [ 2]  322 	sub	sp, #16
+                                    323 ;	user/sw_uart.c: 55: while(x--)
+      0001AA 16 13            [ 2]  324 	ldw	y, (0x13, sp)
+      0001AC 17 05            [ 2]  325 	ldw	(0x05, sp), y
+      0001AE 16 15            [ 2]  326 	ldw	y, (0x15, sp)
+      0001B0                        327 00102$:
+      0001B0 17 0F            [ 2]  328 	ldw	(0x0f, sp), y
+      0001B2 1E 05            [ 2]  329 	ldw	x, (0x05, sp)
+      0001B4 1F 0D            [ 2]  330 	ldw	(0x0d, sp), x
+      0001B6 72 A2 00 01      [ 2]  331 	subw	y, #0x0001
+      0001BA 7B 06            [ 1]  332 	ld	a, (0x06, sp)
+      0001BC A2 00            [ 1]  333 	sbc	a, #0x00
+      0001BE 6B 06            [ 1]  334 	ld	(0x06, sp), a
+      0001C0 7B 05            [ 1]  335 	ld	a, (0x05, sp)
+      0001C2 A2 00            [ 1]  336 	sbc	a, #0x00
+      0001C4 6B 05            [ 1]  337 	ld	(0x05, sp), a
+      0001C6 1E 0F            [ 2]  338 	ldw	x, (0x0f, sp)
+      0001C8 26 04            [ 1]  339 	jrne	00126$
+      0001CA 1E 0D            [ 2]  340 	ldw	x, (0x0d, sp)
+      0001CC 27 34            [ 1]  341 	jreq	00108$
+      0001CE                        342 00126$:
+      0001CE 1E 03            [ 2]  343 	ldw	x, (0x03, sp)
+      0001D0 1F 0B            [ 2]  344 	ldw	(0x0b, sp), x
+      0001D2 1E 01            [ 2]  345 	ldw	x, (0x01, sp)
+      0001D4 1F 09            [ 2]  346 	ldw	(0x09, sp), x
+      0001D6                        347 00106$:
+                                    348 ;	user/sw_uart.c: 57: for(;i<3000;i++);
+      0001D6 1E 0B            [ 2]  349 	ldw	x, (0x0b, sp)
+      0001D8 A3 0B B8         [ 2]  350 	cpw	x, #0x0bb8
+      0001DB 7B 0A            [ 1]  351 	ld	a, (0x0a, sp)
+      0001DD A2 00            [ 1]  352 	sbc	a, #0x00
+      0001DF 7B 09            [ 1]  353 	ld	a, (0x09, sp)
+      0001E1 A2 00            [ 1]  354 	sbc	a, #0x00
+      0001E3 24 CB            [ 1]  355 	jrnc	00102$
+      0001E5 1E 0B            [ 2]  356 	ldw	x, (0x0b, sp)
+      0001E7 1C 00 01         [ 2]  357 	addw	x, #0x0001
+      0001EA 1F 0B            [ 2]  358 	ldw	(0x0b, sp), x
+      0001EC 7B 0A            [ 1]  359 	ld	a, (0x0a, sp)
+      0001EE A9 00            [ 1]  360 	adc	a, #0x00
+      0001F0 6B 0A            [ 1]  361 	ld	(0x0a, sp), a
+      0001F2 7B 09            [ 1]  362 	ld	a, (0x09, sp)
+      0001F4 A9 00            [ 1]  363 	adc	a, #0x00
+      0001F6 6B 09            [ 1]  364 	ld	(0x09, sp), a
+      0001F8 1E 0B            [ 2]  365 	ldw	x, (0x0b, sp)
+      0001FA 1F 03            [ 2]  366 	ldw	(0x03, sp), x
+      0001FC 1E 09            [ 2]  367 	ldw	x, (0x09, sp)
+      0001FE 1F 01            [ 2]  368 	ldw	(0x01, sp), x
+      000200 20 D4            [ 2]  369 	jra	00106$
+      000202                        370 00108$:
+      000202 5B 10            [ 2]  371 	addw	sp, #16
+      000204 81               [ 4]  372 	ret
+                                    373 ;	user/sw_uart.c: 61: void VCOM_TestSpeed(void)
+                                    374 ;	-----------------------------------------
+                                    375 ;	 function VCOM_TestSpeed
+                                    376 ;	-----------------------------------------
+      000205                        377 _VCOM_TestSpeed:
+      000205 52 08            [ 2]  378 	sub	sp, #8
+                                    379 ;	user/sw_uart.c: 66: for(i=250;i>=1;i--)
+      000207                        380 00109$:
+      000207 AEr02r6F         [ 2]  381 	ldw	x, #___str_0+0
+      00020A 1F 07            [ 2]  382 	ldw	(0x07, sp), x
+      00020C AEr00r00         [ 2]  383 	ldw	x, #_vcomstr+0
+      00020F 1F 03            [ 2]  384 	ldw	(0x03, sp), x
+      000211 16 03            [ 2]  385 	ldw	y, (0x03, sp)
+      000213 17 05            [ 2]  386 	ldw	(0x05, sp), y
+      000215 AE 00 FA         [ 2]  387 	ldw	x, #0x00fa
+      000218 1F 01            [ 2]  388 	ldw	(0x01, sp), x
+      00021A                        389 00105$:
+                                    390 ;	user/sw_uart.c: 68: DELAYTIME = i;  
+      00021A 7B 02            [ 1]  391 	ld	a, (0x02, sp)
+      00021C C7u00u01         [ 1]  392 	ld	_DELAYTIME+1, a
+      00021F 7B 01            [ 1]  393 	ld	a, (0x01, sp)
+      000221 C7u00u00         [ 1]  394 	ld	_DELAYTIME+0, a
+                                    395 ;	user/sw_uart.c: 69: vTx_H();
+      000224 4B 20            [ 1]  396 	push	#0x20
+      000226 4B 0F            [ 1]  397 	push	#0x0f
+      000228 4B 50            [ 1]  398 	push	#0x50
+      00022A CDr00r00         [ 4]  399 	call	_GPIO_WriteHigh
+      00022D 5B 03            [ 2]  400 	addw	sp, #3
+                                    401 ;	user/sw_uart.c: 70: delaytest(10000); 
+      00022F 4B 10            [ 1]  402 	push	#0x10
+      000231 4B 27            [ 1]  403 	push	#0x27
+      000233 5F               [ 1]  404 	clrw	x
+      000234 89               [ 2]  405 	pushw	x
+      000235 CDr01rA8         [ 4]  406 	call	_delaytest
+      000238 5B 04            [ 2]  407 	addw	sp, #4
+                                    408 ;	user/sw_uart.c: 71: VCOM_sprintf(vcomstr,"VCOM at %d TESTING SPEED\r\n",i);
+      00023A 16 07            [ 2]  409 	ldw	y, (0x07, sp)
+      00023C 1E 03            [ 2]  410 	ldw	x, (0x03, sp)
+      00023E 7B 02            [ 1]  411 	ld	a, (0x02, sp)
+      000240 88               [ 1]  412 	push	a
+      000241 7B 02            [ 1]  413 	ld	a, (0x02, sp)
+      000243 88               [ 1]  414 	push	a
+      000244 90 89            [ 2]  415 	pushw	y
+      000246 89               [ 2]  416 	pushw	x
+      000247 CDr00r00         [ 4]  417 	call	_sprintf
+      00024A 5B 06            [ 2]  418 	addw	sp, #6
+                                    419 ;	user/sw_uart.c: 72: VCOM_puts(vcomstr); 
+      00024C 1E 05            [ 2]  420 	ldw	x, (0x05, sp)
+      00024E 89               [ 2]  421 	pushw	x
+      00024F CDr00r23         [ 4]  422 	call	_VCOM_puts
+      000252 85               [ 2]  423 	popw	x
+                                    424 ;	user/sw_uart.c: 73: vTx_L(); 
+      000253 4B 20            [ 1]  425 	push	#0x20
+      000255 4B 0F            [ 1]  426 	push	#0x0f
+      000257 4B 50            [ 1]  427 	push	#0x50
+      000259 CDr00r00         [ 4]  428 	call	_GPIO_WriteLow
+      00025C 5B 03            [ 2]  429 	addw	sp, #3
+                                    430 ;	user/sw_uart.c: 66: for(i=250;i>=1;i--)
+      00025E 1E 01            [ 2]  431 	ldw	x, (0x01, sp)
+      000260 5A               [ 2]  432 	decw	x
+      000261 1F 01            [ 2]  433 	ldw	(0x01, sp), x
+      000263 1E 01            [ 2]  434 	ldw	x, (0x01, sp)
+      000265 A3 00 01         [ 2]  435 	cpw	x, #0x0001
+      000268 2E B0            [ 1]  436 	jrsge	00105$
+      00026A 20 9B            [ 2]  437 	jra	00109$
+      00026C 5B 08            [ 2]  438 	addw	sp, #8
+      00026E 81               [ 4]  439 	ret
+                                    440 	.area CODE
+      00026F                        441 ___str_0:
+      00026F 56 43 4F 4D 20 61 74   442 	.ascii "VCOM at %d TESTING SPEED"
+             20 25 64 20 54 45 53
+             54 49 4E 47 20 53 50
+             45 45 44
+      000287 0D                     443 	.db 0x0d
+      000288 0A                     444 	.db 0x0a
+      000289 00                     445 	.db 0x00
+                                    446 	.area INITIALIZER
+      000000                        447 __xinit__DELAYTIME:
+      000000 00 E6                  448 	.dw #0x00e6
+                                    449 	.area CABS (ABS)
