@@ -13,3 +13,7 @@
 ### RF-Learnning-code-1relay 30A
 
 ![rf-learn-command-1relay](/assets/rf-learn-command-1relay.png)
+
+### RF-Learnning-code-1relay_30A-220V_input
+
+![rf-learn-command-1relay-220V](/assets/rf-learn-command-1relay-220V.png)
