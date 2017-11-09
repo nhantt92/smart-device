@@ -25,3 +25,17 @@
 - Nguồn cấp 220V, Nguồn hạ áp bằng tụ
 
 ![rf-learn-command-1relay-220v-capacitor](/assets/rf-learn-command-1relay-220v-capacitor.png)
+
+### wifi-slack-1relay-controller-hw
+
+-3D
+
+![wifi-slack-1relay-controller-hw](/assets/wifi-slack-1relay-controller-hw-2.png)
+
+- PCBA
+
+![wifi-slack-1relay-controller-hw](/assets/wifi-slack-1relay-controller-hw.png)
+
+- Product
+
+![wifi-slack-1relay-controller-hw](/assets/wifi-slack-1relay-controller-hw-1.png)
