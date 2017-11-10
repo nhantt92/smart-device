@@ -1,0 +1,479 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 3.6.0 #9615 (Mac OS X x86_64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module system
+                                      6 	.optsdcc -mstm8
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _led_change
+                                     12 	.globl _led_getstatus
+                                     13 	.globl _sys_WriteCfg
+                                     14 	.globl _info
+                                     15 	.globl _tp_get
+                                     16 	.globl _TIMER_CheckTimeMS
+                                     17 	.globl _TIMER_InitTime
+                                     18 	.globl _sys
+                                     19 	.globl _system_init
+                                     20 	.globl _system_checkID
+                                     21 	.globl _system_manager
+                                     22 ;--------------------------------------------------------
+                                     23 ; ram data
+                                     24 ;--------------------------------------------------------
+                                     25 	.area DATA
+      000000                         26 _sys::
+      000000                         27 	.ds 17
+                                     28 ;--------------------------------------------------------
+                                     29 ; ram data
+                                     30 ;--------------------------------------------------------
+                                     31 	.area INITIALIZED
+                                     32 ;--------------------------------------------------------
+                                     33 ; absolute external ram data
+                                     34 ;--------------------------------------------------------
+                                     35 	.area DABS (ABS)
+                                     36 ;--------------------------------------------------------
+                                     37 ; global & static initialisations
+                                     38 ;--------------------------------------------------------
+                                     39 	.area HOME
+                                     40 	.area GSINIT
+                                     41 	.area GSFINAL
+                                     42 	.area GSINIT
+                                     43 ;--------------------------------------------------------
+                                     44 ; Home
+                                     45 ;--------------------------------------------------------
+                                     46 	.area HOME
+                                     47 	.area HOME
+                                     48 ;--------------------------------------------------------
+                                     49 ; code
+                                     50 ;--------------------------------------------------------
+                                     51 	.area CODE
+                                     52 ;	user/system.c: 11: void system_init(void)
+                                     53 ;	-----------------------------------------
+                                     54 ;	 function system_init
+                                     55 ;	-----------------------------------------
+      000000                         56 _system_init:
+                                     57 ;	user/system.c: 13: sys.mode = SYS_NOMAL;
+      000000 AEr00r00         [ 2]   58 	ldw	x, #_sys+0
+      000003 7F               [ 1]   59 	clr	(x)
+                                     60 ;	user/system.c: 14: TIMER_InitTime(&sys.tick);
+      000004 AEr00r05         [ 2]   61 	ldw	x, #_sys+5
+      000007 89               [ 2]   62 	pushw	x
+      000008 CDr00r00         [ 4]   63 	call	_TIMER_InitTime
+      00000B 85               [ 2]   64 	popw	x
+      00000C 81               [ 4]   65 	ret
+                                     66 ;	user/system.c: 17: uint8_t system_checkID(uint32_t idGet)
+                                     67 ;	-----------------------------------------
+                                     68 ;	 function system_checkID
+                                     69 ;	-----------------------------------------
+      00000D                         70 _system_checkID:
+      00000D 52 07            [ 2]   71 	sub	sp, #7
+                                     72 ;	user/system.c: 20: for(id = 0; id < MAX_KEY_ID_LEN; id++)
+      00000F AEr00r04         [ 2]   73 	ldw	x, #_sysCfg+4
+      000012 1F 06            [ 2]   74 	ldw	(0x06, sp), x
+      000014 0F 01            [ 1]   75 	clr	(0x01, sp)
+      000016                         76 00104$:
+                                     77 ;	user/system.c: 22: if(idGet == sysCfg.id[id])
+      000016 7B 01            [ 1]   78 	ld	a, (0x01, sp)
+      000018 48               [ 1]   79 	sll	a
+      000019 48               [ 1]   80 	sll	a
+      00001A 5F               [ 1]   81 	clrw	x
+      00001B 97               [ 1]   82 	ld	xl, a
+      00001C 72 FB 06         [ 2]   83 	addw	x, (0x06, sp)
+      00001F E6 03            [ 1]   84 	ld	a, (0x3, x)
+      000021 6B 05            [ 1]   85 	ld	(0x05, sp), a
+      000023 E6 02            [ 1]   86 	ld	a, (0x2, x)
+      000025 6B 04            [ 1]   87 	ld	(0x04, sp), a
+      000027 FE               [ 2]   88 	ldw	x, (x)
+      000028 1F 02            [ 2]   89 	ldw	(0x02, sp), x
+      00002A 1E 0C            [ 2]   90 	ldw	x, (0x0c, sp)
+      00002C 13 04            [ 2]   91 	cpw	x, (0x04, sp)
+      00002E 26 0A            [ 1]   92 	jrne	00105$
+      000030 1E 0A            [ 2]   93 	ldw	x, (0x0a, sp)
+      000032 13 02            [ 2]   94 	cpw	x, (0x02, sp)
+      000034 26 04            [ 1]   95 	jrne	00105$
+                                     96 ;	user/system.c: 23: return 1;
+      000036 A6 01            [ 1]   97 	ld	a, #0x01
+      000038 20 09            [ 2]   98 	jra	00106$
+      00003A                         99 00105$:
+                                    100 ;	user/system.c: 20: for(id = 0; id < MAX_KEY_ID_LEN; id++)
+      00003A 0C 01            [ 1]  101 	inc	(0x01, sp)
+      00003C 7B 01            [ 1]  102 	ld	a, (0x01, sp)
+      00003E A1 05            [ 1]  103 	cp	a, #0x05
+      000040 25 D4            [ 1]  104 	jrc	00104$
+                                    105 ;	user/system.c: 25: return 0;
+      000042 4F               [ 1]  106 	clr	a
+      000043                        107 00106$:
+      000043 5B 07            [ 2]  108 	addw	sp, #7
+      000045 81               [ 4]  109 	ret
+                                    110 ;	user/system.c: 28: void system_manager(void)
+                                    111 ;	-----------------------------------------
+                                    112 ;	 function system_manager
+                                    113 ;	-----------------------------------------
+      000046                        114 _system_manager:
+      000046 52 1F            [ 2]  115 	sub	sp, #31
+                                    116 ;	user/system.c: 31: if(!TIMER_CheckTimeMS(&sys.tick, 100)){
+      000048 AEr00r00         [ 2]  117 	ldw	x, #_sys+0
+      00004B 1F 1E            [ 2]  118 	ldw	(0x1e, sp), x
+      00004D 1E 1E            [ 2]  119 	ldw	x, (0x1e, sp)
+      00004F 1C 00 05         [ 2]  120 	addw	x, #0x0005
+      000052 4B 64            [ 1]  121 	push	#0x64
+      000054 4B 00            [ 1]  122 	push	#0x00
+      000056 4B 00            [ 1]  123 	push	#0x00
+      000058 4B 00            [ 1]  124 	push	#0x00
+      00005A 89               [ 2]  125 	pushw	x
+      00005B CDr00r00         [ 4]  126 	call	_TIMER_CheckTimeMS
+      00005E 5B 06            [ 2]  127 	addw	sp, #6
+      000060 6B 1D            [ 1]  128 	ld	(0x1d, sp), a
+      000062 0D 1D            [ 1]  129 	tnz	(0x1d, sp)
+      000064 27 03            [ 1]  130 	jreq	00209$
+      000066 CCr02r37         [ 2]  131 	jp	00135$
+      000069                        132 00209$:
+                                    133 ;	user/system.c: 32: switch(sys.mode)
+      000069 1E 1E            [ 2]  134 	ldw	x, (0x1e, sp)
+      00006B F6               [ 1]  135 	ld	a, (x)
+                                    136 ;	user/system.c: 38: if(++sys.keyPressTime > 30)
+      00006C 1E 1E            [ 2]  137 	ldw	x, (0x1e, sp)
+      00006E 1C 00 0F         [ 2]  138 	addw	x, #0x000f
+      000071 1F 1B            [ 2]  139 	ldw	(0x1b, sp), x
+                                    140 ;	user/system.c: 41: sys.setTimeOut = 600;
+      000073 1E 1E            [ 2]  141 	ldw	x, (0x1e, sp)
+      000075 1C 00 0B         [ 2]  142 	addw	x, #0x000b
+      000078 1F 19            [ 2]  143 	ldw	(0x19, sp), x
+                                    144 ;	user/system.c: 43: sys.keyReleaseTime = 100;
+      00007A 1E 1E            [ 2]  145 	ldw	x, (0x1e, sp)
+      00007C 1C 00 10         [ 2]  146 	addw	x, #0x0010
+      00007F 1F 17            [ 2]  147 	ldw	(0x17, sp), x
+                                    148 ;	user/system.c: 44: sys.idKeyGet = 0;
+      000081 1E 1E            [ 2]  149 	ldw	x, (0x1e, sp)
+      000083 5C               [ 2]  150 	incw	x
+      000084 1F 15            [ 2]  151 	ldw	(0x15, sp), x
+                                    152 ;	user/system.c: 32: switch(sys.mode)
+      000086 A1 00            [ 1]  153 	cp	a, #0x00
+      000088 27 07            [ 1]  154 	jreq	00101$
+      00008A A1 01            [ 1]  155 	cp	a, #0x01
+      00008C 27 70            [ 1]  156 	jreq	00108$
+      00008E CCr02r37         [ 2]  157 	jp	00135$
+                                    158 ;	user/system.c: 34: case SYS_NOMAL:
+      000091                        159 00101$:
+                                    160 ;	user/system.c: 35: keyGet = tp_get(TP_SET);
+      000091 4B 00            [ 1]  161 	push	#0x00
+      000093 CDr00r00         [ 4]  162 	call	_tp_get
+      000096 5B 01            [ 2]  163 	addw	sp, #1
+                                    164 ;	user/system.c: 36: if(keyGet == TP_PRESS)
+      000098 A1 01            [ 1]  165 	cp	a, #0x01
+      00009A 26 3E            [ 1]  166 	jrne	00105$
+                                    167 ;	user/system.c: 38: if(++sys.keyPressTime > 30)
+      00009C 1E 1B            [ 2]  168 	ldw	x, (0x1b, sp)
+      00009E F6               [ 1]  169 	ld	a, (x)
+      00009F 6B 14            [ 1]  170 	ld	(0x14, sp), a
+      0000A1 7B 14            [ 1]  171 	ld	a, (0x14, sp)
+      0000A3 4C               [ 1]  172 	inc	a
+      0000A4 1E 1B            [ 2]  173 	ldw	x, (0x1b, sp)
+      0000A6 F7               [ 1]  174 	ld	(x), a
+      0000A7 A1 1E            [ 1]  175 	cp	a, #0x1e
+      0000A9 23 2F            [ 2]  176 	jrule	00105$
+                                    177 ;	user/system.c: 40: sys.mode = SYS_SET_ID;
+      0000AB 1E 1E            [ 2]  178 	ldw	x, (0x1e, sp)
+      0000AD A6 01            [ 1]  179 	ld	a, #0x01
+      0000AF F7               [ 1]  180 	ld	(x), a
+                                    181 ;	user/system.c: 41: sys.setTimeOut = 600;
+      0000B0 1E 19            [ 2]  182 	ldw	x, (0x19, sp)
+      0000B2 90 AE 02 58      [ 2]  183 	ldw	y, #0x0258
+      0000B6 EF 02            [ 2]  184 	ldw	(0x2, x), y
+      0000B8 6F 01            [ 1]  185 	clr	(0x1, x)
+      0000BA 7F               [ 1]  186 	clr	(x)
+                                    187 ;	user/system.c: 42: sys.keyPressTime = 0;
+      0000BB 1E 1B            [ 2]  188 	ldw	x, (0x1b, sp)
+      0000BD 7F               [ 1]  189 	clr	(x)
+                                    190 ;	user/system.c: 43: sys.keyReleaseTime = 100;
+      0000BE 1E 17            [ 2]  191 	ldw	x, (0x17, sp)
+      0000C0 A6 64            [ 1]  192 	ld	a, #0x64
+      0000C2 F7               [ 1]  193 	ld	(x), a
+                                    194 ;	user/system.c: 44: sys.idKeyGet = 0;
+      0000C3 1E 15            [ 2]  195 	ldw	x, (0x15, sp)
+      0000C5 90 5F            [ 1]  196 	clrw	y
+      0000C7 EF 02            [ 2]  197 	ldw	(0x2, x), y
+      0000C9 FF               [ 2]  198 	ldw	(x), y
+                                    199 ;	user/system.c: 45: led_change(LED_ON, 0);
+      0000CA 4B 00            [ 1]  200 	push	#0x00
+      0000CC 4B 01            [ 1]  201 	push	#0x01
+      0000CE CDr00r00         [ 4]  202 	call	_led_change
+      0000D1 85               [ 2]  203 	popw	x
+                                    204 ;	user/system.c: 46: info("\r\nSet key id.....");
+      0000D2 AEr02r3A         [ 2]  205 	ldw	x, #___str_0+0
+      0000D5 89               [ 2]  206 	pushw	x
+      0000D6 CDr00r00         [ 4]  207 	call	_info
+      0000D9 85               [ 2]  208 	popw	x
+      0000DA                        209 00105$:
+                                    210 ;	user/system.c: 49: if(sys.idKeyGet != 0)
+      0000DA 1E 15            [ 2]  211 	ldw	x, (0x15, sp)
+      0000DC 89               [ 2]  212 	pushw	x
+      0000DD EE 02            [ 2]  213 	ldw	x, (0x2, x)
+      0000DF 51               [ 1]  214 	exgw	x, y
+      0000E0 85               [ 2]  215 	popw	x
+      0000E1 FE               [ 2]  216 	ldw	x, (x)
+      0000E2 90 5D            [ 2]  217 	tnzw	y
+      0000E4 26 06            [ 1]  218 	jrne	00220$
+      0000E6 5D               [ 2]  219 	tnzw	x
+      0000E7 26 03            [ 1]  220 	jrne	00220$
+      0000E9 CCr02r37         [ 2]  221 	jp	00135$
+      0000EC                        222 00220$:
+                                    223 ;	user/system.c: 51: sys.idKeyGet = 0;
+      0000EC 1E 15            [ 2]  224 	ldw	x, (0x15, sp)
+      0000EE 90 5F            [ 1]  225 	clrw	y
+      0000F0 EF 02            [ 2]  226 	ldw	(0x2, x), y
+      0000F2 FF               [ 2]  227 	ldw	(x), y
+                                    228 ;	user/system.c: 52: led_change(LED_FLASH, 10);
+      0000F3 4B 0A            [ 1]  229 	push	#0x0a
+      0000F5 4B 02            [ 1]  230 	push	#0x02
+      0000F7 CDr00r00         [ 4]  231 	call	_led_change
+      0000FA 85               [ 2]  232 	popw	x
+                                    233 ;	user/system.c: 54: break;
+      0000FB CCr02r37         [ 2]  234 	jp	00135$
+                                    235 ;	user/system.c: 55: case SYS_SET_ID:
+      0000FE                        236 00108$:
+                                    237 ;	user/system.c: 56: if((sysCfg.idLen != 0)&&(led_getstatus() != LED_FLASH))
+      0000FE AEr00r00         [ 2]  238 	ldw	x, #_sysCfg+0
+      000101 1F 12            [ 2]  239 	ldw	(0x12, sp), x
+      000103 1E 12            [ 2]  240 	ldw	x, (0x12, sp)
+      000105 5C               [ 2]  241 	incw	x
+      000106 5C               [ 2]  242 	incw	x
+      000107 1F 10            [ 2]  243 	ldw	(0x10, sp), x
+      000109 1E 10            [ 2]  244 	ldw	x, (0x10, sp)
+      00010B FE               [ 2]  245 	ldw	x, (x)
+      00010C 5D               [ 2]  246 	tnzw	x
+      00010D 27 0F            [ 1]  247 	jreq	00110$
+      00010F CDr00r00         [ 4]  248 	call	_led_getstatus
+      000112 A1 02            [ 1]  249 	cp	a, #0x02
+      000114 27 08            [ 1]  250 	jreq	00110$
+                                    251 ;	user/system.c: 57: led_change(LED_ON, 0);
+      000116 4B 00            [ 1]  252 	push	#0x00
+      000118 4B 01            [ 1]  253 	push	#0x01
+      00011A CDr00r00         [ 4]  254 	call	_led_change
+      00011D 85               [ 2]  255 	popw	x
+      00011E                        256 00110$:
+                                    257 ;	user/system.c: 58: if(sys.keyReleaseTime != 0)
+      00011E 1E 17            [ 2]  258 	ldw	x, (0x17, sp)
+      000120 F6               [ 1]  259 	ld	a, (x)
+      000121 4D               [ 1]  260 	tnz	a
+      000122 27 07            [ 1]  261 	jreq	00113$
+                                    262 ;	user/system.c: 60: sys.keyReleaseTime--;
+      000124 4A               [ 1]  263 	dec	a
+      000125 1E 17            [ 2]  264 	ldw	x, (0x17, sp)
+      000127 F7               [ 1]  265 	ld	(x), a
+                                    266 ;	user/system.c: 61: sys.keyPressTime = 0;
+      000128 1E 1B            [ 2]  267 	ldw	x, (0x1b, sp)
+      00012A 7F               [ 1]  268 	clr	(x)
+      00012B                        269 00113$:
+                                    270 ;	user/system.c: 63: keyGet = tp_get(TP_SET);
+      00012B 4B 00            [ 1]  271 	push	#0x00
+      00012D CDr00r00         [ 4]  272 	call	_tp_get
+      000130 5B 01            [ 2]  273 	addw	sp, #1
+                                    274 ;	user/system.c: 68: for(sysCfg.idLen = 0; sysCfg.idLen < MAX_KEY_ID_LEN; sysCfg.idLen++)
+      000132 1E 12            [ 2]  275 	ldw	x, (0x12, sp)
+      000134 1C 00 04         [ 2]  276 	addw	x, #0x0004
+      000137 1F 0E            [ 2]  277 	ldw	(0x0e, sp), x
+                                    278 ;	user/system.c: 64: if((keyGet == TP_PRESS)&&(sys.keyReleaseTime == 0))
+      000139 A1 01            [ 1]  279 	cp	a, #0x01
+      00013B 26 4C            [ 1]  280 	jrne	00118$
+      00013D 1E 17            [ 2]  281 	ldw	x, (0x17, sp)
+      00013F F6               [ 1]  282 	ld	a, (x)
+      000140 4D               [ 1]  283 	tnz	a
+      000141 26 46            [ 1]  284 	jrne	00118$
+                                    285 ;	user/system.c: 66: if(++sys.keyPressTime > 10)
+      000143 1E 1B            [ 2]  286 	ldw	x, (0x1b, sp)
+      000145 F6               [ 1]  287 	ld	a, (x)
+      000146 4C               [ 1]  288 	inc	a
+      000147 F7               [ 1]  289 	ld	(x), a
+      000148 A1 0A            [ 1]  290 	cp	a, #0x0a
+      00014A 23 3D            [ 2]  291 	jrule	00118$
+                                    292 ;	user/system.c: 68: for(sysCfg.idLen = 0; sysCfg.idLen < MAX_KEY_ID_LEN; sysCfg.idLen++)
+      00014C 1E 10            [ 2]  293 	ldw	x, (0x10, sp)
+      00014E 6F 01            [ 1]  294 	clr	(0x1, x)
+      000150 7F               [ 1]  295 	clr	(x)
+      000151 16 0E            [ 2]  296 	ldw	y, (0x0e, sp)
+      000153 17 0C            [ 2]  297 	ldw	(0x0c, sp), y
+      000155                        298 00133$:
+      000155 1E 10            [ 2]  299 	ldw	x, (0x10, sp)
+      000157 FE               [ 2]  300 	ldw	x, (x)
+      000158 A3 00 05         [ 2]  301 	cpw	x, #0x0005
+      00015B 24 14            [ 1]  302 	jrnc	00114$
+                                    303 ;	user/system.c: 69: sysCfg.id[sysCfg.idLen] = 0;
+      00015D 58               [ 2]  304 	sllw	x
+      00015E 58               [ 2]  305 	sllw	x
+      00015F 72 FB 0C         [ 2]  306 	addw	x, (0x0c, sp)
+      000162 90 5F            [ 1]  307 	clrw	y
+      000164 EF 02            [ 2]  308 	ldw	(0x2, x), y
+      000166 FF               [ 2]  309 	ldw	(x), y
+                                    310 ;	user/system.c: 68: for(sysCfg.idLen = 0; sysCfg.idLen < MAX_KEY_ID_LEN; sysCfg.idLen++)
+      000167 1E 10            [ 2]  311 	ldw	x, (0x10, sp)
+      000169 FE               [ 2]  312 	ldw	x, (x)
+      00016A 5C               [ 2]  313 	incw	x
+      00016B 16 10            [ 2]  314 	ldw	y, (0x10, sp)
+      00016D 90 FF            [ 2]  315 	ldw	(y), x
+      00016F 20 E4            [ 2]  316 	jra	00133$
+      000171                        317 00114$:
+                                    318 ;	user/system.c: 70: sysCfg.idLen = 0;
+      000171 1E 10            [ 2]  319 	ldw	x, (0x10, sp)
+      000173 6F 01            [ 1]  320 	clr	(0x1, x)
+      000175 7F               [ 1]  321 	clr	(x)
+                                    322 ;	user/system.c: 71: sys_WriteCfg();
+      000176 CDr00r00         [ 4]  323 	call	_sys_WriteCfg
+                                    324 ;	user/system.c: 72: led_change(LED_OFF, 0);
+      000179 4B 00            [ 1]  325 	push	#0x00
+      00017B 4B 00            [ 1]  326 	push	#0x00
+      00017D CDr00r00         [ 4]  327 	call	_led_change
+      000180 85               [ 2]  328 	popw	x
+                                    329 ;	user/system.c: 73: info("\r\nClear all key.....");
+      000181 AEr02r4C         [ 2]  330 	ldw	x, #___str_1+0
+      000184 89               [ 2]  331 	pushw	x
+      000185 CDr00r00         [ 4]  332 	call	_info
+      000188 85               [ 2]  333 	popw	x
+      000189                        334 00118$:
+                                    335 ;	user/system.c: 76: if(sys.setTimeOut != 0)
+      000189 1E 19            [ 2]  336 	ldw	x, (0x19, sp)
+      00018B 89               [ 2]  337 	pushw	x
+      00018C EE 02            [ 2]  338 	ldw	x, (0x2, x)
+      00018E 51               [ 1]  339 	exgw	x, y
+      00018F 85               [ 2]  340 	popw	x
+      000190 FE               [ 2]  341 	ldw	x, (x)
+      000191 90 5D            [ 2]  342 	tnzw	y
+      000193 26 06            [ 1]  343 	jrne	00232$
+      000195 5D               [ 2]  344 	tnzw	x
+      000196 26 03            [ 1]  345 	jrne	00232$
+      000198 CCr02r29         [ 2]  346 	jp	00127$
+      00019B                        347 00232$:
+                                    348 ;	user/system.c: 78: sys.setTimeOut--;
+      00019B 72 A2 00 01      [ 2]  349 	subw	y, #0x0001
+      00019F 9F               [ 1]  350 	ld	a, xl
+      0001A0 A2 00            [ 1]  351 	sbc	a, #0x00
+      0001A2 6B 09            [ 1]  352 	ld	(0x09, sp), a
+      0001A4 9E               [ 1]  353 	ld	a, xh
+      0001A5 A2 00            [ 1]  354 	sbc	a, #0x00
+      0001A7 6B 08            [ 1]  355 	ld	(0x08, sp), a
+      0001A9 1E 19            [ 2]  356 	ldw	x, (0x19, sp)
+      0001AB EF 02            [ 2]  357 	ldw	(0x2, x), y
+      0001AD 16 08            [ 2]  358 	ldw	y, (0x08, sp)
+      0001AF FF               [ 2]  359 	ldw	(x), y
+                                    360 ;	user/system.c: 79: if(sys.idKeyGet != 0)
+      0001B0 1E 15            [ 2]  361 	ldw	x, (0x15, sp)
+      0001B2 89               [ 2]  362 	pushw	x
+      0001B3 EE 02            [ 2]  363 	ldw	x, (0x2, x)
+      0001B5 51               [ 1]  364 	exgw	x, y
+      0001B6 85               [ 2]  365 	popw	x
+      0001B7 FE               [ 2]  366 	ldw	x, (x)
+      0001B8 90 5D            [ 2]  367 	tnzw	y
+      0001BA 26 03            [ 1]  368 	jrne	00233$
+      0001BC 5D               [ 2]  369 	tnzw	x
+      0001BD 27 78            [ 1]  370 	jreq	00135$
+      0001BF                        371 00233$:
+                                    372 ;	user/system.c: 81: sys.setTimeOut = 600;
+      0001BF 1E 19            [ 2]  373 	ldw	x, (0x19, sp)
+      0001C1 90 AE 02 58      [ 2]  374 	ldw	y, #0x0258
+      0001C5 EF 02            [ 2]  375 	ldw	(0x2, x), y
+      0001C7 6F 01            [ 1]  376 	clr	(0x1, x)
+      0001C9 7F               [ 1]  377 	clr	(x)
+                                    378 ;	user/system.c: 82: if(system_checkID(sys.idKeyGet) == 0)
+      0001CA 1E 15            [ 2]  379 	ldw	x, (0x15, sp)
+      0001CC 89               [ 2]  380 	pushw	x
+      0001CD EE 02            [ 2]  381 	ldw	x, (0x2, x)
+      0001CF 51               [ 1]  382 	exgw	x, y
+      0001D0 85               [ 2]  383 	popw	x
+      0001D1 FE               [ 2]  384 	ldw	x, (x)
+      0001D2 90 89            [ 2]  385 	pushw	y
+      0001D4 89               [ 2]  386 	pushw	x
+      0001D5 CDr00r0D         [ 4]  387 	call	_system_checkID
+      0001D8 5B 04            [ 2]  388 	addw	sp, #4
+      0001DA 6B 07            [ 1]  389 	ld	(0x07, sp), a
+      0001DC 0D 07            [ 1]  390 	tnz	(0x07, sp)
+      0001DE 26 40            [ 1]  391 	jrne	00123$
+                                    392 ;	user/system.c: 84: info("\r\nSave key.....");
+      0001E0 AEr02r61         [ 2]  393 	ldw	x, #___str_2+0
+      0001E3 89               [ 2]  394 	pushw	x
+      0001E4 CDr00r00         [ 4]  395 	call	_info
+      0001E7 85               [ 2]  396 	popw	x
+                                    397 ;	user/system.c: 85: sysCfg.id[sysCfg.idLen] = sys.idKeyGet;
+      0001E8 1E 10            [ 2]  398 	ldw	x, (0x10, sp)
+      0001EA FE               [ 2]  399 	ldw	x, (x)
+      0001EB 58               [ 2]  400 	sllw	x
+      0001EC 58               [ 2]  401 	sllw	x
+      0001ED 72 FB 0E         [ 2]  402 	addw	x, (0x0e, sp)
+      0001F0 1F 05            [ 2]  403 	ldw	(0x05, sp), x
+      0001F2 1E 15            [ 2]  404 	ldw	x, (0x15, sp)
+      0001F4 89               [ 2]  405 	pushw	x
+      0001F5 EE 02            [ 2]  406 	ldw	x, (0x2, x)
+      0001F7 51               [ 1]  407 	exgw	x, y
+      0001F8 85               [ 2]  408 	popw	x
+      0001F9 FE               [ 2]  409 	ldw	x, (x)
+      0001FA 1F 01            [ 2]  410 	ldw	(0x01, sp), x
+      0001FC 1E 05            [ 2]  411 	ldw	x, (0x05, sp)
+      0001FE EF 02            [ 2]  412 	ldw	(0x2, x), y
+      000200 16 01            [ 2]  413 	ldw	y, (0x01, sp)
+      000202 FF               [ 2]  414 	ldw	(x), y
+                                    415 ;	user/system.c: 86: if(++sysCfg.idLen >= MAX_KEY_ID_LEN)sysCfg.idLen = 0;
+      000203 1E 10            [ 2]  416 	ldw	x, (0x10, sp)
+      000205 FE               [ 2]  417 	ldw	x, (x)
+      000206 5C               [ 2]  418 	incw	x
+      000207 16 10            [ 2]  419 	ldw	y, (0x10, sp)
+      000209 90 FF            [ 2]  420 	ldw	(y), x
+      00020B A3 00 05         [ 2]  421 	cpw	x, #0x0005
+      00020E 25 05            [ 1]  422 	jrc	00121$
+      000210 1E 10            [ 2]  423 	ldw	x, (0x10, sp)
+      000212 6F 01            [ 1]  424 	clr	(0x1, x)
+      000214 7F               [ 1]  425 	clr	(x)
+      000215                        426 00121$:
+                                    427 ;	user/system.c: 87: sys_WriteCfg();
+      000215 CDr00r00         [ 4]  428 	call	_sys_WriteCfg
+                                    429 ;	user/system.c: 88: led_change(LED_FLASH, 10);
+      000218 4B 0A            [ 1]  430 	push	#0x0a
+      00021A 4B 02            [ 1]  431 	push	#0x02
+      00021C CDr00r00         [ 4]  432 	call	_led_change
+      00021F 85               [ 2]  433 	popw	x
+      000220                        434 00123$:
+                                    435 ;	user/system.c: 90: sys.idKeyGet = 0;
+      000220 1E 15            [ 2]  436 	ldw	x, (0x15, sp)
+      000222 90 5F            [ 1]  437 	clrw	y
+      000224 EF 02            [ 2]  438 	ldw	(0x2, x), y
+      000226 FF               [ 2]  439 	ldw	(x), y
+      000227 20 0E            [ 2]  440 	jra	00135$
+      000229                        441 00127$:
+                                    442 ;	user/system.c: 95: sys.keyPressTime = 0;
+      000229 1E 1B            [ 2]  443 	ldw	x, (0x1b, sp)
+      00022B 7F               [ 1]  444 	clr	(x)
+                                    445 ;	user/system.c: 96: sys.mode = SYS_NOMAL;
+      00022C 1E 1E            [ 2]  446 	ldw	x, (0x1e, sp)
+      00022E 7F               [ 1]  447 	clr	(x)
+                                    448 ;	user/system.c: 97: led_change(LED_OFF, 0);
+      00022F 4B 00            [ 1]  449 	push	#0x00
+      000231 4B 00            [ 1]  450 	push	#0x00
+      000233 CDr00r00         [ 4]  451 	call	_led_change
+      000236 85               [ 2]  452 	popw	x
+                                    453 ;	user/system.c: 100: }
+      000237                        454 00135$:
+      000237 5B 1F            [ 2]  455 	addw	sp, #31
+      000239 81               [ 4]  456 	ret
+                                    457 	.area CODE
+      00023A                        458 ___str_0:
+      00023A 0D                     459 	.db 0x0d
+      00023B 0A                     460 	.db 0x0a
+      00023C 53 65 74 20 6B 65 79   461 	.ascii "Set key id....."
+             20 69 64 2E 2E 2E 2E
+             2E
+      00024B 00                     462 	.db 0x00
+      00024C                        463 ___str_1:
+      00024C 0D                     464 	.db 0x0d
+      00024D 0A                     465 	.db 0x0a
+      00024E 43 6C 65 61 72 20 61   466 	.ascii "Clear all key....."
+             6C 6C 20 6B 65 79 2E
+             2E 2E 2E 2E
+      000260 00                     467 	.db 0x00
+      000261                        468 ___str_2:
+      000261 0D                     469 	.db 0x0d
+      000262 0A                     470 	.db 0x0a
+      000263 53 61 76 65 20 6B 65   471 	.ascii "Save key....."
+             79 2E 2E 2E 2E 2E
+      000270 00                     472 	.db 0x00
+                                    473 	.area INITIALIZER
+                                    474 	.area CABS (ABS)

@@ -1,0 +1,248 @@
+ASxxxx Linker V03.00 + NoICE + sdld,  page 1.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+.  .ABS.                            00000000    00000000 =           0. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00000000  .__.ABS.                           
+     00000000  l_CABS                          
+     00000000  l_DABS                          
+     00000000  l__CODE                         
+     00000000  s_CABS                          
+     00000000  s_DABS                          
+     00000000  s__CODE                         
+     00000001  l_SSEG                          
+     00000001  s_DATA                          
+     00000002  l_INITIALIZED                   
+     00000002  l_INITIALIZER                   
+     00000003  l_GSFINAL                       
+     0000001A  l_GSINIT                        
+     00000083  l_HOME                          
+     000000E6  l_DATA                          
+     000000E7  s_INITIALIZED                   
+     00001549  l_CODE                          
+     00008000  s_HOME                          
+     00008083  s_GSINIT                        
+     0000809D  s_GSFINAL                       
+     000080A0  s_CODE                          
+     000095E9  s_INITIALIZER                   
+     000095EB  s_SSEG                          
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 2.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+DATA                                00000001    000000E6 =         230. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00000001  _key                               key
+     0000000C  _led                               ledss
+     00000015  _remote                            remote
+     000000B4  _sysCfg                            rom
+     000000CC  _sys                               system
+     000000DD  _timeGet                           timerTick
+     000000DF  _timeBack                          timerTick
+     000000E1  _timeTickMs                        timerTick
+     000000E5  _timeTickUs                        timerTick
+ASxxxx Linker V03.00 + NoICE + sdld,  page 3.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+INITIALIZED                         000000E7    00000002 =           2. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     000000E7  _ctrFlag                           remote
+     000000E8  _ctrCnt                            remote
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 4.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+HOME                                00008000    00000083 =         131. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+ASxxxx Linker V03.00 + NoICE + sdld,  page 5.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+GSINIT                              00008083    0000001A =          26. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+ASxxxx Linker V03.00 + NoICE + sdld,  page 6.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+GSFINAL                             0000809D    00000003 =           3. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+ASxxxx Linker V03.00 + NoICE + sdld,  page 7.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+CODE                                000080A0    00001549 =        5449. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     000080A0  _debug_Init                        debug
+     000080EC  _usart_send                        debug
+     0000812B  _info                              debug
+     00008133  _debugInfo                         debug
+     000081D4  _tp_init                           key
+     00008235  _touch_get                         key
+     000082AC  _tp_get                            key
+     000082BE  _tp_manager                        key
+     0000831F  _led_change                        ledss
+     00008333  _led_getstatus                     ledss
+     00008338  _ledstt_init                       ledss
+     0000836E  _ledstt_manager                    ledss
+     000083E7  _UART1_RX_IRQHandler               main
+     000083EC  _TIM4_UPD_OVF_IRQHandler           main
+     000083FA  _TIM1_UPD_OVF_TRG_BRK_IRQHandler   main
+     00008404  _EXTI_PORTD_IRQHandler             main
+     0000840C  _IWDG_Config                       main
+     00008424  _GPIO_Config                       main
+     0000843D  _main                              main
+     0000846E  _TIM1_EnIn                         remote
+     00008485  _TIM1_DisIn                        remote
+     00008496  _TIM1_Config                       remote
+     000084BF  _GPIO_Configuration                remote
+     000084D5  _remote_Init                       remote
+     000084E6  _remote_CheckCompare               remote
+     00008521  _remote_Decode                     remote
+     000085E3  _remote_Clear                      remote
+     0000860E  _remote_Process                    remote
+     0000866F  _remote_Manager                    remote
+     00008845  _sys_WriteCfg                      rom
+     00008886  _sys_readCfg                       rom
+     000089D2  _system_init                       system
+     000089DF  _system_checkID                    system
+     00008A18  _system_manager                    system
+     00008C43  _TIMER_Init                        timerTick
+     00008C76  _TIMER_Inc                         timerTick
+     00008CA3  _TIMER_InitTime                    timerTick
+     00008CB3  _TIMER_CheckTimeUS                 timerTick
+     00008CFA  _TIMER_CheckTimeMS                 timerTick
+     00008D70  _CLK_Config                        clk
+     00008DC8  _CLK_PeripheralClockConfig         clk
+     00008DF9  _CLK_SYSCLKConfig                  clk
+     00008E30  _CLK_GetClockFreq                  clk
+     00008E89  _HSIDivFactor                      clk
+     00008E8D  _EXTI_SetExtIntSensitivity         exti
+     00008F21  _GPIO_DeInit                       gpio
+     00008F3C  _GPIO_Init                         gpio
+     00008FB4  _GPIO_Write                        gpio
+     00008FBA  _GPIO_WriteHigh                    gpio
+     00008FC1  _GPIO_WriteLow                     gpio
+ASxxxx Linker V03.00 + NoICE + sdld,  page 8.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+CODE                                000080A0    00001549 =        5449. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00008FCF  _GPIO_ReadInputPin                 gpio
+     00008FD6  _GPIO_ExternalPullUpConfig         gpio
+     00008FF1  _IWDG_WriteAccessCmd               iwdg
+     00008FF8  _IWDG_SetPrescaler                 iwdg
+     00008FFF  _IWDG_SetReload                    iwdg
+     00009006  _IWDG_ReloadCounter                iwdg
+     0000900B  _IWDG_Enable                       iwdg
+     00009010  _TIM1_DeInit                       tim1
+     000090A9  _TIM1_TimeBaseInit                 tim1
+     000090DC  _TIM1_Cmd                          tim1
+     000090EA  _TIM1_ITConfig                     tim1
+     0000910C  _TIM1_SetCounter                   tim1
+     0000911D  _TIM1_GetCounter                   tim1
+     00009139  _TIM1_ClearFlag                    tim1
+     0000914E  _TIM1_ClearITPendingBit            tim1
+     00009156  _TIM4_DeInit                       tim4
+     0000916F  _TIM4_TimeBaseInit                 tim4
+     0000917C  _TIM4_Cmd                          tim4
+     00009181  _TIM4_ITConfig                     tim4
+     0000918C  _TIM4_GetCounter                   tim4
+     00009191  _TIM4_GetFlagStatus                tim4
+     0000919F  _TIM4_ClearFlag                    tim4
+     000091A7  _TIM4_ClearITPendingBit            tim4
+     000091AF  _UART1_DeInit                      uart
+     000091DC  _UART1_Init                        uart
+     00009369  _UART1_Cmd                         uart
+     0000937D  _UART1_ITConfig                    uart
+     0000940F  _UART1_ReceiveData8                uart
+     00009414  _UART1_SendData8                   uart
+     0000941B  _UART1_GetFlagStatus               uart
+     0000945E  _UART1_ClearFlag                   uart
+     00009472  _UART1_GetITStatus                 uart
+     000094FF  _UART1_ClearITPendingBit           uart
+     00009513  __divulong                         
+     0000956D  __mullong                          
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 9.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+INITIALIZER                         000095E9    00000002 =           2. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+ASxxxx Linker V03.00 + NoICE + sdld,  page 10.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+SSEG                                000095EB    00000001 =           1. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+ASxxxx Linker V03.00 + NoICE + sdld,  page 11.
+
+Files Linked                              [ module(s) ]
+
+build/user/debug.rel                      [ debug ]
+build/user/key.rel                        [ key ]
+build/user/ledss.rel                      [ ledss ]
+build/user/main.rel                       [ main ]
+build/user/remote.rel                     [ remote ]
+build/user/rom.rel                        [ rom ]
+build/user/system.rel                     [ system ]
+build/user/timerTick.rel                  [ timerTick ]
+build/lib/clk.rel                         [ clk ]
+build/lib/exti.rel                        [ exti ]
+build/lib/gpio.rel                        [ gpio ]
+build/lib/iwdg.rel                        [ iwdg ]
+build/lib/tim1.rel                        [ tim1 ]
+build/lib/tim4.rel                        [ tim4 ]
+build/lib/uart.rel                        [ uart ]
+
+
+Libraries Linked                          [ object file ]
+
+/usr/local/bin/../share/sdcc/lib/stm8/stm8.lib
+                                          [ _divulong.rel ]
+/usr/local/bin/../share/sdcc/lib/stm8/stm8.lib
+                                          [ _mullong.rel ]
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 12.
+
+User Base Address Definitions
+
+HOME = 0x8000
+DATA = 0x0001
+
+

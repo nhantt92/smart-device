@@ -1,0 +1,61 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 1.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  002710 L
+    .__.ABS.                                                    =  000000 G
+    .__.CPU.                                                    =  000000 L
+    .__.H$L.                                                    =  000001 L
+    _CLK_PeripheralClockConfig                                     ****** GX
+    _EXTI_SetExtIntSensitivity                                     ****** GX
+  7 _GPIO_Configuration                                            000051 GR
+    _GPIO_Init                                                     ****** GX
+    _GPIO_WriteHigh                                                ****** GX
+    _GPIO_WriteLow                                                 ****** GX
+    _TIM1_ClearFlag                                                ****** GX
+    _TIM1_Cmd                                                      ****** GX
+  7 _TIM1_Config                                                   000028 GR
+    _TIM1_DeInit                                                   ****** GX
+  7 _TIM1_DisIn                                                    000017 GR
+  7 _TIM1_EnIn                                                     000000 GR
+    _TIM1_GetCounter                                               ****** GX
+    _TIM1_ITConfig                                                 ****** GX
+    _TIM1_SetCounter                                               ****** GX
+    _TIM1_TimeBaseInit                                             ****** GX
+    _TIMER_CheckTimeMS                                             ****** GX
+  7 ___str_0                                                       0003AF R
+  7 ___str_1                                                       0003BE R
+  7 ___str_2                                                       0003CB R
+  8 __xinit__ctrCnt                                                000001 R
+  8 __xinit__ctrFlag                                               000000 R
+  2 _ctrCnt                                                        000001 GR
+  2 _ctrFlag                                                       000000 GR
+    _debugInfo                                                     ****** GX
+    _info                                                          ****** GX
+  1 _remote                                                        000000 GR
+  7 _remote_CheckCompare                                           000078 GR
+  7 _remote_Clear                                                  000175 GR
+  7 _remote_Decode                                                 0000B3 GR
+  7 _remote_Init                                                   000067 GR
+  7 _remote_Manager                                                000201 GR
+  7 _remote_Process                                                0001A0 GR
+    _sys                                                           ****** GX
+    _system_checkID                                                ****** GX
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 2.
+Hexadecimal [24-Bits]
+
+Area Table
+
+   0 _CODE                                      size      0   flags    0
+   1 DATA                                       size     9F   flags    0
+   2 INITIALIZED                                size      2   flags    0
+   3 DABS                                       size      0   flags    8
+   4 HOME                                       size      0   flags    0
+   5 GSINIT                                     size      0   flags    0
+   6 GSFINAL                                    size      0   flags    0
+   7 CODE                                       size    3D7   flags    0
+   8 INITIALIZER                                size      2   flags    0
+   9 CABS                                       size      0   flags    8
+
