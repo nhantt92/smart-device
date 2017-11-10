@@ -1,6 +1,6 @@
 ;--------------------------------------------------------
 ; File Created by SDCC : free open source ANSI-C Compiler
-; Version 3.6.0 #9615 (Mac OS X x86_64)
+; Version 3.6.0 #9615 (MINGW64)
 ;--------------------------------------------------------
 	.module gpio
 	.optsdcc -mstm8
@@ -11,6 +11,7 @@
 	.globl _GPIO_DeInit
 	.globl _GPIO_Init
 	.globl _GPIO_Write
+	.globl _GPIO_WriteReverse
 	.globl _GPIO_WriteHigh
 	.globl _GPIO_WriteLow
 	.globl _GPIO_ReadInputPin
@@ -77,29 +78,29 @@ _GPIO_Init:
 	sub	sp, #5
 ;	lib/gpio.c: 16: GPIOx->CR2 &= (uint8_t)(~(GPIO_Pin));
 	ldw	y, (0x08, sp)
-	ldw	(0x01, sp), y
-	ldw	x, (0x01, sp)
+	ldw	(0x02, sp), y
+	ldw	x, (0x02, sp)
 	addw	x, #0x0004
-	ldw	(0x03, sp), x
-	ldw	x, (0x03, sp)
+	ldw	(0x04, sp), x
+	ldw	x, (0x04, sp)
 	ld	a, (x)
 	push	a
 	ld	a, (0x0b, sp)
 	cpl	a
-	ld	(0x06, sp), a
+	ld	(0x02, sp), a
 	pop	a
-	and	a, (0x05, sp)
-	ldw	x, (0x03, sp)
+	and	a, (0x01, sp)
+	ldw	x, (0x04, sp)
 	ld	(x), a
 ;	lib/gpio.c: 33: GPIOx->DDR |= (uint8_t)GPIO_Pin;
-	ldw	x, (0x01, sp)
+	ldw	x, (0x02, sp)
 	incw	x
 	incw	x
 ;	lib/gpio.c: 22: if ((((uint8_t)(GPIO_Mode)) & (uint8_t)0x80) != (uint8_t)0x00) /* Output mode */
 	tnz	(0x0b, sp)
 	jrpl	00105$
 ;	lib/gpio.c: 26: GPIOx->ODR |= (uint8_t)GPIO_Pin;
-	ldw	y, (0x01, sp)
+	ldw	y, (0x02, sp)
 	ld	a, (y)
 ;	lib/gpio.c: 24: if ((((uint8_t)(GPIO_Mode)) & (uint8_t)0x10) != (uint8_t)0x00) /* High level */
 	push	a
@@ -109,13 +110,13 @@ _GPIO_Init:
 	jreq	00102$
 ;	lib/gpio.c: 26: GPIOx->ODR |= (uint8_t)GPIO_Pin;
 	or	a, (0x0a, sp)
-	ldw	y, (0x01, sp)
+	ldw	y, (0x02, sp)
 	ld	(y), a
 	jra	00103$
 00102$:
 ;	lib/gpio.c: 30: GPIOx->ODR &= (uint8_t)(~(GPIO_Pin));
-	and	a, (0x05, sp)
-	ldw	y, (0x01, sp)
+	and	a, (0x01, sp)
+	ldw	y, (0x02, sp)
 	ld	(y), a
 00103$:
 ;	lib/gpio.c: 33: GPIOx->DDR |= (uint8_t)GPIO_Pin;
@@ -126,11 +127,11 @@ _GPIO_Init:
 00105$:
 ;	lib/gpio.c: 38: GPIOx->DDR &= (uint8_t)(~(GPIO_Pin));
 	ld	a, (x)
-	and	a, (0x05, sp)
+	and	a, (0x01, sp)
 	ld	(x), a
 00106$:
 ;	lib/gpio.c: 47: GPIOx->CR1 |= (uint8_t)GPIO_Pin;
-	ldw	x, (0x01, sp)
+	ldw	x, (0x02, sp)
 	addw	x, #0x0003
 ;	lib/gpio.c: 45: if ((((uint8_t)(GPIO_Mode)) & (uint8_t)0x40) != (uint8_t)0x00) /* Pull-Up or Push-Pull */
 	ld	a, (0x0b, sp)
@@ -144,7 +145,7 @@ _GPIO_Init:
 00108$:
 ;	lib/gpio.c: 51: GPIOx->CR1 &= (uint8_t)(~(GPIO_Pin));
 	ld	a, (x)
-	and	a, (0x05, sp)
+	and	a, (0x01, sp)
 	ld	(x), a
 00109$:
 ;	lib/gpio.c: 58: if ((((uint8_t)(GPIO_Mode)) & (uint8_t)0x20) != (uint8_t)0x00) /* Interrupt or Slow slope */
@@ -152,18 +153,18 @@ _GPIO_Init:
 	bcp	a, #0x20
 	jreq	00111$
 ;	lib/gpio.c: 60: GPIOx->CR2 |= (uint8_t)GPIO_Pin;
-	ldw	x, (0x03, sp)
+	ldw	x, (0x04, sp)
 	ld	a, (x)
 	or	a, (0x0a, sp)
-	ldw	x, (0x03, sp)
+	ldw	x, (0x04, sp)
 	ld	(x), a
 	jra	00113$
 00111$:
 ;	lib/gpio.c: 64: GPIOx->CR2 &= (uint8_t)(~(GPIO_Pin));
-	ldw	x, (0x03, sp)
+	ldw	x, (0x04, sp)
 	ld	a, (x)
-	and	a, (0x05, sp)
-	ldw	x, (0x03, sp)
+	and	a, (0x01, sp)
+	ldw	x, (0x04, sp)
 	ld	(x), a
 00113$:
 	addw	sp, #5
@@ -178,24 +179,35 @@ _GPIO_Write:
 	ld	a, (0x05, sp)
 	ld	(x), a
 	ret
-;	lib/gpio.c: 73: void GPIO_WriteHigh(GPIO_TypeDef* GPIOx, GPIO_Pin_TypeDef PortPins)
+;	lib/gpio.c: 73: void GPIO_WriteReverse(GPIO_TypeDef* GPIOx, GPIO_Pin_TypeDef PortPins)
+;	-----------------------------------------
+;	 function GPIO_WriteReverse
+;	-----------------------------------------
+_GPIO_WriteReverse:
+;	lib/gpio.c: 75: GPIOx->ODR ^= (uint8_t)PortPins;
+	ldw	x, (0x03, sp)
+	ld	a, (x)
+	xor	a, (0x05, sp)
+	ld	(x), a
+	ret
+;	lib/gpio.c: 78: void GPIO_WriteHigh(GPIO_TypeDef* GPIOx, GPIO_Pin_TypeDef PortPins)
 ;	-----------------------------------------
 ;	 function GPIO_WriteHigh
 ;	-----------------------------------------
 _GPIO_WriteHigh:
-;	lib/gpio.c: 75: GPIOx->ODR |= (uint8_t)PortPins;
+;	lib/gpio.c: 80: GPIOx->ODR |= (uint8_t)PortPins;
 	ldw	x, (0x03, sp)
 	ld	a, (x)
 	or	a, (0x05, sp)
 	ld	(x), a
 	ret
-;	lib/gpio.c: 78: void GPIO_WriteLow(GPIO_TypeDef* GPIOx, GPIO_Pin_TypeDef PortPins)
+;	lib/gpio.c: 83: void GPIO_WriteLow(GPIO_TypeDef* GPIOx, GPIO_Pin_TypeDef PortPins)
 ;	-----------------------------------------
 ;	 function GPIO_WriteLow
 ;	-----------------------------------------
 _GPIO_WriteLow:
 	push	a
-;	lib/gpio.c: 80: GPIOx->ODR &= (uint8_t)(~PortPins);
+;	lib/gpio.c: 85: GPIOx->ODR &= (uint8_t)(~PortPins);
 	ldw	x, (0x04, sp)
 	ld	a, (x)
 	ld	(0x01, sp), a
@@ -205,35 +217,35 @@ _GPIO_WriteLow:
 	ld	(x), a
 	pop	a
 	ret
-;	lib/gpio.c: 93: BitStatus GPIO_ReadInputPin(GPIO_TypeDef* GPIOx, GPIO_Pin_TypeDef GPIO_Pin)
+;	lib/gpio.c: 98: BitStatus GPIO_ReadInputPin(GPIO_TypeDef* GPIOx, GPIO_Pin_TypeDef GPIO_Pin)
 ;	-----------------------------------------
 ;	 function GPIO_ReadInputPin
 ;	-----------------------------------------
 _GPIO_ReadInputPin:
-;	lib/gpio.c: 95: return ((BitStatus)(GPIOx->IDR & (uint8_t)GPIO_Pin));
+;	lib/gpio.c: 100: return ((BitStatus)(GPIOx->IDR & (uint8_t)GPIO_Pin));
 	ldw	x, (0x03, sp)
 	ld	a, (0x1, x)
 	and	a, (0x05, sp)
 	ret
-;	lib/gpio.c: 98: void GPIO_ExternalPullUpConfig(GPIO_TypeDef* GPIOx, GPIO_Pin_TypeDef GPIO_Pin, FunctionalState NewState)
+;	lib/gpio.c: 103: void GPIO_ExternalPullUpConfig(GPIO_TypeDef* GPIOx, GPIO_Pin_TypeDef GPIO_Pin, FunctionalState NewState)
 ;	-----------------------------------------
 ;	 function GPIO_ExternalPullUpConfig
 ;	-----------------------------------------
 _GPIO_ExternalPullUpConfig:
 	push	a
-;	lib/gpio.c: 102: GPIOx->CR1 |= (uint8_t)GPIO_Pin;
+;	lib/gpio.c: 107: GPIOx->CR1 |= (uint8_t)GPIO_Pin;
 	ldw	x, (0x04, sp)
 	addw	x, #0x0003
-;	lib/gpio.c: 100: if (NewState != DISABLE)  //External Pull-Up Set
+;	lib/gpio.c: 105: if (NewState != DISABLE)  //External Pull-Up Set
 	tnz	(0x07, sp)
 	jreq	00102$
-;	lib/gpio.c: 102: GPIOx->CR1 |= (uint8_t)GPIO_Pin;
+;	lib/gpio.c: 107: GPIOx->CR1 |= (uint8_t)GPIO_Pin;
 	ld	a, (x)
 	or	a, (0x06, sp)
 	ld	(x), a
 	jra	00104$
 00102$:
-;	lib/gpio.c: 106: GPIOx->CR1 &= (uint8_t)(~(GPIO_Pin));
+;	lib/gpio.c: 111: GPIOx->CR1 &= (uint8_t)(~(GPIO_Pin));
 	ld	a, (x)
 	ld	(0x01, sp), a
 	ld	a, (0x06, sp)

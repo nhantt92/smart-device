@@ -1,6 +1,6 @@
                                       1 ;--------------------------------------------------------
                                       2 ; File Created by SDCC : free open source ANSI-C Compiler
-                                      3 ; Version 3.6.0 #9615 (Mac OS X x86_64)
+                                      3 ; Version 3.6.0 #9615 (MINGW64)
                                       4 ;--------------------------------------------------------
                                       5 	.module clk
                                       6 	.optsdcc -mstm8
@@ -156,10 +156,10 @@
                                     156 ;	lib/clk.c: 54: CLK->CKDIVR |= (uint8_t)((uint8_t)CLK_Prescaler & (uint8_t)CLK_CKDIVR_HSIDIV);
       000095 AE 50 C6         [ 2]  157 	ldw	x, #0x50c6
       000098 F6               [ 1]  158 	ld	a, (x)
-      000099 6B 02            [ 1]  159 	ld	(0x02, sp), a
+      000099 6B 01            [ 1]  159 	ld	(0x01, sp), a
       00009B 7B 05            [ 1]  160 	ld	a, (0x05, sp)
       00009D A4 18            [ 1]  161 	and	a, #0x18
-      00009F 1A 02            [ 1]  162 	or	a, (0x02, sp)
+      00009F 1A 01            [ 1]  162 	or	a, (0x01, sp)
       0000A1 AE 50 C6         [ 2]  163 	ldw	x, #0x50c6
       0000A4 F7               [ 1]  164 	ld	(x), a
       0000A5 20 17            [ 2]  165 	jra	00104$
@@ -172,10 +172,10 @@
                                     172 ;	lib/clk.c: 59: CLK->CKDIVR |= (uint8_t)((uint8_t)CLK_Prescaler & (uint8_t)CLK_CKDIVR_CPUDIV);
       0000AE AE 50 C6         [ 2]  173 	ldw	x, #0x50c6
       0000B1 F6               [ 1]  174 	ld	a, (x)
-      0000B2 6B 01            [ 1]  175 	ld	(0x01, sp), a
+      0000B2 6B 02            [ 1]  175 	ld	(0x02, sp), a
       0000B4 7B 05            [ 1]  176 	ld	a, (0x05, sp)
       0000B6 A4 07            [ 1]  177 	and	a, #0x07
-      0000B8 1A 01            [ 1]  178 	or	a, (0x01, sp)
+      0000B8 1A 02            [ 1]  178 	or	a, (0x02, sp)
       0000BA AE 50 C6         [ 2]  179 	ldw	x, #0x50c6
       0000BD F7               [ 1]  180 	ld	(x), a
       0000BE                        181 00104$:

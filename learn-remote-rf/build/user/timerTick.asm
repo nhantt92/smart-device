@@ -1,6 +1,6 @@
 ;--------------------------------------------------------
 ; File Created by SDCC : free open source ANSI-C Compiler
-; Version 3.6.0 #9615 (Mac OS X x86_64)
+; Version 3.6.0 #9615 (MINGW64)
 ;--------------------------------------------------------
 	.module timerTick
 	.optsdcc -mstm8
@@ -200,47 +200,47 @@ _TIMER_CheckTimeMS:
 	ldw	(0x0a, sp), x
 	ldw	x, (0x0a, sp)
 	ld	a, (0x3, x)
-	ld	(0x09, sp), a
+	ld	(0x04, sp), a
 	ld	a, (0x2, x)
-	ld	(0x08, sp), a
+	ld	(0x03, sp), a
 	ldw	x, (x)
-	ldw	(0x06, sp), x
+	ldw	(0x01, sp), x
 	ldw	x, _timeTickMs+2
-	subw	x, (0x08, sp)
+	subw	x, (0x03, sp)
 	ld	a, _timeTickMs+1
-	sbc	a, (0x07, sp)
+	sbc	a, (0x02, sp)
 	push	a
 	ld	a, _timeTickMs+0
-	sbc	a, (0x07, sp)
-	ld	(0x03, sp), a
+	sbc	a, (0x02, sp)
+	ld	(0x07, sp), a
 	pop	a
 	push	a
 	cpw	x, (0x13, sp)
 	pop	a
 	sbc	a, (0x11, sp)
-	ld	a, (0x02, sp)
+	ld	a, (0x06, sp)
 	sbc	a, (0x10, sp)
 	clr	a
 	rlc	a
-	ld	(0x01, sp), a
-	ldw	x, (0x08, sp)
+	ld	(0x05, sp), a
+	ldw	x, (0x03, sp)
 	cpw	x, _timeTickMs+2
-	ld	a, (0x07, sp)
+	ld	a, (0x02, sp)
 	sbc	a, _timeTickMs+1
-	ld	a, (0x06, sp)
+	ld	a, (0x01, sp)
 	sbc	a, _timeTickMs+0
 	jrnc	00105$
-	tnz	(0x01, sp)
+	tnz	(0x05, sp)
 	jreq	00101$
 00105$:
 	ldw	x, _timeTickMs+2
-	cpw	x, (0x08, sp)
+	cpw	x, (0x03, sp)
 	ld	a, _timeTickMs+1
-	sbc	a, (0x07, sp)
+	sbc	a, (0x02, sp)
 	ld	a, _timeTickMs+0
-	sbc	a, (0x06, sp)
+	sbc	a, (0x01, sp)
 	jrnc	00102$
-	tnz	(0x01, sp)
+	tnz	(0x05, sp)
 	jrne	00102$
 00101$:
 ;	user/timerTick.c: 48: pTime->timeMS = timeTickMs;

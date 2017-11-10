@@ -9,9 +9,9 @@ Symbol Table
     .__.H$L.                                                    =  000001 L
     _TIMER_CheckTimeMS                                             ****** GX
     _TIMER_InitTime                                                ****** GX
-  7 ___str_0                                                       00023A R
-  7 ___str_1                                                       00024C R
-  7 ___str_2                                                       000261 R
+  7 ___str_0                                                       000234 R
+  7 ___str_1                                                       000246 R
+  7 ___str_2                                                       00025B R
     _info                                                          ****** GX
     _led_change                                                    ****** GX
     _led_getstatus                                                 ****** GX
@@ -36,7 +36,7 @@ Area Table
    4 HOME                                       size      0   flags    0
    5 GSINIT                                     size      0   flags    0
    6 GSFINAL                                    size      0   flags    0
-   7 CODE                                       size    271   flags    0
+   7 CODE                                       size    26B   flags    0
    8 INITIALIZER                                size      0   flags    0
    9 CABS                                       size      0   flags    8
 

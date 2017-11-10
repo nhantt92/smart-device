@@ -23,13 +23,13 @@ Area                                    Addr        Size        Decimal Bytes (A
      00000083  l_HOME                          
      000000E6  l_DATA                          
      000000E7  s_INITIALIZED                   
-     00001549  l_CODE                          
+     0000153B  l_CODE                          
      00008000  s_HOME                          
      00008083  s_GSINIT                        
      0000809D  s_GSFINAL                       
      000080A0  s_CODE                          
-     000095E9  s_INITIALIZER                   
-     000095EB  s_SSEG                          
+     000095DB  s_INITIALIZER                   
+     000095DD  s_SSEG                          
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 2.
 Hexadecimal  [32-Bits]
@@ -93,7 +93,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-CODE                                000080A0    00001549 =        5449. bytes (REL,CON)
+CODE                                000080A0    0000153B =        5435. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -101,103 +101,104 @@ CODE                                000080A0    00001549 =        5449. bytes (R
      000080EC  _usart_send                        debug
      0000812B  _info                              debug
      00008133  _debugInfo                         debug
-     000081D4  _tp_init                           key
-     00008235  _touch_get                         key
-     000082AC  _tp_get                            key
-     000082BE  _tp_manager                        key
-     0000831F  _led_change                        ledss
-     00008333  _led_getstatus                     ledss
-     00008338  _ledstt_init                       ledss
-     0000836E  _ledstt_manager                    ledss
-     000083E7  _UART1_RX_IRQHandler               main
-     000083EC  _TIM4_UPD_OVF_IRQHandler           main
-     000083FA  _TIM1_UPD_OVF_TRG_BRK_IRQHandler   main
-     00008404  _EXTI_PORTD_IRQHandler             main
-     0000840C  _IWDG_Config                       main
-     00008424  _GPIO_Config                       main
-     0000843D  _main                              main
-     0000846E  _TIM1_EnIn                         remote
-     00008485  _TIM1_DisIn                        remote
-     00008496  _TIM1_Config                       remote
-     000084BF  _GPIO_Configuration                remote
-     000084D5  _remote_Init                       remote
-     000084E6  _remote_CheckCompare               remote
-     00008521  _remote_Decode                     remote
-     000085E3  _remote_Clear                      remote
-     0000860E  _remote_Process                    remote
-     0000866F  _remote_Manager                    remote
-     00008845  _sys_WriteCfg                      rom
-     00008886  _sys_readCfg                       rom
-     000089D2  _system_init                       system
-     000089DF  _system_checkID                    system
-     00008A18  _system_manager                    system
-     00008C43  _TIMER_Init                        timerTick
-     00008C76  _TIMER_Inc                         timerTick
-     00008CA3  _TIMER_InitTime                    timerTick
-     00008CB3  _TIMER_CheckTimeUS                 timerTick
-     00008CFA  _TIMER_CheckTimeMS                 timerTick
-     00008D70  _CLK_Config                        clk
-     00008DC8  _CLK_PeripheralClockConfig         clk
-     00008DF9  _CLK_SYSCLKConfig                  clk
-     00008E30  _CLK_GetClockFreq                  clk
-     00008E89  _HSIDivFactor                      clk
-     00008E8D  _EXTI_SetExtIntSensitivity         exti
-     00008F21  _GPIO_DeInit                       gpio
-     00008F3C  _GPIO_Init                         gpio
-     00008FB4  _GPIO_Write                        gpio
-     00008FBA  _GPIO_WriteHigh                    gpio
-     00008FC1  _GPIO_WriteLow                     gpio
+     000081D3  _tp_init                           key
+     00008234  _touch_get                         key
+     000082AB  _tp_get                            key
+     000082BD  _tp_manager                        key
+     0000831E  _led_change                        ledss
+     00008332  _led_getstatus                     ledss
+     00008337  _ledstt_init                       ledss
+     0000836D  _ledstt_manager                    ledss
+     000083E6  _UART1_RX_IRQHandler               main
+     000083EB  _TIM4_UPD_OVF_IRQHandler           main
+     000083F9  _TIM1_UPD_OVF_TRG_BRK_IRQHandler   main
+     00008403  _EXTI_PORTD_IRQHandler             main
+     0000840B  _IWDG_Config                       main
+     00008423  _GPIO_Config                       main
+     0000843C  _main                              main
+     0000846D  _TIM1_EnIn                         remote
+     00008484  _TIM1_DisIn                        remote
+     00008495  _TIM1_Config                       remote
+     000084BE  _GPIO_Configuration                remote
+     000084D4  _remote_Init                       remote
+     000084E5  _remote_CheckCompare               remote
+     00008520  _remote_Decode                     remote
+     000085E2  _remote_Clear                      remote
+     0000860D  _remote_Process                    remote
+     0000866E  _remote_Manager                    remote
+     00008837  _sys_WriteCfg                      rom
+     00008878  _sys_readCfg                       rom
+     000089C4  _system_init                       system
+     000089D1  _system_checkID                    system
+     00008A0A  _system_manager                    system
+     00008C2F  _TIMER_Init                        timerTick
+     00008C62  _TIMER_Inc                         timerTick
+     00008C8F  _TIMER_InitTime                    timerTick
+     00008C9F  _TIMER_CheckTimeUS                 timerTick
+     00008CE6  _TIMER_CheckTimeMS                 timerTick
+     00008D5C  _CLK_Config                        clk
+     00008DB4  _CLK_PeripheralClockConfig         clk
+     00008DE5  _CLK_SYSCLKConfig                  clk
+     00008E1C  _CLK_GetClockFreq                  clk
+     00008E75  _HSIDivFactor                      clk
+     00008E79  _EXTI_SetExtIntSensitivity         exti
+     00008F0D  _GPIO_DeInit                       gpio
+     00008F28  _GPIO_Init                         gpio
+     00008FA0  _GPIO_Write                        gpio
+     00008FA6  _GPIO_WriteReverse                 gpio
+     00008FAD  _GPIO_WriteHigh                    gpio
 ASxxxx Linker V03.00 + NoICE + sdld,  page 8.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-CODE                                000080A0    00001549 =        5449. bytes (REL,CON)
+CODE                                000080A0    0000153B =        5435. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     00008FCF  _GPIO_ReadInputPin                 gpio
-     00008FD6  _GPIO_ExternalPullUpConfig         gpio
-     00008FF1  _IWDG_WriteAccessCmd               iwdg
-     00008FF8  _IWDG_SetPrescaler                 iwdg
-     00008FFF  _IWDG_SetReload                    iwdg
-     00009006  _IWDG_ReloadCounter                iwdg
-     0000900B  _IWDG_Enable                       iwdg
-     00009010  _TIM1_DeInit                       tim1
-     000090A9  _TIM1_TimeBaseInit                 tim1
-     000090DC  _TIM1_Cmd                          tim1
-     000090EA  _TIM1_ITConfig                     tim1
-     0000910C  _TIM1_SetCounter                   tim1
-     0000911D  _TIM1_GetCounter                   tim1
-     00009139  _TIM1_ClearFlag                    tim1
-     0000914E  _TIM1_ClearITPendingBit            tim1
-     00009156  _TIM4_DeInit                       tim4
-     0000916F  _TIM4_TimeBaseInit                 tim4
-     0000917C  _TIM4_Cmd                          tim4
-     00009181  _TIM4_ITConfig                     tim4
-     0000918C  _TIM4_GetCounter                   tim4
-     00009191  _TIM4_GetFlagStatus                tim4
-     0000919F  _TIM4_ClearFlag                    tim4
-     000091A7  _TIM4_ClearITPendingBit            tim4
-     000091AF  _UART1_DeInit                      uart
-     000091DC  _UART1_Init                        uart
-     00009369  _UART1_Cmd                         uart
-     0000937D  _UART1_ITConfig                    uart
-     0000940F  _UART1_ReceiveData8                uart
-     00009414  _UART1_SendData8                   uart
-     0000941B  _UART1_GetFlagStatus               uart
-     0000945E  _UART1_ClearFlag                   uart
-     00009472  _UART1_GetITStatus                 uart
-     000094FF  _UART1_ClearITPendingBit           uart
-     00009513  __divulong                         
-     0000956D  __mullong                          
+     00008FB4  _GPIO_WriteLow                     gpio
+     00008FC2  _GPIO_ReadInputPin                 gpio
+     00008FC9  _GPIO_ExternalPullUpConfig         gpio
+     00008FE4  _IWDG_WriteAccessCmd               iwdg
+     00008FEB  _IWDG_SetPrescaler                 iwdg
+     00008FF2  _IWDG_SetReload                    iwdg
+     00008FF9  _IWDG_ReloadCounter                iwdg
+     00008FFE  _IWDG_Enable                       iwdg
+     00009003  _TIM1_DeInit                       tim1
+     0000909C  _TIM1_TimeBaseInit                 tim1
+     000090CF  _TIM1_Cmd                          tim1
+     000090DD  _TIM1_ITConfig                     tim1
+     000090FF  _TIM1_SetCounter                   tim1
+     00009110  _TIM1_GetCounter                   tim1
+     0000912C  _TIM1_ClearFlag                    tim1
+     00009141  _TIM1_ClearITPendingBit            tim1
+     00009149  _TIM4_DeInit                       tim4
+     00009162  _TIM4_TimeBaseInit                 tim4
+     0000916F  _TIM4_Cmd                          tim4
+     00009174  _TIM4_ITConfig                     tim4
+     0000917F  _TIM4_GetCounter                   tim4
+     00009184  _TIM4_GetFlagStatus                tim4
+     00009192  _TIM4_ClearFlag                    tim4
+     0000919A  _TIM4_ClearITPendingBit            tim4
+     000091A2  _UART1_DeInit                      uart
+     000091CF  _UART1_Init                        uart
+     0000935B  _UART1_Cmd                         uart
+     0000936F  _UART1_ITConfig                    uart
+     00009401  _UART1_ReceiveData8                uart
+     00009406  _UART1_SendData8                   uart
+     0000940D  _UART1_GetFlagStatus               uart
+     00009450  _UART1_ClearFlag                   uart
+     00009464  _UART1_GetITStatus                 uart
+     000094F1  _UART1_ClearITPendingBit           uart
+     00009505  __divulong                         
+     0000955F  __mullong                          
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 9.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-INITIALIZER                         000095E9    00000002 =           2. bytes (REL,CON)
+INITIALIZER                         000095DB    00000002 =           2. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -206,7 +207,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-SSEG                                000095EB    00000001 =           1. bytes (REL,CON)
+SSEG                                000095DD    00000001 =           1. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -233,9 +234,9 @@ build/lib/uart.rel                        [ uart ]
 
 Libraries Linked                          [ object file ]
 
-/usr/local/bin/../share/sdcc/lib/stm8/stm8.lib
+c:\Program Files\SDCC\bin\..\lib\stm8/stm8.lib
                                           [ _divulong.rel ]
-/usr/local/bin/../share/sdcc/lib/stm8/stm8.lib
+c:\Program Files\SDCC\bin\..\lib\stm8/stm8.lib
                                           [ _mullong.rel ]
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 12.

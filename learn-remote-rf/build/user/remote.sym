@@ -11,8 +11,7 @@ Symbol Table
     _EXTI_SetExtIntSensitivity                                     ****** GX
   7 _GPIO_Configuration                                            000051 GR
     _GPIO_Init                                                     ****** GX
-    _GPIO_WriteHigh                                                ****** GX
-    _GPIO_WriteLow                                                 ****** GX
+    _GPIO_WriteReverse                                             ****** GX
     _TIM1_ClearFlag                                                ****** GX
     _TIM1_Cmd                                                      ****** GX
   7 _TIM1_Config                                                   000028 GR
@@ -24,9 +23,9 @@ Symbol Table
     _TIM1_SetCounter                                               ****** GX
     _TIM1_TimeBaseInit                                             ****** GX
     _TIMER_CheckTimeMS                                             ****** GX
-  7 ___str_0                                                       0003AF R
-  7 ___str_1                                                       0003BE R
-  7 ___str_2                                                       0003CB R
+  7 ___str_0                                                       0003A2 R
+  7 ___str_1                                                       0003B1 R
+  7 ___str_2                                                       0003BE R
   8 __xinit__ctrCnt                                                000001 R
   8 __xinit__ctrFlag                                               000000 R
   2 _ctrCnt                                                        000001 GR
@@ -43,6 +42,7 @@ Symbol Table
     _sys                                                           ****** GX
     _system_checkID                                                ****** GX
 
+
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 2.
 Hexadecimal [24-Bits]
 
@@ -55,7 +55,7 @@ Area Table
    4 HOME                                       size      0   flags    0
    5 GSINIT                                     size      0   flags    0
    6 GSFINAL                                    size      0   flags    0
-   7 CODE                                       size    3D7   flags    0
+   7 CODE                                       size    3CA   flags    0
    8 INITIALIZER                                size      2   flags    0
    9 CABS                                       size      0   flags    8
 

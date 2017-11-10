@@ -1,6 +1,6 @@
 ;--------------------------------------------------------
 ; File Created by SDCC : free open source ANSI-C Compiler
-; Version 3.6.0 #9615 (Mac OS X x86_64)
+; Version 3.6.0 #9615 (MINGW64)
 ;--------------------------------------------------------
 	.module rom
 	.optsdcc -mstm8
@@ -98,8 +98,8 @@ _sys_readCfg:
 	sub	sp, #43
 ;	user/rom.c: 28: pSys = (uint8_t*)&sysCfg;
 	ldw	x, #_sysCfg+0
-	ldw	(0x2a, sp), x
-	ldw	y, (0x2a, sp)
+	ldw	(0x22, sp), x
+	ldw	y, (0x22, sp)
 ;	user/rom.c: 35: (void) FLASH->IAPSR; /* Reading of this register causes the clearing of status flags */
 	ldw	x, #0x505f
 	ld	a, (x)
@@ -121,11 +121,11 @@ _sys_readCfg:
 	ld	a, (0x05, sp)
 	ld	xl, a
 	clr	a
-	clr	(0x26, sp)
+	clr	(0x1e, sp)
 	addw	x, #0x4000
 	adc	a, #0x00
-	ld	(0x23, sp), a
-	ld	a, (0x26, sp)
+	ld	(0x1b, sp), a
+	ld	a, (0x1e, sp)
 	adc	a, #0x00
 	ld	a, (x)
 	ld	(y), a
@@ -137,31 +137,31 @@ _sys_readCfg:
 	cp	a, #0x18
 	jrc	00107$
 ;	user/rom.c: 45: if(sysCfg.holder != CFG_HOLDER)
-	ldw	x, (0x2a, sp)
+	ldw	x, (0x22, sp)
 	ldw	x, (x)
 ;	user/rom.c: 48: sysCfg.id[0] = DEFAULT_ID_1;
-	ldw	y, (0x2a, sp)
+	ldw	y, (0x22, sp)
 	addw	y, #0x0004
-	ldw	(0x20, sp), y
+	ldw	(0x18, sp), y
 ;	user/rom.c: 49: sysCfg.id[1] = DEFAULT_ID_2;
-	ldw	y, (0x2a, sp)
+	ldw	y, (0x22, sp)
 	addw	y, #0x0008
-	ldw	(0x1e, sp), y
+	ldw	(0x2a, sp), y
 ;	user/rom.c: 45: if(sysCfg.holder != CFG_HOLDER)
 	cpw	x, #0x0044
 	jreq	00106$
 ;	user/rom.c: 47: sysCfg.holder = CFG_HOLDER;
-	ldw	x, (0x2a, sp)
+	ldw	x, (0x22, sp)
 	ldw	y, #0x0044
 	ldw	(x), y
 ;	user/rom.c: 48: sysCfg.id[0] = DEFAULT_ID_1;
-	ldw	x, (0x20, sp)
+	ldw	x, (0x18, sp)
 	ldw	y, #0x92c6
 	ldw	(0x2, x), y
 	ldw	y, #0x0143
 	ldw	(x), y
 ;	user/rom.c: 49: sysCfg.id[1] = DEFAULT_ID_2;
-	ldw	x, (0x1e, sp)
+	ldw	x, (0x2a, sp)
 	ldw	y, #0xb7c6
 	ldw	(0x2, x), y
 	ldw	y, #0x0160
@@ -177,8 +177,8 @@ _sys_readCfg:
 ;	user/rom.c: 55: cm[0] = (sysCfg.id[0]&0xFF000000)>>24;
 	ldw	x, sp
 	incw	x
-	ldw	(0x1c, sp), x
-	ldw	x, (0x20, sp)
+	ldw	(0x16, sp), x
+	ldw	x, (0x18, sp)
 	pushw	x
 	ldw	x, (0x2, x)
 	exgw	x, y
@@ -188,14 +188,14 @@ _sys_readCfg:
 	clrw	y
 	ld	a, xh
 	clrw	x
-	clr	(0x18, sp)
-	ldw	x, (0x1c, sp)
+	clr	(0x26, sp)
+	ldw	x, (0x16, sp)
 	ld	(x), a
 ;	user/rom.c: 56: cm[1] = (sysCfg.id[0]&0x00FF0000)>>16;
-	ldw	x, (0x1c, sp)
+	ldw	x, (0x16, sp)
 	incw	x
-	ldw	(0x16, sp), x
-	ldw	x, (0x20, sp)
+	ldw	(0x14, sp), x
+	ldw	x, (0x18, sp)
 	pushw	x
 	ldw	x, (0x2, x)
 	exgw	x, y
@@ -205,30 +205,30 @@ _sys_readCfg:
 	clr	a
 	clrw	y
 	ld	a, xl
-	ldw	x, (0x16, sp)
+	ldw	x, (0x14, sp)
 	ld	(x), a
 ;	user/rom.c: 57: cm[2] = (sysCfg.id[0]&0x0000FF00)>>8;
-	ldw	x, (0x1c, sp)
+	ldw	x, (0x16, sp)
 	incw	x
 	incw	x
-	ldw	(0x14, sp), x
-	ldw	x, (0x20, sp)
+	ldw	(0x12, sp), x
+	ldw	x, (0x18, sp)
 	pushw	x
 	ldw	x, (0x2, x)
 	exgw	x, y
 	popw	x
 	ldw	x, (x)
-	clr	(0x13, sp)
+	clr	(0x11, sp)
 	clrw	x
 	clr	a
 	ld	a, yh
-	ldw	x, (0x14, sp)
+	ldw	x, (0x12, sp)
 	ld	(x), a
 ;	user/rom.c: 58: cm[3] = (sysCfg.id[0]&0x000000FF)>>0;
-	ldw	x, (0x1c, sp)
+	ldw	x, (0x16, sp)
 	addw	x, #0x0003
-	ldw	(0x0e, sp), x
-	ldw	x, (0x20, sp)
+	ldw	(0x24, sp), x
+	ldw	x, (0x18, sp)
 	pushw	x
 	ldw	x, (0x2, x)
 	exgw	x, y
@@ -237,10 +237,10 @@ _sys_readCfg:
 	clr	a
 	clrw	x
 	ld	a, yl
-	ldw	x, (0x0e, sp)
+	ldw	x, (0x24, sp)
 	ld	(x), a
 ;	user/rom.c: 59: debugInfo("Key 1: ", cm, 4);
-	ldw	y, (0x1c, sp)
+	ldw	y, (0x16, sp)
 	ldw	x, #___str_0+0
 	push	#0x04
 	pushw	y
@@ -248,7 +248,7 @@ _sys_readCfg:
 	call	_debugInfo
 	addw	sp, #5
 ;	user/rom.c: 60: cm[0] = (sysCfg.id[1]&0xFF000000)>>24;
-	ldw	x, (0x1e, sp)
+	ldw	x, (0x2a, sp)
 	pushw	x
 	ldw	x, (0x2, x)
 	exgw	x, y
@@ -259,10 +259,10 @@ _sys_readCfg:
 	ld	a, xh
 	clrw	x
 	clr	(0x0a, sp)
-	ldw	x, (0x1c, sp)
+	ldw	x, (0x16, sp)
 	ld	(x), a
 ;	user/rom.c: 61: cm[1] = (sysCfg.id[1]&0x00FF0000)>>16;
-	ldw	x, (0x1e, sp)
+	ldw	x, (0x2a, sp)
 	pushw	x
 	ldw	x, (0x2, x)
 	exgw	x, y
@@ -272,10 +272,10 @@ _sys_readCfg:
 	clr	a
 	clrw	y
 	ld	a, xl
-	ldw	x, (0x16, sp)
+	ldw	x, (0x14, sp)
 	ld	(x), a
 ;	user/rom.c: 62: cm[2] = (sysCfg.id[1]&0x0000FF00)>>8;
-	ldw	x, (0x1e, sp)
+	ldw	x, (0x2a, sp)
 	pushw	x
 	ldw	x, (0x2, x)
 	exgw	x, y
@@ -285,10 +285,10 @@ _sys_readCfg:
 	clrw	x
 	clr	a
 	ld	a, yh
-	ldw	x, (0x14, sp)
+	ldw	x, (0x12, sp)
 	ld	(x), a
 ;	user/rom.c: 63: cm[3] = (sysCfg.id[1]&0x000000FF)>>0;
-	ldw	x, (0x1e, sp)
+	ldw	x, (0x2a, sp)
 	pushw	x
 	ldw	x, (0x2, x)
 	exgw	x, y
@@ -297,10 +297,10 @@ _sys_readCfg:
 	clr	a
 	clrw	x
 	ld	a, yl
-	ldw	x, (0x0e, sp)
+	ldw	x, (0x24, sp)
 	ld	(x), a
 ;	user/rom.c: 64: debugInfo("Key 2: ", cm, 4);
-	ldw	y, (0x1c, sp)
+	ldw	y, (0x16, sp)
 	ldw	x, #___str_1+0
 	push	#0x04
 	pushw	y

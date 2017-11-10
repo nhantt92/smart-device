@@ -1,6 +1,6 @@
 ;--------------------------------------------------------
 ; File Created by SDCC : free open source ANSI-C Compiler
-; Version 3.6.0 #9615 (Mac OS X x86_64)
+; Version 3.6.0 #9615 (MINGW64)
 ;--------------------------------------------------------
 	.module debug
 	.optsdcc -mstm8
@@ -169,16 +169,16 @@ _debugInfo:
 	call	_usart_send
 	popw	x
 ;	user/debug.c: 72: for(add = 0; add < len; add++)
-	clr	(0x02, sp)
+	clr	(0x01, sp)
 00111$:
-	ld	a, (0x02, sp)
+	ld	a, (0x01, sp)
 	cp	a, (0x15, sp)
 	jrc	00140$
 	jp	00109$
 00140$:
 ;	user/debug.c: 74: dat = data[add];
 	clrw	x
-	ld	a, (0x02, sp)
+	ld	a, (0x01, sp)
 	ld	xl, a
 	addw	x, (0x13, sp)
 	ld	a, (x)
@@ -189,25 +189,26 @@ _debugInfo:
 	exg	a, yl
 ;	user/debug.c: 76: lnib = dat%16;
 	and	a, #0x0f
-	ld	(0x01, sp), a
+	ld	(0x08, sp), a
 ;	user/debug.c: 77: ascii[0] = '0';
 	ldw	x, sp
-	addw	x, #3
-	ldw	(0x0d, sp), x
-	ldw	x, (0x0d, sp)
+	incw	x
+	incw	x
+	ldw	(0x0a, sp), x
+	ldw	x, (0x0a, sp)
 	ld	a, #0x30
 	ld	(x), a
 ;	user/debug.c: 78: ascii[1] = 'x';
-	ldw	x, (0x0d, sp)
+	ldw	x, (0x0a, sp)
 	incw	x
 	ld	a, #0x78
 	ld	(x), a
 ;	user/debug.c: 79: ascii[4] = ' ';
-	ldw	x, (0x0d, sp)
+	ldw	x, (0x0a, sp)
 	ld	a, #0x20
 	ld	(0x0004, x), a
 ;	user/debug.c: 80: ascii[5] = 0;
-	ldw	x, (0x0d, sp)
+	ldw	x, (0x0a, sp)
 	addw	x, #0x0005
 	clr	(x)
 ;	user/debug.c: 81: if(hnib < 10)
@@ -215,43 +216,43 @@ _debugInfo:
 	cp	a, #0x0a
 	clr	a
 	rlc	a
-	ld	(0x0c, sp), a
+	ld	(0x0e, sp), a
 ;	user/debug.c: 82: ascii[2] = hnib + '0';
-	ldw	x, (0x0d, sp)
+	ldw	x, (0x0a, sp)
 	incw	x
 	incw	x
 	exg	a, yl
-	ld	(0x0b, sp), a
+	ld	(0x0d, sp), a
 	exg	a, yl
 ;	user/debug.c: 81: if(hnib < 10)
-	tnz	(0x0c, sp)
+	tnz	(0x0e, sp)
 	jreq	00102$
 ;	user/debug.c: 82: ascii[2] = hnib + '0';
-	ld	a, (0x0b, sp)
+	ld	a, (0x0d, sp)
 	add	a, #0x30
 	ld	(x), a
 00102$:
 ;	user/debug.c: 83: if(hnib >= 10)
-	tnz	(0x0c, sp)
+	tnz	(0x0e, sp)
 	jrne	00104$
 ;	user/debug.c: 84: ascii[2] = (hnib - 10) + 'A';
-	ld	a, (0x0b, sp)
+	ld	a, (0x0d, sp)
 	add	a, #0x37
 	ld	(x), a
 00104$:
 ;	user/debug.c: 85: if(lnib < 10)
-	ld	a, (0x01, sp)
+	ld	a, (0x08, sp)
 	cp	a, #0x0a
 	clr	a
 	rlc	a
-	ld	(0x0a, sp), a
+	ld	(0x0c, sp), a
 ;	user/debug.c: 86: ascii[3] = lnib + '0';
-	ldw	x, (0x0d, sp)
+	ldw	x, (0x0a, sp)
 	addw	x, #0x0003
-	ld	a, (0x01, sp)
+	ld	a, (0x08, sp)
 	ld	(0x09, sp), a
 ;	user/debug.c: 85: if(lnib < 10)
-	tnz	(0x0a, sp)
+	tnz	(0x0c, sp)
 	jreq	00106$
 ;	user/debug.c: 86: ascii[3] = lnib + '0';
 	ld	a, (0x09, sp)
@@ -259,7 +260,7 @@ _debugInfo:
 	ld	(x), a
 00106$:
 ;	user/debug.c: 87: if(lnib >= 10)
-	tnz	(0x0a, sp)
+	tnz	(0x0c, sp)
 	jrne	00108$
 ;	user/debug.c: 88: ascii[3] = (lnib - 10) + 'A';
 	ld	a, (0x09, sp)
@@ -267,12 +268,12 @@ _debugInfo:
 	ld	(x), a
 00108$:
 ;	user/debug.c: 89: usart_send(ascii);
-	ldw	x, (0x0d, sp)
+	ldw	x, (0x0a, sp)
 	pushw	x
 	call	_usart_send
 	popw	x
 ;	user/debug.c: 72: for(add = 0; add < len; add++)
-	inc	(0x02, sp)
+	inc	(0x01, sp)
 	jp	00111$
 00109$:
 ;	user/debug.c: 91: usart_send("\r\n");

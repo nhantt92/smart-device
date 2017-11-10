@@ -1,6 +1,6 @@
 ;--------------------------------------------------------
 ; File Created by SDCC : free open source ANSI-C Compiler
-; Version 3.6.0 #9615 (Mac OS X x86_64)
+; Version 3.6.0 #9615 (MINGW64)
 ;--------------------------------------------------------
 	.module main
 	.optsdcc -mstm8

@@ -3,27 +3,25 @@ THISDIR:=$(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 BUILD_BASE  = build
 FW_BASE = firmware
 
-SDCC_PATH ?= /usr/local/bin
+SDCC_PATH ?= "C:\Program Files\SDCC\bin"
 LIB_PATH =
 
 TARGET ?= main
 
 #STM8FLASH ?= /usr/bin/stm8flash
 #MCU				?= stm8s003f3
-STM8FLASH ?= /Volumes/Tools/stm8/stm8flash/stm8flash
-#STM8FLASH ?= /Users/nhantt/User/tools/stm8flash/stm8flash
+STM8FLASH ?= "E:\Project\tool\stm8flash"
 MCU				?= stm8s003f3
 
 SOURCE = user lib
 
-INCLUDE = user/inc lib/inc
+INCLUDE = "user\inc" "lib\inc"
 
-#osx
-CC := $(SDCC_PATH)/sdcc
-LD := $(SDCC_PATH)/sdcc
+#CC := $(SDCC_PATH)/sdcc
+#LD := $(SDCC_PATH)/sdcc
 
-#CC := sdcc  #windows
-#LD := sdcc
+CC := sdcc
+LD := sdcc
 
 
 CC_FLAGS = --std-c99 -lstm8 -mstm8 -DSTM8S003 -DSDCC 
@@ -81,7 +79,7 @@ clean:
 	rm -rf $(FW_BASE) $(BUILD_DIR)
 flash:
 	#$(Q) $(STM8FLASH) -c stlink -p $(MCU) -s 0x8000 -w $(HEX_OUT)
-	$(Q) $(STM8FLASH) -c stlinkv2 -p stm8s003f3 -s 0x8000 -w $(HEX_OUT) #osx
-	#stm8flash -c stlinkv2 -p stm8s003f3 -w $(HEX_OUT) #window
+	#$(Q) $(STM8FLASH) -c stlinkv2 -p stm8s003f3 -s 0x8000 -w $(HEX_OUT)
+	stm8flash -c stlinkv2 -p stm8s003f3 -w $(HEX_OUT)
 
 $(foreach bdir,$(BUILD_DIR),$(eval $(call compile-objects,$(bdir))))

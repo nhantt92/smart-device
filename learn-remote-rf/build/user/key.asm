@@ -1,6 +1,6 @@
 ;--------------------------------------------------------
 ; File Created by SDCC : free open source ANSI-C Compiler
-; Version 3.6.0 #9615 (Mac OS X x86_64)
+; Version 3.6.0 #9615 (MINGW64)
 ;--------------------------------------------------------
 	.module key
 	.optsdcc -mstm8
@@ -55,27 +55,27 @@ _tp_init:
 	sub	sp, #6
 ;	user/key.c: 9: GPIO_Init(PORT_SET_KEY, PIN_SET_KEY, GPIO_MODE_IN_PU_NO_IT);
 	push	#0x40
-	push	#0x02
+	push	#0x08
 	push	#0x0a
 	push	#0x50
 	call	_GPIO_Init
 	addw	sp, #4
 ;	user/key.c: 10: TIMER_InitTime(&key.tick);
 	ldw	x, #_key+0
-	ldw	(0x05, sp), x
-	ldw	x, (0x05, sp)
+	ldw	(0x03, sp), x
+	ldw	x, (0x03, sp)
 	addw	x, #0x0005
 	pushw	x
 	call	_TIMER_InitTime
 	popw	x
 ;	user/key.c: 11: for(key.name = TP_SET; key.name < NUM_KEY; key.name++){
-	ldw	x, (0x05, sp)
+	ldw	x, (0x03, sp)
 	clr	(x)
-	ldw	x, (0x05, sp)
+	ldw	x, (0x03, sp)
 	incw	x
-	ldw	(0x03, sp), x
+	ldw	(0x05, sp), x
 00103$:
-	ldw	x, (0x05, sp)
+	ldw	x, (0x03, sp)
 	ld	a, (x)
 	cp	a, #0x01
 	jrnc	00105$
@@ -85,7 +85,7 @@ _tp_init:
 	ld	xl, a
 	clr	a
 	ld	xh, a
-	addw	x, (0x03, sp)
+	addw	x, (0x05, sp)
 	ldw	(0x01, sp), x
 	ldw	x, (0x01, sp)
 	incw	x
@@ -93,28 +93,28 @@ _tp_init:
 	ldw	x, (0x01, sp)
 	clr	(x)
 ;	user/key.c: 13: key.ext[key.name].waitRelease = 0;
-	ldw	x, (0x05, sp)
+	ldw	x, (0x03, sp)
 	ld	a, (x)
 	sll	a
 	sll	a
 	clrw	x
 	ld	xl, a
-	addw	x, (0x03, sp)
+	addw	x, (0x05, sp)
 	incw	x
 	incw	x
 	clr	(x)
 ;	user/key.c: 14: key.ext[key.name].cnt = 0;
-	ldw	x, (0x05, sp)
+	ldw	x, (0x03, sp)
 	ld	a, (x)
 	sll	a
 	sll	a
 	clrw	x
 	ld	xl, a
-	addw	x, (0x03, sp)
+	addw	x, (0x05, sp)
 	addw	x, #0x0003
 	clr	(x)
 ;	user/key.c: 11: for(key.name = TP_SET; key.name < NUM_KEY; key.name++){
-	ldw	x, (0x05, sp)
+	ldw	x, (0x03, sp)
 	inc	(x)
 	jra	00103$
 00105$:
@@ -136,7 +136,7 @@ _touch_get:
 	cp	a, #0x00
 	jrne	00105$
 ;	user/key.c: 24: keyGet = SET_In();
-	push	#0x02
+	push	#0x08
 	push	#0x0a
 	push	#0x50
 	call	_GPIO_ReadInputPin
@@ -144,7 +144,7 @@ _touch_get:
 	clrw	x
 	ld	xl, a
 ;	user/key.c: 26: if(keyGet != PIN_SET_KEY)
-	cpw	x, #0x0002
+	cpw	x, #0x0008
 	jreq	00103$
 ;	user/key.c: 30: key.ext[port_id].press = TP_PRESS;
 	ldw	x, #_key+1
@@ -179,19 +179,19 @@ _touch_get:
 	ld	(0x04, sp), a
 	ldw	x, (0x04, sp)
 	incw	x
-	ldw	(0x02, sp), x
-	ldw	x, (0x02, sp)
+	ldw	(0x01, sp), x
+	ldw	x, (0x01, sp)
 	ld	a, (x)
 	ldw	x, (0x04, sp)
 	push	a
 	ld	a, (x)
-	ld	(0x02, sp), a
+	ld	(0x04, sp), a
 	pop	a
 ;	user/key.c: 37: ++(key.ext[port_id].cnt);
 	ldw	x, (0x04, sp)
 	addw	x, #0x0003
 ;	user/key.c: 35: if(key.ext[port_id].press != key.ext[port_id].pressed)
-	cp	a, (0x01, sp)
+	cp	a, (0x03, sp)
 	jreq	00109$
 ;	user/key.c: 37: ++(key.ext[port_id].cnt);
 	ld	a, (x)
@@ -201,7 +201,7 @@ _touch_get:
 	cp	a, #0x0a
 	jrne	00111$
 ;	user/key.c: 40: key.ext[port_id].pressed = key.ext[port_id].press;
-	ldw	y, (0x02, sp)
+	ldw	y, (0x01, sp)
 	ld	a, (y)
 	ldw	y, (0x04, sp)
 	ld	(y), a
@@ -240,8 +240,8 @@ _tp_manager:
 	sub	sp, #5
 ;	user/key.c: 57: if(!TIMER_CheckTimeMS(&key.tick, 10))
 	ldw	x, #_key+0
-	ldw	(0x04, sp), x
-	ldw	x, (0x04, sp)
+	ldw	(0x01, sp), x
+	ldw	x, (0x01, sp)
 	addw	x, #0x0005
 	push	#0x0a
 	push	#0x00
@@ -254,13 +254,13 @@ _tp_manager:
 	tnz	(0x03, sp)
 	jrne	00111$
 ;	user/key.c: 59: for(key.name = TP_SET;key.name < NUM_KEY;key.name++)
-	ldw	x, (0x04, sp)
+	ldw	x, (0x01, sp)
 	clr	(x)
-	ldw	x, (0x04, sp)
+	ldw	x, (0x01, sp)
 	incw	x
-	ldw	(0x01, sp), x
+	ldw	(0x04, sp), x
 00109$:
-	ldw	x, (0x04, sp)
+	ldw	x, (0x01, sp)
 	ld	a, (x)
 	cp	a, #0x01
 	jrnc	00111$
@@ -269,13 +269,13 @@ _tp_manager:
 	call	_touch_get
 	pop	a
 ;	user/key.c: 62: if(key.ext[key.name].pressed == TP_PRESS)
-	ldw	x, (0x04, sp)
+	ldw	x, (0x01, sp)
 	ld	a, (x)
 	sll	a
 	sll	a
 	clrw	x
 	ld	xl, a
-	addw	x, (0x01, sp)
+	addw	x, (0x04, sp)
 	ld	a, (x)
 	cp	a, #0x01
 	jrne	00102$
@@ -286,13 +286,13 @@ _tp_manager:
 	ld	(x), a
 00102$:
 ;	user/key.c: 67: if(key.ext[key.name].pressed == TP_RELEASE){
-	ldw	x, (0x04, sp)
+	ldw	x, (0x01, sp)
 	ld	a, (x)
 	sll	a
 	sll	a
 	clrw	x
 	ld	xl, a
-	addw	x, (0x01, sp)
+	addw	x, (0x04, sp)
 	ld	a, (x)
 	tnz	a
 	jrne	00110$
@@ -302,7 +302,7 @@ _tp_manager:
 	clr	(x)
 00110$:
 ;	user/key.c: 59: for(key.name = TP_SET;key.name < NUM_KEY;key.name++)
-	ldw	x, (0x04, sp)
+	ldw	x, (0x01, sp)
 	inc	(x)
 	jra	00109$
 00111$:

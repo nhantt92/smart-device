@@ -1,6 +1,6 @@
                                       1 ;--------------------------------------------------------
                                       2 ; File Created by SDCC : free open source ANSI-C Compiler
-                                      3 ; Version 3.6.0 #9615 (Mac OS X x86_64)
+                                      3 ; Version 3.6.0 #9615 (MINGW64)
                                       4 ;--------------------------------------------------------
                                       5 	.module tim4
                                       6 	.optsdcc -mstm8

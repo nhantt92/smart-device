@@ -1,6 +1,6 @@
                                       1 ;--------------------------------------------------------
                                       2 ; File Created by SDCC : free open source ANSI-C Compiler
-                                      3 ; Version 3.6.0 #9615 (Mac OS X x86_64)
+                                      3 ; Version 3.6.0 #9615 (MINGW64)
                                       4 ;--------------------------------------------------------
                                       5 	.module key
                                       6 	.optsdcc -mstm8
@@ -55,27 +55,27 @@
       000000 52 06            [ 2]   55 	sub	sp, #6
                                      56 ;	user/key.c: 9: GPIO_Init(PORT_SET_KEY, PIN_SET_KEY, GPIO_MODE_IN_PU_NO_IT);
       000002 4B 40            [ 1]   57 	push	#0x40
-      000004 4B 02            [ 1]   58 	push	#0x02
+      000004 4B 08            [ 1]   58 	push	#0x08
       000006 4B 0A            [ 1]   59 	push	#0x0a
       000008 4B 50            [ 1]   60 	push	#0x50
       00000A CDr00r00         [ 4]   61 	call	_GPIO_Init
       00000D 5B 04            [ 2]   62 	addw	sp, #4
                                      63 ;	user/key.c: 10: TIMER_InitTime(&key.tick);
       00000F AEr00r00         [ 2]   64 	ldw	x, #_key+0
-      000012 1F 05            [ 2]   65 	ldw	(0x05, sp), x
-      000014 1E 05            [ 2]   66 	ldw	x, (0x05, sp)
+      000012 1F 03            [ 2]   65 	ldw	(0x03, sp), x
+      000014 1E 03            [ 2]   66 	ldw	x, (0x03, sp)
       000016 1C 00 05         [ 2]   67 	addw	x, #0x0005
       000019 89               [ 2]   68 	pushw	x
       00001A CDr00r00         [ 4]   69 	call	_TIMER_InitTime
       00001D 85               [ 2]   70 	popw	x
                                      71 ;	user/key.c: 11: for(key.name = TP_SET; key.name < NUM_KEY; key.name++){
-      00001E 1E 05            [ 2]   72 	ldw	x, (0x05, sp)
+      00001E 1E 03            [ 2]   72 	ldw	x, (0x03, sp)
       000020 7F               [ 1]   73 	clr	(x)
-      000021 1E 05            [ 2]   74 	ldw	x, (0x05, sp)
+      000021 1E 03            [ 2]   74 	ldw	x, (0x03, sp)
       000023 5C               [ 2]   75 	incw	x
-      000024 1F 03            [ 2]   76 	ldw	(0x03, sp), x
+      000024 1F 05            [ 2]   76 	ldw	(0x05, sp), x
       000026                         77 00103$:
-      000026 1E 05            [ 2]   78 	ldw	x, (0x05, sp)
+      000026 1E 03            [ 2]   78 	ldw	x, (0x03, sp)
       000028 F6               [ 1]   79 	ld	a, (x)
       000029 A1 01            [ 1]   80 	cp	a, #0x01
       00002B 24 31            [ 1]   81 	jrnc	00105$
@@ -85,7 +85,7 @@
       00002F 97               [ 1]   85 	ld	xl, a
       000030 4F               [ 1]   86 	clr	a
       000031 95               [ 1]   87 	ld	xh, a
-      000032 72 FB 03         [ 2]   88 	addw	x, (0x03, sp)
+      000032 72 FB 05         [ 2]   88 	addw	x, (0x05, sp)
       000035 1F 01            [ 2]   89 	ldw	(0x01, sp), x
       000037 1E 01            [ 2]   90 	ldw	x, (0x01, sp)
       000039 5C               [ 2]   91 	incw	x
@@ -93,28 +93,28 @@
       00003B 1E 01            [ 2]   93 	ldw	x, (0x01, sp)
       00003D 7F               [ 1]   94 	clr	(x)
                                      95 ;	user/key.c: 13: key.ext[key.name].waitRelease = 0;
-      00003E 1E 05            [ 2]   96 	ldw	x, (0x05, sp)
+      00003E 1E 03            [ 2]   96 	ldw	x, (0x03, sp)
       000040 F6               [ 1]   97 	ld	a, (x)
       000041 48               [ 1]   98 	sll	a
       000042 48               [ 1]   99 	sll	a
       000043 5F               [ 1]  100 	clrw	x
       000044 97               [ 1]  101 	ld	xl, a
-      000045 72 FB 03         [ 2]  102 	addw	x, (0x03, sp)
+      000045 72 FB 05         [ 2]  102 	addw	x, (0x05, sp)
       000048 5C               [ 2]  103 	incw	x
       000049 5C               [ 2]  104 	incw	x
       00004A 7F               [ 1]  105 	clr	(x)
                                     106 ;	user/key.c: 14: key.ext[key.name].cnt = 0;
-      00004B 1E 05            [ 2]  107 	ldw	x, (0x05, sp)
+      00004B 1E 03            [ 2]  107 	ldw	x, (0x03, sp)
       00004D F6               [ 1]  108 	ld	a, (x)
       00004E 48               [ 1]  109 	sll	a
       00004F 48               [ 1]  110 	sll	a
       000050 5F               [ 1]  111 	clrw	x
       000051 97               [ 1]  112 	ld	xl, a
-      000052 72 FB 03         [ 2]  113 	addw	x, (0x03, sp)
+      000052 72 FB 05         [ 2]  113 	addw	x, (0x05, sp)
       000055 1C 00 03         [ 2]  114 	addw	x, #0x0003
       000058 7F               [ 1]  115 	clr	(x)
                                     116 ;	user/key.c: 11: for(key.name = TP_SET; key.name < NUM_KEY; key.name++){
-      000059 1E 05            [ 2]  117 	ldw	x, (0x05, sp)
+      000059 1E 03            [ 2]  117 	ldw	x, (0x03, sp)
       00005B 7C               [ 1]  118 	inc	(x)
       00005C 20 C8            [ 2]  119 	jra	00103$
       00005E                        120 00105$:
@@ -136,7 +136,7 @@
       00006B A1 00            [ 1]  136 	cp	a, #0x00
       00006D 26 2E            [ 1]  137 	jrne	00105$
                                     138 ;	user/key.c: 24: keyGet = SET_In();
-      00006F 4B 02            [ 1]  139 	push	#0x02
+      00006F 4B 08            [ 1]  139 	push	#0x08
       000071 4B 0A            [ 1]  140 	push	#0x0a
       000073 4B 50            [ 1]  141 	push	#0x50
       000075 CDr00r00         [ 4]  142 	call	_GPIO_ReadInputPin
@@ -144,7 +144,7 @@
       00007A 5F               [ 1]  144 	clrw	x
       00007B 97               [ 1]  145 	ld	xl, a
                                     146 ;	user/key.c: 26: if(keyGet != PIN_SET_KEY)
-      00007C A3 00 02         [ 2]  147 	cpw	x, #0x0002
+      00007C A3 00 08         [ 2]  147 	cpw	x, #0x0008
       00007F 27 10            [ 1]  148 	jreq	00103$
                                     149 ;	user/key.c: 30: key.ext[port_id].press = TP_PRESS;
       000081 AEr00r01         [ 2]  150 	ldw	x, #_key+1
@@ -179,19 +179,19 @@
       0000A8 6B 04            [ 1]  179 	ld	(0x04, sp), a
       0000AA 1E 04            [ 2]  180 	ldw	x, (0x04, sp)
       0000AC 5C               [ 2]  181 	incw	x
-      0000AD 1F 02            [ 2]  182 	ldw	(0x02, sp), x
-      0000AF 1E 02            [ 2]  183 	ldw	x, (0x02, sp)
+      0000AD 1F 01            [ 2]  182 	ldw	(0x01, sp), x
+      0000AF 1E 01            [ 2]  183 	ldw	x, (0x01, sp)
       0000B1 F6               [ 1]  184 	ld	a, (x)
       0000B2 1E 04            [ 2]  185 	ldw	x, (0x04, sp)
       0000B4 88               [ 1]  186 	push	a
       0000B5 F6               [ 1]  187 	ld	a, (x)
-      0000B6 6B 02            [ 1]  188 	ld	(0x02, sp), a
+      0000B6 6B 04            [ 1]  188 	ld	(0x04, sp), a
       0000B8 84               [ 1]  189 	pop	a
                                     190 ;	user/key.c: 37: ++(key.ext[port_id].cnt);
       0000B9 1E 04            [ 2]  191 	ldw	x, (0x04, sp)
       0000BB 1C 00 03         [ 2]  192 	addw	x, #0x0003
                                     193 ;	user/key.c: 35: if(key.ext[port_id].press != key.ext[port_id].pressed)
-      0000BE 11 01            [ 1]  194 	cp	a, (0x01, sp)
+      0000BE 11 03            [ 1]  194 	cp	a, (0x03, sp)
       0000C0 27 12            [ 1]  195 	jreq	00109$
                                     196 ;	user/key.c: 37: ++(key.ext[port_id].cnt);
       0000C2 F6               [ 1]  197 	ld	a, (x)
@@ -201,7 +201,7 @@
       0000C5 A1 0A            [ 1]  201 	cp	a, #0x0a
       0000C7 26 0C            [ 1]  202 	jrne	00111$
                                     203 ;	user/key.c: 40: key.ext[port_id].pressed = key.ext[port_id].press;
-      0000C9 16 02            [ 2]  204 	ldw	y, (0x02, sp)
+      0000C9 16 01            [ 2]  204 	ldw	y, (0x01, sp)
       0000CB 90 F6            [ 1]  205 	ld	a, (y)
       0000CD 16 04            [ 2]  206 	ldw	y, (0x04, sp)
       0000CF 90 F7            [ 1]  207 	ld	(y), a
@@ -240,8 +240,8 @@
       0000EA 52 05            [ 2]  240 	sub	sp, #5
                                     241 ;	user/key.c: 57: if(!TIMER_CheckTimeMS(&key.tick, 10))
       0000EC AEr00r00         [ 2]  242 	ldw	x, #_key+0
-      0000EF 1F 04            [ 2]  243 	ldw	(0x04, sp), x
-      0000F1 1E 04            [ 2]  244 	ldw	x, (0x04, sp)
+      0000EF 1F 01            [ 2]  243 	ldw	(0x01, sp), x
+      0000F1 1E 01            [ 2]  244 	ldw	x, (0x01, sp)
       0000F3 1C 00 05         [ 2]  245 	addw	x, #0x0005
       0000F6 4B 0A            [ 1]  246 	push	#0x0a
       0000F8 4B 00            [ 1]  247 	push	#0x00
@@ -254,13 +254,13 @@
       000106 0D 03            [ 1]  254 	tnz	(0x03, sp)
       000108 26 3E            [ 1]  255 	jrne	00111$
                                     256 ;	user/key.c: 59: for(key.name = TP_SET;key.name < NUM_KEY;key.name++)
-      00010A 1E 04            [ 2]  257 	ldw	x, (0x04, sp)
+      00010A 1E 01            [ 2]  257 	ldw	x, (0x01, sp)
       00010C 7F               [ 1]  258 	clr	(x)
-      00010D 1E 04            [ 2]  259 	ldw	x, (0x04, sp)
+      00010D 1E 01            [ 2]  259 	ldw	x, (0x01, sp)
       00010F 5C               [ 2]  260 	incw	x
-      000110 1F 01            [ 2]  261 	ldw	(0x01, sp), x
+      000110 1F 04            [ 2]  261 	ldw	(0x04, sp), x
       000112                        262 00109$:
-      000112 1E 04            [ 2]  263 	ldw	x, (0x04, sp)
+      000112 1E 01            [ 2]  263 	ldw	x, (0x01, sp)
       000114 F6               [ 1]  264 	ld	a, (x)
       000115 A1 01            [ 1]  265 	cp	a, #0x01
       000117 24 2F            [ 1]  266 	jrnc	00111$
@@ -269,13 +269,13 @@
       00011A CDr00r61         [ 4]  269 	call	_touch_get
       00011D 84               [ 1]  270 	pop	a
                                     271 ;	user/key.c: 62: if(key.ext[key.name].pressed == TP_PRESS)
-      00011E 1E 04            [ 2]  272 	ldw	x, (0x04, sp)
+      00011E 1E 01            [ 2]  272 	ldw	x, (0x01, sp)
       000120 F6               [ 1]  273 	ld	a, (x)
       000121 48               [ 1]  274 	sll	a
       000122 48               [ 1]  275 	sll	a
       000123 5F               [ 1]  276 	clrw	x
       000124 97               [ 1]  277 	ld	xl, a
-      000125 72 FB 01         [ 2]  278 	addw	x, (0x01, sp)
+      000125 72 FB 04         [ 2]  278 	addw	x, (0x04, sp)
       000128 F6               [ 1]  279 	ld	a, (x)
       000129 A1 01            [ 1]  280 	cp	a, #0x01
       00012B 26 05            [ 1]  281 	jrne	00102$
@@ -286,13 +286,13 @@
       000131 F7               [ 1]  286 	ld	(x), a
       000132                        287 00102$:
                                     288 ;	user/key.c: 67: if(key.ext[key.name].pressed == TP_RELEASE){
-      000132 1E 04            [ 2]  289 	ldw	x, (0x04, sp)
+      000132 1E 01            [ 2]  289 	ldw	x, (0x01, sp)
       000134 F6               [ 1]  290 	ld	a, (x)
       000135 48               [ 1]  291 	sll	a
       000136 48               [ 1]  292 	sll	a
       000137 5F               [ 1]  293 	clrw	x
       000138 97               [ 1]  294 	ld	xl, a
-      000139 72 FB 01         [ 2]  295 	addw	x, (0x01, sp)
+      000139 72 FB 04         [ 2]  295 	addw	x, (0x04, sp)
       00013C F6               [ 1]  296 	ld	a, (x)
       00013D 4D               [ 1]  297 	tnz	a
       00013E 26 03            [ 1]  298 	jrne	00110$
@@ -302,7 +302,7 @@
       000142 7F               [ 1]  302 	clr	(x)
       000143                        303 00110$:
                                     304 ;	user/key.c: 59: for(key.name = TP_SET;key.name < NUM_KEY;key.name++)
-      000143 1E 04            [ 2]  305 	ldw	x, (0x04, sp)
+      000143 1E 01            [ 2]  305 	ldw	x, (0x01, sp)
       000145 7C               [ 1]  306 	inc	(x)
       000146 20 CA            [ 2]  307 	jra	00109$
       000148                        308 00111$:

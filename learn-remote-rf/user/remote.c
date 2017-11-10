@@ -4,13 +4,15 @@
 #include "rom.h"
 #include "main.h"
 #include "system.h"
+#include "stm8s_gpio.h"
+
 
 #define   MIN_SYN_BIT_TIME_US   5500      /* Syn bit time in µs */
-#define   MAX_SYN_BIT_TIME_US   6500      /* Syn bit time in µs */
-#define   MIN_LSB_BIT_TIME_US   100       /* Minimum half bit time in µs */
-#define   MAX_LSB_BIT_TIME_US   300       /* Maximum half bit time in µs */
-#define   MIN_MSB_BIT_TIME_US   500       /* Minimum half bit time in µs */
-#define   MAX_MSB_BIT_TIME_US   700       /* Maximum half bit time in µs */
+#define   MAX_SYN_BIT_TIME_US   12000      /* Syn bit time in µs */
+#define   MIN_LSB_BIT_TIME_US   300       /* Minimum half bit time in µs */
+#define   MAX_LSB_BIT_TIME_US   500       /* Maximum half bit time in µs */
+#define   MIN_MSB_BIT_TIME_US   700       /* Minimum half bit time in µs */
+#define   MAX_MSB_BIT_TIME_US   1200       /* Maximum half bit time in µs */
 
 #define   MAX_BIT_READ          25
 #define   BIT_READ              24
@@ -137,10 +139,10 @@ void remote_Manager(void)
   {
     //info("Test \r\n");
     if(ctrCnt != 0)ctrCnt--;
-    else{
-      //debugInfo("TurnOff", 0, 0);
-      GPIO_WriteLow(CTR_GPIO, CTR_PIN);
-    }
+    // else{
+    //   //debugInfo("TurnOff", 0, 0);
+    //   GPIO_WriteLow(CTR_GPIO, CTR_PIN);
+    // }
     if(remote.flag == 1)
     {
       disableInterrupts();
@@ -173,7 +175,7 @@ void remote_Manager(void)
               checkCmd = system_checkID(remote.command);
               if((checkCmd == 1)&&(ctrCnt == 0))
               {
-                  GPIO_WriteHigh(CTR_GPIO, CTR_PIN);
+                  GPIO_WriteReverse(CTR_GPIO, CTR_PIN);
                   info("TurnOn A \r\n");
                 ctrCnt = 20;
                 remote.command = 0;

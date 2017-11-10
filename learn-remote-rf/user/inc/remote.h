@@ -3,6 +3,10 @@
 
 #include "stm8s.h"
 #include "timerTick.h"
+#include "stm8s_gpio.h"
+
+#define CTR_GPIO       									GPIOD
+#define CTR_PIN      	 								GPIO_PIN_2
 
 #define MAX_BUFF				60
 #define MAX_BUFF_CMD			5

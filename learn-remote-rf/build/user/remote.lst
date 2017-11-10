@@ -1,6 +1,6 @@
                                       1 ;--------------------------------------------------------
                                       2 ; File Created by SDCC : free open source ANSI-C Compiler
-                                      3 ; Version 3.6.0 #9615 (Mac OS X x86_64)
+                                      3 ; Version 3.6.0 #9615 (MINGW64)
                                       4 ;--------------------------------------------------------
                                       5 	.module remote
                                       6 	.optsdcc -mstm8
@@ -24,743 +24,734 @@
                                      24 	.globl _TIM1_Cmd
                                      25 	.globl _TIM1_TimeBaseInit
                                      26 	.globl _TIM1_DeInit
-                                     27 	.globl _GPIO_WriteLow
-                                     28 	.globl _GPIO_WriteHigh
-                                     29 	.globl _GPIO_Init
-                                     30 	.globl _EXTI_SetExtIntSensitivity
-                                     31 	.globl _CLK_PeripheralClockConfig
-                                     32 	.globl _ctrCnt
-                                     33 	.globl _ctrFlag
-                                     34 	.globl _remote
-                                     35 	.globl _remote_Init
-                                     36 	.globl _remote_CheckCompare
-                                     37 	.globl _remote_Clear
-                                     38 	.globl _remote_Process
-                                     39 	.globl _remote_Manager
-                                     40 ;--------------------------------------------------------
-                                     41 ; ram data
-                                     42 ;--------------------------------------------------------
-                                     43 	.area DATA
-      000000                         44 _remote::
-      000000                         45 	.ds 159
-                                     46 ;--------------------------------------------------------
-                                     47 ; ram data
-                                     48 ;--------------------------------------------------------
-                                     49 	.area INITIALIZED
-      000000                         50 _ctrFlag::
-      000000                         51 	.ds 1
-      000001                         52 _ctrCnt::
-      000001                         53 	.ds 1
-                                     54 ;--------------------------------------------------------
-                                     55 ; absolute external ram data
-                                     56 ;--------------------------------------------------------
-                                     57 	.area DABS (ABS)
-                                     58 ;--------------------------------------------------------
-                                     59 ; global & static initialisations
-                                     60 ;--------------------------------------------------------
-                                     61 	.area HOME
-                                     62 	.area GSINIT
-                                     63 	.area GSFINAL
-                                     64 	.area GSINIT
-                                     65 ;--------------------------------------------------------
-                                     66 ; Home
-                                     67 ;--------------------------------------------------------
+                                     27 	.globl _GPIO_WriteReverse
+                                     28 	.globl _GPIO_Init
+                                     29 	.globl _EXTI_SetExtIntSensitivity
+                                     30 	.globl _CLK_PeripheralClockConfig
+                                     31 	.globl _ctrCnt
+                                     32 	.globl _ctrFlag
+                                     33 	.globl _remote
+                                     34 	.globl _remote_Init
+                                     35 	.globl _remote_CheckCompare
+                                     36 	.globl _remote_Clear
+                                     37 	.globl _remote_Process
+                                     38 	.globl _remote_Manager
+                                     39 ;--------------------------------------------------------
+                                     40 ; ram data
+                                     41 ;--------------------------------------------------------
+                                     42 	.area DATA
+      000000                         43 _remote::
+      000000                         44 	.ds 159
+                                     45 ;--------------------------------------------------------
+                                     46 ; ram data
+                                     47 ;--------------------------------------------------------
+                                     48 	.area INITIALIZED
+      000000                         49 _ctrFlag::
+      000000                         50 	.ds 1
+      000001                         51 _ctrCnt::
+      000001                         52 	.ds 1
+                                     53 ;--------------------------------------------------------
+                                     54 ; absolute external ram data
+                                     55 ;--------------------------------------------------------
+                                     56 	.area DABS (ABS)
+                                     57 ;--------------------------------------------------------
+                                     58 ; global & static initialisations
+                                     59 ;--------------------------------------------------------
+                                     60 	.area HOME
+                                     61 	.area GSINIT
+                                     62 	.area GSFINAL
+                                     63 	.area GSINIT
+                                     64 ;--------------------------------------------------------
+                                     65 ; Home
+                                     66 ;--------------------------------------------------------
+                                     67 	.area HOME
                                      68 	.area HOME
-                                     69 	.area HOME
-                                     70 ;--------------------------------------------------------
-                                     71 ; code
-                                     72 ;--------------------------------------------------------
-                                     73 	.area CODE
-                                     74 ;	user/remote.c: 19: void TIM1_EnIn(void)
-                                     75 ;	-----------------------------------------
-                                     76 ;	 function TIM1_EnIn
-                                     77 ;	-----------------------------------------
-      000000                         78 _TIM1_EnIn:
-                                     79 ;	user/remote.c: 21: TIM1_ClearFlag(TIM1_FLAG_UPDATE); 
-      000000 4B 01            [ 1]   80 	push	#0x01
-      000002 4B 00            [ 1]   81 	push	#0x00
-      000004 CDr00r00         [ 4]   82 	call	_TIM1_ClearFlag
-      000007 85               [ 2]   83 	popw	x
-                                     84 ;	user/remote.c: 22: TIM1_ITConfig(TIM1_IT_UPDATE, ENABLE);
-      000008 4B 01            [ 1]   85 	push	#0x01
-      00000A 4B 01            [ 1]   86 	push	#0x01
-      00000C CDr00r00         [ 4]   87 	call	_TIM1_ITConfig
-      00000F 85               [ 2]   88 	popw	x
-                                     89 ;	user/remote.c: 23: TIM1_SetCounter(0);
-      000010 5F               [ 1]   90 	clrw	x
-      000011 89               [ 2]   91 	pushw	x
-      000012 CDr00r00         [ 4]   92 	call	_TIM1_SetCounter
-      000015 85               [ 2]   93 	popw	x
-      000016 81               [ 4]   94 	ret
-                                     95 ;	user/remote.c: 26: void TIM1_DisIn(void)
-                                     96 ;	-----------------------------------------
-                                     97 ;	 function TIM1_DisIn
-                                     98 ;	-----------------------------------------
-      000017                         99 _TIM1_DisIn:
-                                    100 ;	user/remote.c: 28: TIM1_ClearFlag(TIM1_FLAG_UPDATE); 
-      000017 4B 01            [ 1]  101 	push	#0x01
-      000019 4B 00            [ 1]  102 	push	#0x00
-      00001B CDr00r00         [ 4]  103 	call	_TIM1_ClearFlag
-      00001E 85               [ 2]  104 	popw	x
-                                    105 ;	user/remote.c: 29: TIM1_ITConfig(TIM1_IT_UPDATE, DISABLE); 
-      00001F 4B 00            [ 1]  106 	push	#0x00
-      000021 4B 01            [ 1]  107 	push	#0x01
-      000023 CDr00r00         [ 4]  108 	call	_TIM1_ITConfig
-      000026 85               [ 2]  109 	popw	x
-      000027 81               [ 4]  110 	ret
-                                    111 ;	user/remote.c: 32: void TIM1_Config(void)
-                                    112 ;	-----------------------------------------
-                                    113 ;	 function TIM1_Config
-                                    114 ;	-----------------------------------------
-      000028                        115 _TIM1_Config:
-                                    116 ;	user/remote.c: 34: CLK_PeripheralClockConfig(CLK_PERIPHERAL_TIMER1 , ENABLE); 
-      000028 4B 01            [ 1]  117 	push	#0x01
-      00002A 4B 07            [ 1]  118 	push	#0x07
-      00002C CDr00r00         [ 4]  119 	call	_CLK_PeripheralClockConfig
-      00002F 85               [ 2]  120 	popw	x
-                                    121 ;	user/remote.c: 36: TIM1_DeInit();
-      000030 CDr00r00         [ 4]  122 	call	_TIM1_DeInit
-                                    123 ;	user/remote.c: 37: TIM1_TimeBaseInit(15, TIM1_COUNTERMODE_UP, 65535, 0);
-      000033 4B 00            [ 1]  124 	push	#0x00
-      000035 4B FF            [ 1]  125 	push	#0xff
-      000037 4B FF            [ 1]  126 	push	#0xff
-      000039 4B 00            [ 1]  127 	push	#0x00
-      00003B 4B 0F            [ 1]  128 	push	#0x0f
-      00003D 4B 00            [ 1]  129 	push	#0x00
-      00003F CDr00r00         [ 4]  130 	call	_TIM1_TimeBaseInit
-      000042 5B 06            [ 2]  131 	addw	sp, #6
-                                    132 ;	user/remote.c: 38: TIM1_SetCounter(0);
-      000044 5F               [ 1]  133 	clrw	x
-      000045 89               [ 2]  134 	pushw	x
-      000046 CDr00r00         [ 4]  135 	call	_TIM1_SetCounter
-      000049 85               [ 2]  136 	popw	x
-                                    137 ;	user/remote.c: 40: TIM1_Cmd(ENABLE);
-      00004A 4B 01            [ 1]  138 	push	#0x01
-      00004C CDr00r00         [ 4]  139 	call	_TIM1_Cmd
-      00004F 84               [ 1]  140 	pop	a
-      000050 81               [ 4]  141 	ret
-                                    142 ;	user/remote.c: 43: void GPIO_Configuration(void)
-                                    143 ;	-----------------------------------------
-                                    144 ;	 function GPIO_Configuration
-                                    145 ;	-----------------------------------------
-      000051                        146 _GPIO_Configuration:
-                                    147 ;	user/remote.c: 45: GPIO_Init(GPIOD, GPIO_PIN_3, GPIO_MODE_IN_FL_IT);
-      000051 4B 20            [ 1]  148 	push	#0x20
-      000053 4B 08            [ 1]  149 	push	#0x08
-      000055 4B 0F            [ 1]  150 	push	#0x0f
-      000057 4B 50            [ 1]  151 	push	#0x50
-      000059 CDr00r00         [ 4]  152 	call	_GPIO_Init
-      00005C 5B 04            [ 2]  153 	addw	sp, #4
-                                    154 ;	user/remote.c: 47: EXTI_SetExtIntSensitivity(EXTI_PORT_GPIOD, EXTI_SENSITIVITY_RISE_FALL);
-      00005E 4B 03            [ 1]  155 	push	#0x03
-      000060 4B 03            [ 1]  156 	push	#0x03
-      000062 CDr00r00         [ 4]  157 	call	_EXTI_SetExtIntSensitivity
-      000065 85               [ 2]  158 	popw	x
-      000066 81               [ 4]  159 	ret
-                                    160 ;	user/remote.c: 50: void remote_Init(void)
-                                    161 ;	-----------------------------------------
-                                    162 ;	 function remote_Init
-                                    163 ;	-----------------------------------------
-      000067                        164 _remote_Init:
-                                    165 ;	user/remote.c: 52: remote_Clear();
-      000067 CDr01r75         [ 4]  166 	call	_remote_Clear
-                                    167 ;	user/remote.c: 53: remote.command = 0;
-      00006A AEr00r95         [ 2]  168 	ldw	x, #_remote+149
-      00006D 90 5F            [ 1]  169 	clrw	y
-      00006F EF 02            [ 2]  170 	ldw	(0x2, x), y
-      000071 FF               [ 2]  171 	ldw	(x), y
-                                    172 ;	user/remote.c: 54: TIM1_Config();
-      000072 CDr00r28         [ 4]  173 	call	_TIM1_Config
-                                    174 ;	user/remote.c: 55: GPIO_Configuration();
-      000075 CCr00r51         [ 2]  175 	jp	_GPIO_Configuration
-                                    176 ;	user/remote.c: 58: uint32_t remote_CheckCompare(uint32_t dat, uint32_t *buf, uint8_t offset, uint8_t len)
-                                    177 ;	-----------------------------------------
-                                    178 ;	 function remote_CheckCompare
-                                    179 ;	-----------------------------------------
-      000078                        180 _remote_CheckCompare:
-      000078 52 04            [ 2]  181 	sub	sp, #4
-                                    182 ;	user/remote.c: 62: for(add = 0;add < len;add++)
-      00007A 4F               [ 1]  183 	clr	a
-      00007B                        184 00107$:
-      00007B 11 0E            [ 1]  185 	cp	a, (0x0e, sp)
-      00007D 24 2E            [ 1]  186 	jrnc	00105$
-                                    187 ;	user/remote.c: 64: if(add == offset)
-      00007F 11 0D            [ 1]  188 	cp	a, (0x0d, sp)
-      000081 26 01            [ 1]  189 	jrne	00102$
-                                    190 ;	user/remote.c: 65: add++;
-      000083 4C               [ 1]  191 	inc	a
-      000084                        192 00102$:
-                                    193 ;	user/remote.c: 66: if(dat == buf[add])
-      000084 5F               [ 1]  194 	clrw	x
-      000085 97               [ 1]  195 	ld	xl, a
-      000086 58               [ 2]  196 	sllw	x
-      000087 58               [ 2]  197 	sllw	x
-      000088 72 FB 0B         [ 2]  198 	addw	x, (0x0b, sp)
-      00008B 88               [ 1]  199 	push	a
-      00008C E6 03            [ 1]  200 	ld	a, (0x3, x)
-      00008E 6B 05            [ 1]  201 	ld	(0x05, sp), a
-      000090 E6 02            [ 1]  202 	ld	a, (0x2, x)
-      000092 6B 04            [ 1]  203 	ld	(0x04, sp), a
-      000094 FE               [ 2]  204 	ldw	x, (x)
-      000095 1F 02            [ 2]  205 	ldw	(0x02, sp), x
-      000097 84               [ 1]  206 	pop	a
-      000098 1E 09            [ 2]  207 	ldw	x, (0x09, sp)
-      00009A 13 03            [ 2]  208 	cpw	x, (0x03, sp)
-      00009C 26 0C            [ 1]  209 	jrne	00108$
-      00009E 1E 07            [ 2]  210 	ldw	x, (0x07, sp)
-      0000A0 13 01            [ 2]  211 	cpw	x, (0x01, sp)
-      0000A2 26 06            [ 1]  212 	jrne	00108$
-                                    213 ;	user/remote.c: 67: return dat;
-      0000A4 1E 09            [ 2]  214 	ldw	x, (0x09, sp)
-      0000A6 16 07            [ 2]  215 	ldw	y, (0x07, sp)
-      0000A8 20 06            [ 2]  216 	jra	00109$
-      0000AA                        217 00108$:
-                                    218 ;	user/remote.c: 62: for(add = 0;add < len;add++)
-      0000AA 4C               [ 1]  219 	inc	a
-      0000AB 20 CE            [ 2]  220 	jra	00107$
-      0000AD                        221 00105$:
-                                    222 ;	user/remote.c: 69: return 0;
-      0000AD 5F               [ 1]  223 	clrw	x
-      0000AE 90 5F            [ 1]  224 	clrw	y
-      0000B0                        225 00109$:
-      0000B0 5B 04            [ 2]  226 	addw	sp, #4
-      0000B2 81               [ 4]  227 	ret
-                                    228 ;	user/remote.c: 72: void remote_Decode(void)
-                                    229 ;	-----------------------------------------
-                                    230 ;	 function remote_Decode
-                                    231 ;	-----------------------------------------
-      0000B3                        232 _remote_Decode:
-      0000B3 52 11            [ 2]  233 	sub	sp, #17
-                                    234 ;	user/remote.c: 74: uint32_t RC_dataIndex = 0;
-      0000B5 5F               [ 1]  235 	clrw	x
-      0000B6 1F 04            [ 2]  236 	ldw	(0x04, sp), x
-      0000B8 1F 02            [ 2]  237 	ldw	(0x02, sp), x
-                                    238 ;	user/remote.c: 76: for(add = 1;add < (BIT_READ*2)+1;add+=2)
-      0000BA AEr00r00         [ 2]  239 	ldw	x, #_remote+0
-      0000BD 1F 10            [ 2]  240 	ldw	(0x10, sp), x
-      0000BF 1E 10            [ 2]  241 	ldw	x, (0x10, sp)
-      0000C1 1C 00 03         [ 2]  242 	addw	x, #0x0003
-      0000C4 1F 0E            [ 2]  243 	ldw	(0x0e, sp), x
-      0000C6 A6 01            [ 1]  244 	ld	a, #0x01
-      0000C8 6B 01            [ 1]  245 	ld	(0x01, sp), a
-      0000CA                        246 00117$:
-                                    247 ;	user/remote.c: 78: if((remote.buff[add] >= MIN_LSB_BIT_TIME_US)&&(remote.buff[add] < MAX_LSB_BIT_TIME_US)&&(remote.buff[add+1] >= MIN_MSB_BIT_TIME_US)&&(remote.buff[add+1] < MAX_MSB_BIT_TIME_US))
-      0000CA 7B 01            [ 1]  248 	ld	a, (0x01, sp)
-      0000CC 48               [ 1]  249 	sll	a
-      0000CD 5F               [ 1]  250 	clrw	x
-      0000CE 97               [ 1]  251 	ld	xl, a
-      0000CF 72 FB 0E         [ 2]  252 	addw	x, (0x0e, sp)
-      0000D2 FE               [ 2]  253 	ldw	x, (x)
-      0000D3 1F 0C            [ 2]  254 	ldw	(0x0c, sp), x
-      0000D5 7B 01            [ 1]  255 	ld	a, (0x01, sp)
-      0000D7 4C               [ 1]  256 	inc	a
-      0000D8 48               [ 1]  257 	sll	a
-      0000D9 97               [ 1]  258 	ld	xl, a
-      0000DA 4F               [ 1]  259 	clr	a
-      0000DB 95               [ 1]  260 	ld	xh, a
-      0000DC 72 FB 0E         [ 2]  261 	addw	x, (0x0e, sp)
-      0000DF 1F 0A            [ 2]  262 	ldw	(0x0a, sp), x
-      0000E1 1E 0C            [ 2]  263 	ldw	x, (0x0c, sp)
-      0000E3 A3 00 64         [ 2]  264 	cpw	x, #0x0064
-      0000E6 25 14            [ 1]  265 	jrc	00108$
-      0000E8 1E 0C            [ 2]  266 	ldw	x, (0x0c, sp)
-      0000EA A3 01 2C         [ 2]  267 	cpw	x, #0x012c
-      0000ED 24 0D            [ 1]  268 	jrnc	00108$
-      0000EF 1E 0A            [ 2]  269 	ldw	x, (0x0a, sp)
-      0000F1 FE               [ 2]  270 	ldw	x, (x)
-      0000F2 A3 01 F4         [ 2]  271 	cpw	x, #0x01f4
-      0000F5 25 05            [ 1]  272 	jrc	00108$
-      0000F7 A3 02 BC         [ 2]  273 	cpw	x, #0x02bc
-      0000FA 25 2E            [ 1]  274 	jrc	00109$
-                                    275 ;	user/remote.c: 79: RC_dataIndex |= 0;
-      0000FC                        276 00108$:
-                                    277 ;	user/remote.c: 80: else if((remote.buff[add] >= MIN_MSB_BIT_TIME_US)&&(remote.buff[add] < MAX_MSB_BIT_TIME_US)&&(remote.buff[add+1] >= MIN_LSB_BIT_TIME_US)&&(remote.buff[add+1] < MAX_LSB_BIT_TIME_US))
-      0000FC 1E 0C            [ 2]  278 	ldw	x, (0x0c, sp)
-      0000FE A3 01 F4         [ 2]  279 	cpw	x, #0x01f4
-      000101 25 6F            [ 1]  280 	jrc	00119$
-      000103 1E 0C            [ 2]  281 	ldw	x, (0x0c, sp)
-      000105 A3 02 BC         [ 2]  282 	cpw	x, #0x02bc
-      000108 24 68            [ 1]  283 	jrnc	00119$
-      00010A 1E 0A            [ 2]  284 	ldw	x, (0x0a, sp)
-      00010C FE               [ 2]  285 	ldw	x, (x)
-      00010D A3 00 64         [ 2]  286 	cpw	x, #0x0064
-      000110 25 60            [ 1]  287 	jrc	00119$
-      000112 A3 01 2C         [ 2]  288 	cpw	x, #0x012c
-      000115 24 5B            [ 1]  289 	jrnc	00119$
-                                    290 ;	user/remote.c: 81: RC_dataIndex |= 1;
-      000117 1E 04            [ 2]  291 	ldw	x, (0x04, sp)
-      000119 54               [ 2]  292 	srlw	x
-      00011A 99               [ 1]  293 	scf
-      00011B 59               [ 2]  294 	rlcw	x
-      00011C 7B 03            [ 1]  295 	ld	a, (0x03, sp)
-      00011E 90 97            [ 1]  296 	ld	yl, a
-      000120 7B 02            [ 1]  297 	ld	a, (0x02, sp)
-      000122 90 95            [ 1]  298 	ld	yh, a
-      000124 1F 04            [ 2]  299 	ldw	(0x04, sp), x
-      000126 17 02            [ 2]  300 	ldw	(0x02, sp), y
-                                    301 ;	user/remote.c: 83: return;
-      000128 20 00            [ 2]  302 	jra	00109$
-      00012A                        303 00109$:
-                                    304 ;	user/remote.c: 84: RC_dataIndex <<= 1;
-      00012A 1E 04            [ 2]  305 	ldw	x, (0x04, sp)
-      00012C 16 02            [ 2]  306 	ldw	y, (0x02, sp)
-      00012E 58               [ 2]  307 	sllw	x
-      00012F 90 59            [ 2]  308 	rlcw	y
-      000131 1F 04            [ 2]  309 	ldw	(0x04, sp), x
-      000133 17 02            [ 2]  310 	ldw	(0x02, sp), y
-                                    311 ;	user/remote.c: 76: for(add = 1;add < (BIT_READ*2)+1;add+=2)
-      000135 0C 01            [ 1]  312 	inc	(0x01, sp)
-      000137 0C 01            [ 1]  313 	inc	(0x01, sp)
-      000139 7B 01            [ 1]  314 	ld	a, (0x01, sp)
-      00013B A1 31            [ 1]  315 	cp	a, #0x31
-      00013D 25 8B            [ 1]  316 	jrc	00117$
-                                    317 ;	user/remote.c: 86: remote.cmdBuff[remote.cntCmd] = RC_dataIndex;
-      00013F 1E 10            [ 2]  318 	ldw	x, (0x10, sp)
-      000141 1C 00 7C         [ 2]  319 	addw	x, #0x007c
-      000144 1F 08            [ 2]  320 	ldw	(0x08, sp), x
-      000146 1E 10            [ 2]  321 	ldw	x, (0x10, sp)
-      000148 1C 00 7B         [ 2]  322 	addw	x, #0x007b
-      00014B 1F 06            [ 2]  323 	ldw	(0x06, sp), x
-      00014D 1E 06            [ 2]  324 	ldw	x, (0x06, sp)
-      00014F F6               [ 1]  325 	ld	a, (x)
-      000150 48               [ 1]  326 	sll	a
-      000151 48               [ 1]  327 	sll	a
-      000152 5F               [ 1]  328 	clrw	x
-      000153 97               [ 1]  329 	ld	xl, a
-      000154 72 FB 08         [ 2]  330 	addw	x, (0x08, sp)
-      000157 16 04            [ 2]  331 	ldw	y, (0x04, sp)
-      000159 EF 02            [ 2]  332 	ldw	(0x2, x), y
-      00015B 16 02            [ 2]  333 	ldw	y, (0x02, sp)
-      00015D FF               [ 2]  334 	ldw	(x), y
-                                    335 ;	user/remote.c: 87: if(remote.cntCmd < (MAX_BUFF_CMD-1))
-      00015E 1E 06            [ 2]  336 	ldw	x, (0x06, sp)
-      000160 F6               [ 1]  337 	ld	a, (x)
-      000161 A1 04            [ 1]  338 	cp	a, #0x04
-      000163 24 06            [ 1]  339 	jrnc	00115$
-                                    340 ;	user/remote.c: 88: remote.cntCmd++;
-      000165 4C               [ 1]  341 	inc	a
-      000166 1E 06            [ 2]  342 	ldw	x, (0x06, sp)
-      000168 F7               [ 1]  343 	ld	(x), a
-      000169 20 07            [ 2]  344 	jra	00119$
-      00016B                        345 00115$:
-                                    346 ;	user/remote.c: 90: remote.flag = 1;
-      00016B 1E 10            [ 2]  347 	ldw	x, (0x10, sp)
-      00016D 5C               [ 2]  348 	incw	x
-      00016E 5C               [ 2]  349 	incw	x
-      00016F A6 01            [ 1]  350 	ld	a, #0x01
-      000171 F7               [ 1]  351 	ld	(x), a
-      000172                        352 00119$:
-      000172 5B 11            [ 2]  353 	addw	sp, #17
-      000174 81               [ 4]  354 	ret
-                                    355 ;	user/remote.c: 93: void remote_Clear(void)
-                                    356 ;	-----------------------------------------
-                                    357 ;	 function remote_Clear
-                                    358 ;	-----------------------------------------
-      000175                        359 _remote_Clear:
-      000175 89               [ 2]  360 	pushw	x
-                                    361 ;	user/remote.c: 95: remote.startBit = 0;
-      000176 AEr00r00         [ 2]  362 	ldw	x, #_remote+0
-      000179 7F               [ 1]  363 	clr	(x)
-                                    364 ;	user/remote.c: 96: remote.cnt = 0;
-      00017A AEr00r00         [ 2]  365 	ldw	x, #_remote+0
-      00017D 1F 01            [ 2]  366 	ldw	(0x01, sp), x
-      00017F 1E 01            [ 2]  367 	ldw	x, (0x01, sp)
-      000181 5C               [ 2]  368 	incw	x
-      000182 7F               [ 1]  369 	clr	(x)
-                                    370 ;	user/remote.c: 97: remote.cntCmd = 0;
-      000183 1E 01            [ 2]  371 	ldw	x, (0x01, sp)
-      000185 1C 00 7B         [ 2]  372 	addw	x, #0x007b
-      000188 7F               [ 1]  373 	clr	(x)
-                                    374 ;	user/remote.c: 98: remote.flag = 0;
-      000189 1E 01            [ 2]  375 	ldw	x, (0x01, sp)
-      00018B 5C               [ 2]  376 	incw	x
-      00018C 5C               [ 2]  377 	incw	x
-      00018D 7F               [ 1]  378 	clr	(x)
-                                    379 ;	user/remote.c: 99: remote.lastCmd = 0;
-      00018E 1E 01            [ 2]  380 	ldw	x, (0x01, sp)
-      000190 1C 00 90         [ 2]  381 	addw	x, #0x0090
-      000193 90 5F            [ 1]  382 	clrw	y
-      000195 EF 02            [ 2]  383 	ldw	(0x2, x), y
-      000197 FF               [ 2]  384 	ldw	(x), y
-                                    385 ;	user/remote.c: 100: remote.compareCnt = 0;
-      000198 1E 01            [ 2]  386 	ldw	x, (0x01, sp)
-      00019A 1C 00 94         [ 2]  387 	addw	x, #0x0094
-      00019D 7F               [ 1]  388 	clr	(x)
-      00019E 85               [ 2]  389 	popw	x
-      00019F 81               [ 4]  390 	ret
-                                    391 ;	user/remote.c: 103: void remote_Process(void)
-                                    392 ;	-----------------------------------------
-                                    393 ;	 function remote_Process
-                                    394 ;	-----------------------------------------
-      0001A0                        395 _remote_Process:
-      0001A0 52 08            [ 2]  396 	sub	sp, #8
-                                    397 ;	user/remote.c: 106: TIM1_DisIn();
-      0001A2 CDr00r17         [ 4]  398 	call	_TIM1_DisIn
-                                    399 ;	user/remote.c: 107: dat = TIM1_GetCounter();
-      0001A5 CDr00r00         [ 4]  400 	call	_TIM1_GetCounter
-      0001A8 1F 01            [ 2]  401 	ldw	(0x01, sp), x
-      0001AA 16 01            [ 2]  402 	ldw	y, (0x01, sp)
-                                    403 ;	user/remote.c: 108: if((dat >= MIN_SYN_BIT_TIME_US)&&(dat < MAX_SYN_BIT_TIME_US))
-      0001AC 90 A3 15 7C      [ 2]  404 	cpw	y, #0x157c
-      0001B0 25 14            [ 1]  405 	jrc	00104$
-      0001B2 90 A3 19 64      [ 2]  406 	cpw	y, #0x1964
-      0001B6 24 0E            [ 1]  407 	jrnc	00104$
-                                    408 ;	user/remote.c: 110: if(remote.startBit == 0)
-      0001B8 AEr00r00         [ 2]  409 	ldw	x, #_remote+0
-      0001BB F6               [ 1]  410 	ld	a, (x)
-      0001BC 4D               [ 1]  411 	tnz	a
-      0001BD 26 07            [ 1]  412 	jrne	00104$
-                                    413 ;	user/remote.c: 112: remote.startBit = 1;
-      0001BF A6 01            [ 1]  414 	ld	a, #0x01
-      0001C1 F7               [ 1]  415 	ld	(x), a
-                                    416 ;	user/remote.c: 113: remote.cnt = 0;
-      0001C2 AEr00r01         [ 2]  417 	ldw	x, #_remote+1
-      0001C5 7F               [ 1]  418 	clr	(x)
-      0001C6                        419 00104$:
-                                    420 ;	user/remote.c: 116: if(remote.startBit == 1)
-      0001C6 AEr00r00         [ 2]  421 	ldw	x, #_remote+0
-      0001C9 F6               [ 1]  422 	ld	a, (x)
-      0001CA A1 01            [ 1]  423 	cp	a, #0x01
-      0001CC 26 2D            [ 1]  424 	jrne	00109$
-                                    425 ;	user/remote.c: 118: remote.buff[remote.cnt] = dat;
-      0001CE AEr00r00         [ 2]  426 	ldw	x, #_remote+0
-      0001D1 1F 07            [ 2]  427 	ldw	(0x07, sp), x
-      0001D3 1E 07            [ 2]  428 	ldw	x, (0x07, sp)
-      0001D5 1C 00 03         [ 2]  429 	addw	x, #0x0003
-      0001D8 1F 05            [ 2]  430 	ldw	(0x05, sp), x
-      0001DA 1E 07            [ 2]  431 	ldw	x, (0x07, sp)
-      0001DC 5C               [ 2]  432 	incw	x
-      0001DD 1F 03            [ 2]  433 	ldw	(0x03, sp), x
-      0001DF 1E 03            [ 2]  434 	ldw	x, (0x03, sp)
-      0001E1 F6               [ 1]  435 	ld	a, (x)
-      0001E2 48               [ 1]  436 	sll	a
-      0001E3 5F               [ 1]  437 	clrw	x
-      0001E4 97               [ 1]  438 	ld	xl, a
-      0001E5 72 FB 05         [ 2]  439 	addw	x, (0x05, sp)
-      0001E8 FF               [ 2]  440 	ldw	(x), y
-                                    441 ;	user/remote.c: 119: if(++remote.cnt > (MAX_BIT_READ*2))
-      0001E9 1E 03            [ 2]  442 	ldw	x, (0x03, sp)
-      0001EB F6               [ 1]  443 	ld	a, (x)
-      0001EC 4C               [ 1]  444 	inc	a
-      0001ED F7               [ 1]  445 	ld	(x), a
-      0001EE A1 32            [ 1]  446 	cp	a, #0x32
-      0001F0 23 09            [ 2]  447 	jrule	00109$
-                                    448 ;	user/remote.c: 121: remote.startBit = 0;
-      0001F2 1E 07            [ 2]  449 	ldw	x, (0x07, sp)
-      0001F4 7F               [ 1]  450 	clr	(x)
-                                    451 ;	user/remote.c: 122: remote.cnt = 0;
-      0001F5 1E 03            [ 2]  452 	ldw	x, (0x03, sp)
-      0001F7 7F               [ 1]  453 	clr	(x)
-                                    454 ;	user/remote.c: 123: remote_Decode();
-      0001F8 CDr00rB3         [ 4]  455 	call	_remote_Decode
-      0001FB                        456 00109$:
-                                    457 ;	user/remote.c: 126: TIM1_EnIn();
-      0001FB CDr00r00         [ 4]  458 	call	_TIM1_EnIn
-      0001FE 5B 08            [ 2]  459 	addw	sp, #8
-      000200 81               [ 4]  460 	ret
-                                    461 ;	user/remote.c: 131: void remote_Manager(void)
-                                    462 ;	-----------------------------------------
-                                    463 ;	 function remote_Manager
-                                    464 ;	-----------------------------------------
-      000201                        465 _remote_Manager:
-      000201 52 33            [ 2]  466 	sub	sp, #51
-                                    467 ;	user/remote.c: 136: if(TIMER_CheckTimeMS(&remote.time, 100) == 0)
-      000203 AEr00r00         [ 2]  468 	ldw	x, #_remote+0
-      000206 1F 32            [ 2]  469 	ldw	(0x32, sp), x
-      000208 1E 32            [ 2]  470 	ldw	x, (0x32, sp)
-      00020A 1C 00 99         [ 2]  471 	addw	x, #0x0099
-      00020D 4B 64            [ 1]  472 	push	#0x64
-      00020F 4B 00            [ 1]  473 	push	#0x00
-      000211 4B 00            [ 1]  474 	push	#0x00
-      000213 4B 00            [ 1]  475 	push	#0x00
-      000215 89               [ 2]  476 	pushw	x
-      000216 CDr00r00         [ 4]  477 	call	_TIMER_CheckTimeMS
-      000219 5B 06            [ 2]  478 	addw	sp, #6
-      00021B 4D               [ 1]  479 	tnz	a
-      00021C 27 03            [ 1]  480 	jreq	00163$
-      00021E CCr03rAC         [ 2]  481 	jp	00120$
-      000221                        482 00163$:
-                                    483 ;	user/remote.c: 139: if(ctrCnt != 0)ctrCnt--;
-      000221 72 5Du00u01      [ 1]  484 	tnz	_ctrCnt+0
-      000225 27 06            [ 1]  485 	jreq	00102$
-      000227 72 5Au00u01      [ 1]  486 	dec	_ctrCnt+0
-      00022B 20 0B            [ 2]  487 	jra	00103$
-      00022D                        488 00102$:
-                                    489 ;	user/remote.c: 142: GPIO_WriteLow(CTR_GPIO, CTR_PIN);
-      00022D 4B 04            [ 1]  490 	push	#0x04
-      00022F 4B 0F            [ 1]  491 	push	#0x0f
-      000231 4B 50            [ 1]  492 	push	#0x50
-      000233 CDr00r00         [ 4]  493 	call	_GPIO_WriteLow
-      000236 5B 03            [ 2]  494 	addw	sp, #3
-      000238                        495 00103$:
-                                    496 ;	user/remote.c: 144: if(remote.flag == 1)
-      000238 1E 32            [ 2]  497 	ldw	x, (0x32, sp)
-      00023A E6 02            [ 1]  498 	ld	a, (0x2, x)
-      00023C A1 01            [ 1]  499 	cp	a, #0x01
-      00023E 27 03            [ 1]  500 	jreq	00167$
-      000240 CCr03rAC         [ 2]  501 	jp	00120$
-      000243                        502 00167$:
-                                    503 ;	user/remote.c: 146: disableInterrupts();
-      000243 9B               [ 1]  504 	sim
-                                    505 ;	user/remote.c: 147: remote.compareCnt = 0;
-      000244 1E 32            [ 2]  506 	ldw	x, (0x32, sp)
-      000246 1C 00 94         [ 2]  507 	addw	x, #0x0094
-      000249 1F 30            [ 2]  508 	ldw	(0x30, sp), x
-      00024B 1E 30            [ 2]  509 	ldw	x, (0x30, sp)
-      00024D 7F               [ 1]  510 	clr	(x)
-                                    511 ;	user/remote.c: 148: for(add = 0;add < MAX_BUFF_CMD;add++)
-      00024E AEr03rCB         [ 2]  512 	ldw	x, #___str_2+0
-      000251 1F 2E            [ 2]  513 	ldw	(0x2e, sp), x
-      000253 AEr03rBE         [ 2]  514 	ldw	x, #___str_1+0
-      000256 1F 2C            [ 2]  515 	ldw	(0x2c, sp), x
-      000258 1E 32            [ 2]  516 	ldw	x, (0x32, sp)
-      00025A 1C 00 7C         [ 2]  517 	addw	x, #0x007c
-      00025D 1F 2A            [ 2]  518 	ldw	(0x2a, sp), x
-      00025F AEr03rAF         [ 2]  519 	ldw	x, #___str_0+0
-      000262 1F 28            [ 2]  520 	ldw	(0x28, sp), x
-      000264 0F 05            [ 1]  521 	clr	(0x05, sp)
-      000266                        522 00118$:
-                                    523 ;	user/remote.c: 150: cm[0] = (remote.cmdBuff[add]&0xFF000000)>>24;
-      000266 96               [ 1]  524 	ldw	x, sp
-      000267 5C               [ 2]  525 	incw	x
-      000268 1F 26            [ 2]  526 	ldw	(0x26, sp), x
-      00026A 7B 05            [ 1]  527 	ld	a, (0x05, sp)
-      00026C 97               [ 1]  528 	ld	xl, a
-      00026D 58               [ 2]  529 	sllw	x
-      00026E 58               [ 2]  530 	sllw	x
-      00026F 4F               [ 1]  531 	clr	a
-      000270 95               [ 1]  532 	ld	xh, a
-      000271 72 FB 2A         [ 2]  533 	addw	x, (0x2a, sp)
-      000274 1F 24            [ 2]  534 	ldw	(0x24, sp), x
-      000276 1E 24            [ 2]  535 	ldw	x, (0x24, sp)
-      000278 89               [ 2]  536 	pushw	x
-      000279 EE 02            [ 2]  537 	ldw	x, (0x2, x)
-      00027B 51               [ 1]  538 	exgw	x, y
-      00027C 85               [ 2]  539 	popw	x
-      00027D FE               [ 2]  540 	ldw	x, (x)
-      00027E 4F               [ 1]  541 	clr	a
-      00027F 90 5F            [ 1]  542 	clrw	y
-      000281 9E               [ 1]  543 	ld	a, xh
-      000282 5F               [ 1]  544 	clrw	x
-      000283 0F 20            [ 1]  545 	clr	(0x20, sp)
-      000285 1E 26            [ 2]  546 	ldw	x, (0x26, sp)
-      000287 F7               [ 1]  547 	ld	(x), a
-                                    548 ;	user/remote.c: 151: cm[1] = (remote.cmdBuff[add]&0x00FF0000)>>16;
-      000288 1E 26            [ 2]  549 	ldw	x, (0x26, sp)
-      00028A 5C               [ 2]  550 	incw	x
-      00028B 1F 1E            [ 2]  551 	ldw	(0x1e, sp), x
-      00028D 1E 24            [ 2]  552 	ldw	x, (0x24, sp)
-      00028F 89               [ 2]  553 	pushw	x
-      000290 EE 02            [ 2]  554 	ldw	x, (0x2, x)
-      000292 51               [ 1]  555 	exgw	x, y
-      000293 85               [ 2]  556 	popw	x
-      000294 FE               [ 2]  557 	ldw	x, (x)
-      000295 90 5F            [ 1]  558 	clrw	y
-      000297 4F               [ 1]  559 	clr	a
-      000298 90 5F            [ 1]  560 	clrw	y
-      00029A 9F               [ 1]  561 	ld	a, xl
-      00029B 1E 1E            [ 2]  562 	ldw	x, (0x1e, sp)
-      00029D F7               [ 1]  563 	ld	(x), a
-                                    564 ;	user/remote.c: 152: cm[2] = (remote.cmdBuff[add]&0x0000FF00)>>8;
-      00029E 1E 26            [ 2]  565 	ldw	x, (0x26, sp)
-      0002A0 5C               [ 2]  566 	incw	x
-      0002A1 5C               [ 2]  567 	incw	x
-      0002A2 1F 1C            [ 2]  568 	ldw	(0x1c, sp), x
-      0002A4 1E 24            [ 2]  569 	ldw	x, (0x24, sp)
-      0002A6 89               [ 2]  570 	pushw	x
-      0002A7 EE 02            [ 2]  571 	ldw	x, (0x2, x)
-      0002A9 51               [ 1]  572 	exgw	x, y
-      0002AA 85               [ 2]  573 	popw	x
-      0002AB FE               [ 2]  574 	ldw	x, (x)
-      0002AC 0F 1B            [ 1]  575 	clr	(0x1b, sp)
-      0002AE 5F               [ 1]  576 	clrw	x
-      0002AF 4F               [ 1]  577 	clr	a
-      0002B0 90 9E            [ 1]  578 	ld	a, yh
-      0002B2 1E 1C            [ 2]  579 	ldw	x, (0x1c, sp)
-      0002B4 F7               [ 1]  580 	ld	(x), a
-                                    581 ;	user/remote.c: 153: cm[3] = (remote.cmdBuff[add]&0x000000FF)>>0;
-      0002B5 1E 26            [ 2]  582 	ldw	x, (0x26, sp)
-      0002B7 1C 00 03         [ 2]  583 	addw	x, #0x0003
-      0002BA 1F 16            [ 2]  584 	ldw	(0x16, sp), x
-      0002BC 1E 24            [ 2]  585 	ldw	x, (0x24, sp)
-      0002BE 89               [ 2]  586 	pushw	x
-      0002BF EE 02            [ 2]  587 	ldw	x, (0x2, x)
-      0002C1 51               [ 1]  588 	exgw	x, y
-      0002C2 85               [ 2]  589 	popw	x
-      0002C3 FE               [ 2]  590 	ldw	x, (x)
-      0002C4 4F               [ 1]  591 	clr	a
-      0002C5 5F               [ 1]  592 	clrw	x
-      0002C6 90 9F            [ 1]  593 	ld	a, yl
-      0002C8 1E 16            [ 2]  594 	ldw	x, (0x16, sp)
-      0002CA F7               [ 1]  595 	ld	(x), a
-                                    596 ;	user/remote.c: 154: debugInfo("Data decoder: ", cm, 4);
-      0002CB 16 26            [ 2]  597 	ldw	y, (0x26, sp)
-      0002CD 1E 28            [ 2]  598 	ldw	x, (0x28, sp)
-      0002CF 4B 04            [ 1]  599 	push	#0x04
-      0002D1 90 89            [ 2]  600 	pushw	y
-      0002D3 89               [ 2]  601 	pushw	x
-      0002D4 CDr00r00         [ 4]  602 	call	_debugInfo
-      0002D7 5B 05            [ 2]  603 	addw	sp, #5
-                                    604 ;	user/remote.c: 155: if(remote.cmdBuff[add] != 0)
-      0002D9 1E 24            [ 2]  605 	ldw	x, (0x24, sp)
-      0002DB E6 03            [ 1]  606 	ld	a, (0x3, x)
-      0002DD 6B 15            [ 1]  607 	ld	(0x15, sp), a
-      0002DF E6 02            [ 1]  608 	ld	a, (0x2, x)
-      0002E1 6B 14            [ 1]  609 	ld	(0x14, sp), a
-      0002E3 FE               [ 2]  610 	ldw	x, (x)
-      0002E4 1F 12            [ 2]  611 	ldw	(0x12, sp), x
-      0002E6 1E 14            [ 2]  612 	ldw	x, (0x14, sp)
-      0002E8 26 07            [ 1]  613 	jrne	00168$
-      0002EA 1E 12            [ 2]  614 	ldw	x, (0x12, sp)
-      0002EC 26 03            [ 1]  615 	jrne	00168$
-      0002EE CCr03r9D         [ 2]  616 	jp	00119$
-      0002F1                        617 00168$:
-                                    618 ;	user/remote.c: 157: if(remote_CheckCompare(remote.cmdBuff[add], remote.cmdBuff, add, MAX_BUFF_CMD))
-      0002F1 1E 2A            [ 2]  619 	ldw	x, (0x2a, sp)
-      0002F3 4B 05            [ 1]  620 	push	#0x05
-      0002F5 7B 06            [ 1]  621 	ld	a, (0x06, sp)
-      0002F7 88               [ 1]  622 	push	a
-      0002F8 89               [ 2]  623 	pushw	x
-      0002F9 1E 18            [ 2]  624 	ldw	x, (0x18, sp)
-      0002FB 89               [ 2]  625 	pushw	x
-      0002FC 1E 18            [ 2]  626 	ldw	x, (0x18, sp)
-      0002FE 89               [ 2]  627 	pushw	x
-      0002FF CDr00r78         [ 4]  628 	call	_remote_CheckCompare
-      000302 5B 08            [ 2]  629 	addw	sp, #8
-      000304 5D               [ 2]  630 	tnzw	x
-      000305 26 07            [ 1]  631 	jrne	00169$
-      000307 90 5D            [ 2]  632 	tnzw	y
-      000309 26 03            [ 1]  633 	jrne	00169$
-      00030B CCr03r9D         [ 2]  634 	jp	00119$
-      00030E                        635 00169$:
-                                    636 ;	user/remote.c: 159: remote.lastCmd = remote.cmdBuff[add];
-      00030E 1E 32            [ 2]  637 	ldw	x, (0x32, sp)
-      000310 1C 00 90         [ 2]  638 	addw	x, #0x0090
-      000313 1F 10            [ 2]  639 	ldw	(0x10, sp), x
-      000315 1E 24            [ 2]  640 	ldw	x, (0x24, sp)
-      000317 89               [ 2]  641 	pushw	x
-      000318 EE 02            [ 2]  642 	ldw	x, (0x2, x)
-      00031A 51               [ 1]  643 	exgw	x, y
-      00031B 85               [ 2]  644 	popw	x
-      00031C FE               [ 2]  645 	ldw	x, (x)
-      00031D 1F 0C            [ 2]  646 	ldw	(0x0c, sp), x
-      00031F 1E 10            [ 2]  647 	ldw	x, (0x10, sp)
-      000321 EF 02            [ 2]  648 	ldw	(0x2, x), y
-      000323 16 0C            [ 2]  649 	ldw	y, (0x0c, sp)
-      000325 FF               [ 2]  650 	ldw	(x), y
-                                    651 ;	user/remote.c: 160: remote.compareCnt++;
-      000326 1E 30            [ 2]  652 	ldw	x, (0x30, sp)
-      000328 F6               [ 1]  653 	ld	a, (x)
-      000329 4C               [ 1]  654 	inc	a
-      00032A F7               [ 1]  655 	ld	(x), a
-                                    656 ;	user/remote.c: 161: if(remote.compareCnt >= (MAX_BUFF_CMD - 2))
-      00032B A1 03            [ 1]  657 	cp	a, #0x03
-      00032D 25 6E            [ 1]  658 	jrc	00119$
-                                    659 ;	user/remote.c: 163: remote.compareCnt = 0;
-      00032F 1E 30            [ 2]  660 	ldw	x, (0x30, sp)
-      000331 7F               [ 1]  661 	clr	(x)
-                                    662 ;	user/remote.c: 164: remote.command = remote.lastCmd;
-      000332 1E 32            [ 2]  663 	ldw	x, (0x32, sp)
-      000334 1C 00 95         [ 2]  664 	addw	x, #0x0095
-      000337 1F 0A            [ 2]  665 	ldw	(0x0a, sp), x
-      000339 1E 10            [ 2]  666 	ldw	x, (0x10, sp)
-      00033B 89               [ 2]  667 	pushw	x
-      00033C EE 02            [ 2]  668 	ldw	x, (0x2, x)
-      00033E 51               [ 1]  669 	exgw	x, y
-      00033F 85               [ 2]  670 	popw	x
-      000340 FE               [ 2]  671 	ldw	x, (x)
-      000341 1F 06            [ 2]  672 	ldw	(0x06, sp), x
-      000343 1E 0A            [ 2]  673 	ldw	x, (0x0a, sp)
-      000345 EF 02            [ 2]  674 	ldw	(0x2, x), y
-      000347 7B 07            [ 1]  675 	ld	a, (0x07, sp)
-      000349 E7 01            [ 1]  676 	ld	(0x1, x), a
-      00034B 7B 06            [ 1]  677 	ld	a, (0x06, sp)
-      00034D F7               [ 1]  678 	ld	(x), a
-                                    679 ;	user/remote.c: 165: remote.lastCmd = 0;
-      00034E 1E 10            [ 2]  680 	ldw	x, (0x10, sp)
-      000350 6F 03            [ 1]  681 	clr	(0x3, x)
-      000352 6F 02            [ 1]  682 	clr	(0x2, x)
-      000354 6F 01            [ 1]  683 	clr	(0x1, x)
-      000356 7F               [ 1]  684 	clr	(x)
-                                    685 ;	user/remote.c: 166: sys.idKeyGet = remote.command;
-      000357 AEr00r01         [ 2]  686 	ldw	x, #_sys+1
-      00035A EF 02            [ 2]  687 	ldw	(0x2, x), y
-      00035C 16 06            [ 2]  688 	ldw	y, (0x06, sp)
-      00035E FF               [ 2]  689 	ldw	(x), y
-                                    690 ;	user/remote.c: 167: info("Key press \r\n");
-      00035F 1E 2C            [ 2]  691 	ldw	x, (0x2c, sp)
-      000361 89               [ 2]  692 	pushw	x
-      000362 CDr00r00         [ 4]  693 	call	_info
-      000365 85               [ 2]  694 	popw	x
-                                    695 ;	user/remote.c: 173: checkCmd = system_checkID(remote.command);
-      000366 1E 0A            [ 2]  696 	ldw	x, (0x0a, sp)
-      000368 89               [ 2]  697 	pushw	x
-      000369 EE 02            [ 2]  698 	ldw	x, (0x2, x)
-      00036B 51               [ 1]  699 	exgw	x, y
-      00036C 85               [ 2]  700 	popw	x
-      00036D FE               [ 2]  701 	ldw	x, (x)
-      00036E 90 89            [ 2]  702 	pushw	y
-      000370 89               [ 2]  703 	pushw	x
-      000371 CDr00r00         [ 4]  704 	call	_system_checkID
-      000374 5B 04            [ 2]  705 	addw	sp, #4
-                                    706 ;	user/remote.c: 174: if((checkCmd == 1)&&(ctrCnt == 0))
-      000376 A1 01            [ 1]  707 	cp	a, #0x01
-      000378 26 23            [ 1]  708 	jrne	00119$
-      00037A 72 5Du00u01      [ 1]  709 	tnz	_ctrCnt+0
-      00037E 26 1D            [ 1]  710 	jrne	00119$
-                                    711 ;	user/remote.c: 176: GPIO_WriteHigh(CTR_GPIO, CTR_PIN);
-      000380 4B 04            [ 1]  712 	push	#0x04
-      000382 4B 0F            [ 1]  713 	push	#0x0f
-      000384 4B 50            [ 1]  714 	push	#0x50
-      000386 CDr00r00         [ 4]  715 	call	_GPIO_WriteHigh
-      000389 5B 03            [ 2]  716 	addw	sp, #3
-                                    717 ;	user/remote.c: 177: info("TurnOn A \r\n");
-      00038B 1E 2E            [ 2]  718 	ldw	x, (0x2e, sp)
-      00038D 89               [ 2]  719 	pushw	x
-      00038E CDr00r00         [ 4]  720 	call	_info
-      000391 85               [ 2]  721 	popw	x
-                                    722 ;	user/remote.c: 178: ctrCnt = 20;
-      000392 35 14u00u01      [ 1]  723 	mov	_ctrCnt+0, #0x14
-                                    724 ;	user/remote.c: 179: remote.command = 0;
-      000396 1E 0A            [ 2]  725 	ldw	x, (0x0a, sp)
-      000398 90 5F            [ 1]  726 	clrw	y
-      00039A EF 02            [ 2]  727 	ldw	(0x2, x), y
-      00039C FF               [ 2]  728 	ldw	(x), y
-      00039D                        729 00119$:
-                                    730 ;	user/remote.c: 148: for(add = 0;add < MAX_BUFF_CMD;add++)
-      00039D 0C 05            [ 1]  731 	inc	(0x05, sp)
-      00039F 7B 05            [ 1]  732 	ld	a, (0x05, sp)
-      0003A1 A1 05            [ 1]  733 	cp	a, #0x05
-      0003A3 24 03            [ 1]  734 	jrnc	00175$
-      0003A5 CCr02r66         [ 2]  735 	jp	00118$
-      0003A8                        736 00175$:
-                                    737 ;	user/remote.c: 185: remote_Clear();
-      0003A8 CDr01r75         [ 4]  738 	call	_remote_Clear
-                                    739 ;	user/remote.c: 186: enableInterrupts();
-      0003AB 9A               [ 1]  740 	rim
-      0003AC                        741 00120$:
-      0003AC 5B 33            [ 2]  742 	addw	sp, #51
-      0003AE 81               [ 4]  743 	ret
-                                    744 	.area CODE
-      0003AF                        745 ___str_0:
-      0003AF 44 61 74 61 20 64 65   746 	.ascii "Data decoder: "
+                                     69 ;--------------------------------------------------------
+                                     70 ; code
+                                     71 ;--------------------------------------------------------
+                                     72 	.area CODE
+                                     73 ;	user/remote.c: 21: void TIM1_EnIn(void)
+                                     74 ;	-----------------------------------------
+                                     75 ;	 function TIM1_EnIn
+                                     76 ;	-----------------------------------------
+      000000                         77 _TIM1_EnIn:
+                                     78 ;	user/remote.c: 23: TIM1_ClearFlag(TIM1_FLAG_UPDATE); 
+      000000 4B 01            [ 1]   79 	push	#0x01
+      000002 4B 00            [ 1]   80 	push	#0x00
+      000004 CDr00r00         [ 4]   81 	call	_TIM1_ClearFlag
+      000007 85               [ 2]   82 	popw	x
+                                     83 ;	user/remote.c: 24: TIM1_ITConfig(TIM1_IT_UPDATE, ENABLE);
+      000008 4B 01            [ 1]   84 	push	#0x01
+      00000A 4B 01            [ 1]   85 	push	#0x01
+      00000C CDr00r00         [ 4]   86 	call	_TIM1_ITConfig
+      00000F 85               [ 2]   87 	popw	x
+                                     88 ;	user/remote.c: 25: TIM1_SetCounter(0);
+      000010 5F               [ 1]   89 	clrw	x
+      000011 89               [ 2]   90 	pushw	x
+      000012 CDr00r00         [ 4]   91 	call	_TIM1_SetCounter
+      000015 85               [ 2]   92 	popw	x
+      000016 81               [ 4]   93 	ret
+                                     94 ;	user/remote.c: 28: void TIM1_DisIn(void)
+                                     95 ;	-----------------------------------------
+                                     96 ;	 function TIM1_DisIn
+                                     97 ;	-----------------------------------------
+      000017                         98 _TIM1_DisIn:
+                                     99 ;	user/remote.c: 30: TIM1_ClearFlag(TIM1_FLAG_UPDATE); 
+      000017 4B 01            [ 1]  100 	push	#0x01
+      000019 4B 00            [ 1]  101 	push	#0x00
+      00001B CDr00r00         [ 4]  102 	call	_TIM1_ClearFlag
+      00001E 85               [ 2]  103 	popw	x
+                                    104 ;	user/remote.c: 31: TIM1_ITConfig(TIM1_IT_UPDATE, DISABLE); 
+      00001F 4B 00            [ 1]  105 	push	#0x00
+      000021 4B 01            [ 1]  106 	push	#0x01
+      000023 CDr00r00         [ 4]  107 	call	_TIM1_ITConfig
+      000026 85               [ 2]  108 	popw	x
+      000027 81               [ 4]  109 	ret
+                                    110 ;	user/remote.c: 34: void TIM1_Config(void)
+                                    111 ;	-----------------------------------------
+                                    112 ;	 function TIM1_Config
+                                    113 ;	-----------------------------------------
+      000028                        114 _TIM1_Config:
+                                    115 ;	user/remote.c: 36: CLK_PeripheralClockConfig(CLK_PERIPHERAL_TIMER1 , ENABLE); 
+      000028 4B 01            [ 1]  116 	push	#0x01
+      00002A 4B 07            [ 1]  117 	push	#0x07
+      00002C CDr00r00         [ 4]  118 	call	_CLK_PeripheralClockConfig
+      00002F 85               [ 2]  119 	popw	x
+                                    120 ;	user/remote.c: 38: TIM1_DeInit();
+      000030 CDr00r00         [ 4]  121 	call	_TIM1_DeInit
+                                    122 ;	user/remote.c: 39: TIM1_TimeBaseInit(15, TIM1_COUNTERMODE_UP, 65535, 0);
+      000033 4B 00            [ 1]  123 	push	#0x00
+      000035 4B FF            [ 1]  124 	push	#0xff
+      000037 4B FF            [ 1]  125 	push	#0xff
+      000039 4B 00            [ 1]  126 	push	#0x00
+      00003B 4B 0F            [ 1]  127 	push	#0x0f
+      00003D 4B 00            [ 1]  128 	push	#0x00
+      00003F CDr00r00         [ 4]  129 	call	_TIM1_TimeBaseInit
+      000042 5B 06            [ 2]  130 	addw	sp, #6
+                                    131 ;	user/remote.c: 40: TIM1_SetCounter(0);
+      000044 5F               [ 1]  132 	clrw	x
+      000045 89               [ 2]  133 	pushw	x
+      000046 CDr00r00         [ 4]  134 	call	_TIM1_SetCounter
+      000049 85               [ 2]  135 	popw	x
+                                    136 ;	user/remote.c: 42: TIM1_Cmd(ENABLE);
+      00004A 4B 01            [ 1]  137 	push	#0x01
+      00004C CDr00r00         [ 4]  138 	call	_TIM1_Cmd
+      00004F 84               [ 1]  139 	pop	a
+      000050 81               [ 4]  140 	ret
+                                    141 ;	user/remote.c: 45: void GPIO_Configuration(void)
+                                    142 ;	-----------------------------------------
+                                    143 ;	 function GPIO_Configuration
+                                    144 ;	-----------------------------------------
+      000051                        145 _GPIO_Configuration:
+                                    146 ;	user/remote.c: 47: GPIO_Init(GPIOD, GPIO_PIN_3, GPIO_MODE_IN_FL_IT);
+      000051 4B 20            [ 1]  147 	push	#0x20
+      000053 4B 08            [ 1]  148 	push	#0x08
+      000055 4B 0F            [ 1]  149 	push	#0x0f
+      000057 4B 50            [ 1]  150 	push	#0x50
+      000059 CDr00r00         [ 4]  151 	call	_GPIO_Init
+      00005C 5B 04            [ 2]  152 	addw	sp, #4
+                                    153 ;	user/remote.c: 49: EXTI_SetExtIntSensitivity(EXTI_PORT_GPIOD, EXTI_SENSITIVITY_RISE_FALL);
+      00005E 4B 03            [ 1]  154 	push	#0x03
+      000060 4B 03            [ 1]  155 	push	#0x03
+      000062 CDr00r00         [ 4]  156 	call	_EXTI_SetExtIntSensitivity
+      000065 85               [ 2]  157 	popw	x
+      000066 81               [ 4]  158 	ret
+                                    159 ;	user/remote.c: 52: void remote_Init(void)
+                                    160 ;	-----------------------------------------
+                                    161 ;	 function remote_Init
+                                    162 ;	-----------------------------------------
+      000067                        163 _remote_Init:
+                                    164 ;	user/remote.c: 54: remote_Clear();
+      000067 CDr01r75         [ 4]  165 	call	_remote_Clear
+                                    166 ;	user/remote.c: 55: remote.command = 0;
+      00006A AEr00r95         [ 2]  167 	ldw	x, #_remote+149
+      00006D 90 5F            [ 1]  168 	clrw	y
+      00006F EF 02            [ 2]  169 	ldw	(0x2, x), y
+      000071 FF               [ 2]  170 	ldw	(x), y
+                                    171 ;	user/remote.c: 56: TIM1_Config();
+      000072 CDr00r28         [ 4]  172 	call	_TIM1_Config
+                                    173 ;	user/remote.c: 57: GPIO_Configuration();
+      000075 CCr00r51         [ 2]  174 	jp	_GPIO_Configuration
+                                    175 ;	user/remote.c: 60: uint32_t remote_CheckCompare(uint32_t dat, uint32_t *buf, uint8_t offset, uint8_t len)
+                                    176 ;	-----------------------------------------
+                                    177 ;	 function remote_CheckCompare
+                                    178 ;	-----------------------------------------
+      000078                        179 _remote_CheckCompare:
+      000078 52 04            [ 2]  180 	sub	sp, #4
+                                    181 ;	user/remote.c: 64: for(add = 0;add < len;add++)
+      00007A 4F               [ 1]  182 	clr	a
+      00007B                        183 00107$:
+      00007B 11 0E            [ 1]  184 	cp	a, (0x0e, sp)
+      00007D 24 2E            [ 1]  185 	jrnc	00105$
+                                    186 ;	user/remote.c: 66: if(add == offset)
+      00007F 11 0D            [ 1]  187 	cp	a, (0x0d, sp)
+      000081 26 01            [ 1]  188 	jrne	00102$
+                                    189 ;	user/remote.c: 67: add++;
+      000083 4C               [ 1]  190 	inc	a
+      000084                        191 00102$:
+                                    192 ;	user/remote.c: 68: if(dat == buf[add])
+      000084 5F               [ 1]  193 	clrw	x
+      000085 97               [ 1]  194 	ld	xl, a
+      000086 58               [ 2]  195 	sllw	x
+      000087 58               [ 2]  196 	sllw	x
+      000088 72 FB 0B         [ 2]  197 	addw	x, (0x0b, sp)
+      00008B 88               [ 1]  198 	push	a
+      00008C E6 03            [ 1]  199 	ld	a, (0x3, x)
+      00008E 6B 05            [ 1]  200 	ld	(0x05, sp), a
+      000090 E6 02            [ 1]  201 	ld	a, (0x2, x)
+      000092 6B 04            [ 1]  202 	ld	(0x04, sp), a
+      000094 FE               [ 2]  203 	ldw	x, (x)
+      000095 1F 02            [ 2]  204 	ldw	(0x02, sp), x
+      000097 84               [ 1]  205 	pop	a
+      000098 1E 09            [ 2]  206 	ldw	x, (0x09, sp)
+      00009A 13 03            [ 2]  207 	cpw	x, (0x03, sp)
+      00009C 26 0C            [ 1]  208 	jrne	00108$
+      00009E 1E 07            [ 2]  209 	ldw	x, (0x07, sp)
+      0000A0 13 01            [ 2]  210 	cpw	x, (0x01, sp)
+      0000A2 26 06            [ 1]  211 	jrne	00108$
+                                    212 ;	user/remote.c: 69: return dat;
+      0000A4 1E 09            [ 2]  213 	ldw	x, (0x09, sp)
+      0000A6 16 07            [ 2]  214 	ldw	y, (0x07, sp)
+      0000A8 20 06            [ 2]  215 	jra	00109$
+      0000AA                        216 00108$:
+                                    217 ;	user/remote.c: 64: for(add = 0;add < len;add++)
+      0000AA 4C               [ 1]  218 	inc	a
+      0000AB 20 CE            [ 2]  219 	jra	00107$
+      0000AD                        220 00105$:
+                                    221 ;	user/remote.c: 71: return 0;
+      0000AD 5F               [ 1]  222 	clrw	x
+      0000AE 90 5F            [ 1]  223 	clrw	y
+      0000B0                        224 00109$:
+      0000B0 5B 04            [ 2]  225 	addw	sp, #4
+      0000B2 81               [ 4]  226 	ret
+                                    227 ;	user/remote.c: 74: void remote_Decode(void)
+                                    228 ;	-----------------------------------------
+                                    229 ;	 function remote_Decode
+                                    230 ;	-----------------------------------------
+      0000B3                        231 _remote_Decode:
+      0000B3 52 11            [ 2]  232 	sub	sp, #17
+                                    233 ;	user/remote.c: 76: uint32_t RC_dataIndex = 0;
+      0000B5 5F               [ 1]  234 	clrw	x
+      0000B6 1F 03            [ 2]  235 	ldw	(0x03, sp), x
+      0000B8 1F 01            [ 2]  236 	ldw	(0x01, sp), x
+                                    237 ;	user/remote.c: 78: for(add = 1;add < (BIT_READ*2)+1;add+=2)
+      0000BA AEr00r00         [ 2]  238 	ldw	x, #_remote+0
+      0000BD 1F 08            [ 2]  239 	ldw	(0x08, sp), x
+      0000BF 1E 08            [ 2]  240 	ldw	x, (0x08, sp)
+      0000C1 1C 00 03         [ 2]  241 	addw	x, #0x0003
+      0000C4 1F 0C            [ 2]  242 	ldw	(0x0c, sp), x
+      0000C6 A6 01            [ 1]  243 	ld	a, #0x01
+      0000C8 6B 05            [ 1]  244 	ld	(0x05, sp), a
+      0000CA                        245 00117$:
+                                    246 ;	user/remote.c: 80: if((remote.buff[add] >= MIN_LSB_BIT_TIME_US)&&(remote.buff[add] < MAX_LSB_BIT_TIME_US)&&(remote.buff[add+1] >= MIN_MSB_BIT_TIME_US)&&(remote.buff[add+1] < MAX_MSB_BIT_TIME_US))
+      0000CA 7B 05            [ 1]  247 	ld	a, (0x05, sp)
+      0000CC 48               [ 1]  248 	sll	a
+      0000CD 5F               [ 1]  249 	clrw	x
+      0000CE 97               [ 1]  250 	ld	xl, a
+      0000CF 72 FB 0C         [ 2]  251 	addw	x, (0x0c, sp)
+      0000D2 FE               [ 2]  252 	ldw	x, (x)
+      0000D3 1F 0E            [ 2]  253 	ldw	(0x0e, sp), x
+      0000D5 7B 05            [ 1]  254 	ld	a, (0x05, sp)
+      0000D7 4C               [ 1]  255 	inc	a
+      0000D8 48               [ 1]  256 	sll	a
+      0000D9 97               [ 1]  257 	ld	xl, a
+      0000DA 4F               [ 1]  258 	clr	a
+      0000DB 95               [ 1]  259 	ld	xh, a
+      0000DC 72 FB 0C         [ 2]  260 	addw	x, (0x0c, sp)
+      0000DF 1F 06            [ 2]  261 	ldw	(0x06, sp), x
+      0000E1 1E 0E            [ 2]  262 	ldw	x, (0x0e, sp)
+      0000E3 A3 01 2C         [ 2]  263 	cpw	x, #0x012c
+      0000E6 25 14            [ 1]  264 	jrc	00108$
+      0000E8 1E 0E            [ 2]  265 	ldw	x, (0x0e, sp)
+      0000EA A3 01 F4         [ 2]  266 	cpw	x, #0x01f4
+      0000ED 24 0D            [ 1]  267 	jrnc	00108$
+      0000EF 1E 06            [ 2]  268 	ldw	x, (0x06, sp)
+      0000F1 FE               [ 2]  269 	ldw	x, (x)
+      0000F2 A3 02 BC         [ 2]  270 	cpw	x, #0x02bc
+      0000F5 25 05            [ 1]  271 	jrc	00108$
+      0000F7 A3 04 B0         [ 2]  272 	cpw	x, #0x04b0
+      0000FA 25 2E            [ 1]  273 	jrc	00109$
+                                    274 ;	user/remote.c: 81: RC_dataIndex |= 0;
+      0000FC                        275 00108$:
+                                    276 ;	user/remote.c: 82: else if((remote.buff[add] >= MIN_MSB_BIT_TIME_US)&&(remote.buff[add] < MAX_MSB_BIT_TIME_US)&&(remote.buff[add+1] >= MIN_LSB_BIT_TIME_US)&&(remote.buff[add+1] < MAX_LSB_BIT_TIME_US))
+      0000FC 1E 0E            [ 2]  277 	ldw	x, (0x0e, sp)
+      0000FE A3 02 BC         [ 2]  278 	cpw	x, #0x02bc
+      000101 25 6F            [ 1]  279 	jrc	00119$
+      000103 1E 0E            [ 2]  280 	ldw	x, (0x0e, sp)
+      000105 A3 04 B0         [ 2]  281 	cpw	x, #0x04b0
+      000108 24 68            [ 1]  282 	jrnc	00119$
+      00010A 1E 06            [ 2]  283 	ldw	x, (0x06, sp)
+      00010C FE               [ 2]  284 	ldw	x, (x)
+      00010D A3 01 2C         [ 2]  285 	cpw	x, #0x012c
+      000110 25 60            [ 1]  286 	jrc	00119$
+      000112 A3 01 F4         [ 2]  287 	cpw	x, #0x01f4
+      000115 24 5B            [ 1]  288 	jrnc	00119$
+                                    289 ;	user/remote.c: 83: RC_dataIndex |= 1;
+      000117 1E 03            [ 2]  290 	ldw	x, (0x03, sp)
+      000119 54               [ 2]  291 	srlw	x
+      00011A 99               [ 1]  292 	scf
+      00011B 59               [ 2]  293 	rlcw	x
+      00011C 7B 02            [ 1]  294 	ld	a, (0x02, sp)
+      00011E 90 97            [ 1]  295 	ld	yl, a
+      000120 7B 01            [ 1]  296 	ld	a, (0x01, sp)
+      000122 90 95            [ 1]  297 	ld	yh, a
+      000124 1F 03            [ 2]  298 	ldw	(0x03, sp), x
+      000126 17 01            [ 2]  299 	ldw	(0x01, sp), y
+                                    300 ;	user/remote.c: 85: return;
+      000128 20 00            [ 2]  301 	jra	00109$
+      00012A                        302 00109$:
+                                    303 ;	user/remote.c: 86: RC_dataIndex <<= 1;
+      00012A 1E 03            [ 2]  304 	ldw	x, (0x03, sp)
+      00012C 16 01            [ 2]  305 	ldw	y, (0x01, sp)
+      00012E 58               [ 2]  306 	sllw	x
+      00012F 90 59            [ 2]  307 	rlcw	y
+      000131 1F 03            [ 2]  308 	ldw	(0x03, sp), x
+      000133 17 01            [ 2]  309 	ldw	(0x01, sp), y
+                                    310 ;	user/remote.c: 78: for(add = 1;add < (BIT_READ*2)+1;add+=2)
+      000135 0C 05            [ 1]  311 	inc	(0x05, sp)
+      000137 0C 05            [ 1]  312 	inc	(0x05, sp)
+      000139 7B 05            [ 1]  313 	ld	a, (0x05, sp)
+      00013B A1 31            [ 1]  314 	cp	a, #0x31
+      00013D 25 8B            [ 1]  315 	jrc	00117$
+                                    316 ;	user/remote.c: 88: remote.cmdBuff[remote.cntCmd] = RC_dataIndex;
+      00013F 1E 08            [ 2]  317 	ldw	x, (0x08, sp)
+      000141 1C 00 7C         [ 2]  318 	addw	x, #0x007c
+      000144 1F 10            [ 2]  319 	ldw	(0x10, sp), x
+      000146 1E 08            [ 2]  320 	ldw	x, (0x08, sp)
+      000148 1C 00 7B         [ 2]  321 	addw	x, #0x007b
+      00014B 1F 0A            [ 2]  322 	ldw	(0x0a, sp), x
+      00014D 1E 0A            [ 2]  323 	ldw	x, (0x0a, sp)
+      00014F F6               [ 1]  324 	ld	a, (x)
+      000150 48               [ 1]  325 	sll	a
+      000151 48               [ 1]  326 	sll	a
+      000152 5F               [ 1]  327 	clrw	x
+      000153 97               [ 1]  328 	ld	xl, a
+      000154 72 FB 10         [ 2]  329 	addw	x, (0x10, sp)
+      000157 16 03            [ 2]  330 	ldw	y, (0x03, sp)
+      000159 EF 02            [ 2]  331 	ldw	(0x2, x), y
+      00015B 16 01            [ 2]  332 	ldw	y, (0x01, sp)
+      00015D FF               [ 2]  333 	ldw	(x), y
+                                    334 ;	user/remote.c: 89: if(remote.cntCmd < (MAX_BUFF_CMD-1))
+      00015E 1E 0A            [ 2]  335 	ldw	x, (0x0a, sp)
+      000160 F6               [ 1]  336 	ld	a, (x)
+      000161 A1 04            [ 1]  337 	cp	a, #0x04
+      000163 24 06            [ 1]  338 	jrnc	00115$
+                                    339 ;	user/remote.c: 90: remote.cntCmd++;
+      000165 4C               [ 1]  340 	inc	a
+      000166 1E 0A            [ 2]  341 	ldw	x, (0x0a, sp)
+      000168 F7               [ 1]  342 	ld	(x), a
+      000169 20 07            [ 2]  343 	jra	00119$
+      00016B                        344 00115$:
+                                    345 ;	user/remote.c: 92: remote.flag = 1;
+      00016B 1E 08            [ 2]  346 	ldw	x, (0x08, sp)
+      00016D 5C               [ 2]  347 	incw	x
+      00016E 5C               [ 2]  348 	incw	x
+      00016F A6 01            [ 1]  349 	ld	a, #0x01
+      000171 F7               [ 1]  350 	ld	(x), a
+      000172                        351 00119$:
+      000172 5B 11            [ 2]  352 	addw	sp, #17
+      000174 81               [ 4]  353 	ret
+                                    354 ;	user/remote.c: 95: void remote_Clear(void)
+                                    355 ;	-----------------------------------------
+                                    356 ;	 function remote_Clear
+                                    357 ;	-----------------------------------------
+      000175                        358 _remote_Clear:
+      000175 89               [ 2]  359 	pushw	x
+                                    360 ;	user/remote.c: 97: remote.startBit = 0;
+      000176 AEr00r00         [ 2]  361 	ldw	x, #_remote+0
+      000179 7F               [ 1]  362 	clr	(x)
+                                    363 ;	user/remote.c: 98: remote.cnt = 0;
+      00017A AEr00r00         [ 2]  364 	ldw	x, #_remote+0
+      00017D 1F 01            [ 2]  365 	ldw	(0x01, sp), x
+      00017F 1E 01            [ 2]  366 	ldw	x, (0x01, sp)
+      000181 5C               [ 2]  367 	incw	x
+      000182 7F               [ 1]  368 	clr	(x)
+                                    369 ;	user/remote.c: 99: remote.cntCmd = 0;
+      000183 1E 01            [ 2]  370 	ldw	x, (0x01, sp)
+      000185 1C 00 7B         [ 2]  371 	addw	x, #0x007b
+      000188 7F               [ 1]  372 	clr	(x)
+                                    373 ;	user/remote.c: 100: remote.flag = 0;
+      000189 1E 01            [ 2]  374 	ldw	x, (0x01, sp)
+      00018B 5C               [ 2]  375 	incw	x
+      00018C 5C               [ 2]  376 	incw	x
+      00018D 7F               [ 1]  377 	clr	(x)
+                                    378 ;	user/remote.c: 101: remote.lastCmd = 0;
+      00018E 1E 01            [ 2]  379 	ldw	x, (0x01, sp)
+      000190 1C 00 90         [ 2]  380 	addw	x, #0x0090
+      000193 90 5F            [ 1]  381 	clrw	y
+      000195 EF 02            [ 2]  382 	ldw	(0x2, x), y
+      000197 FF               [ 2]  383 	ldw	(x), y
+                                    384 ;	user/remote.c: 102: remote.compareCnt = 0;
+      000198 1E 01            [ 2]  385 	ldw	x, (0x01, sp)
+      00019A 1C 00 94         [ 2]  386 	addw	x, #0x0094
+      00019D 7F               [ 1]  387 	clr	(x)
+      00019E 85               [ 2]  388 	popw	x
+      00019F 81               [ 4]  389 	ret
+                                    390 ;	user/remote.c: 105: void remote_Process(void)
+                                    391 ;	-----------------------------------------
+                                    392 ;	 function remote_Process
+                                    393 ;	-----------------------------------------
+      0001A0                        394 _remote_Process:
+      0001A0 52 08            [ 2]  395 	sub	sp, #8
+                                    396 ;	user/remote.c: 108: TIM1_DisIn();
+      0001A2 CDr00r17         [ 4]  397 	call	_TIM1_DisIn
+                                    398 ;	user/remote.c: 109: dat = TIM1_GetCounter();
+      0001A5 CDr00r00         [ 4]  399 	call	_TIM1_GetCounter
+      0001A8 1F 01            [ 2]  400 	ldw	(0x01, sp), x
+      0001AA 16 01            [ 2]  401 	ldw	y, (0x01, sp)
+                                    402 ;	user/remote.c: 110: if((dat >= MIN_SYN_BIT_TIME_US)&&(dat < MAX_SYN_BIT_TIME_US))
+      0001AC 90 A3 15 7C      [ 2]  403 	cpw	y, #0x157c
+      0001B0 25 14            [ 1]  404 	jrc	00104$
+      0001B2 90 A3 2E E0      [ 2]  405 	cpw	y, #0x2ee0
+      0001B6 24 0E            [ 1]  406 	jrnc	00104$
+                                    407 ;	user/remote.c: 112: if(remote.startBit == 0)
+      0001B8 AEr00r00         [ 2]  408 	ldw	x, #_remote+0
+      0001BB F6               [ 1]  409 	ld	a, (x)
+      0001BC 4D               [ 1]  410 	tnz	a
+      0001BD 26 07            [ 1]  411 	jrne	00104$
+                                    412 ;	user/remote.c: 114: remote.startBit = 1;
+      0001BF A6 01            [ 1]  413 	ld	a, #0x01
+      0001C1 F7               [ 1]  414 	ld	(x), a
+                                    415 ;	user/remote.c: 115: remote.cnt = 0;
+      0001C2 AEr00r01         [ 2]  416 	ldw	x, #_remote+1
+      0001C5 7F               [ 1]  417 	clr	(x)
+      0001C6                        418 00104$:
+                                    419 ;	user/remote.c: 118: if(remote.startBit == 1)
+      0001C6 AEr00r00         [ 2]  420 	ldw	x, #_remote+0
+      0001C9 F6               [ 1]  421 	ld	a, (x)
+      0001CA A1 01            [ 1]  422 	cp	a, #0x01
+      0001CC 26 2D            [ 1]  423 	jrne	00109$
+                                    424 ;	user/remote.c: 120: remote.buff[remote.cnt] = dat;
+      0001CE AEr00r00         [ 2]  425 	ldw	x, #_remote+0
+      0001D1 1F 07            [ 2]  426 	ldw	(0x07, sp), x
+      0001D3 1E 07            [ 2]  427 	ldw	x, (0x07, sp)
+      0001D5 1C 00 03         [ 2]  428 	addw	x, #0x0003
+      0001D8 1F 05            [ 2]  429 	ldw	(0x05, sp), x
+      0001DA 1E 07            [ 2]  430 	ldw	x, (0x07, sp)
+      0001DC 5C               [ 2]  431 	incw	x
+      0001DD 1F 03            [ 2]  432 	ldw	(0x03, sp), x
+      0001DF 1E 03            [ 2]  433 	ldw	x, (0x03, sp)
+      0001E1 F6               [ 1]  434 	ld	a, (x)
+      0001E2 48               [ 1]  435 	sll	a
+      0001E3 5F               [ 1]  436 	clrw	x
+      0001E4 97               [ 1]  437 	ld	xl, a
+      0001E5 72 FB 05         [ 2]  438 	addw	x, (0x05, sp)
+      0001E8 FF               [ 2]  439 	ldw	(x), y
+                                    440 ;	user/remote.c: 121: if(++remote.cnt > (MAX_BIT_READ*2))
+      0001E9 1E 03            [ 2]  441 	ldw	x, (0x03, sp)
+      0001EB F6               [ 1]  442 	ld	a, (x)
+      0001EC 4C               [ 1]  443 	inc	a
+      0001ED F7               [ 1]  444 	ld	(x), a
+      0001EE A1 32            [ 1]  445 	cp	a, #0x32
+      0001F0 23 09            [ 2]  446 	jrule	00109$
+                                    447 ;	user/remote.c: 123: remote.startBit = 0;
+      0001F2 1E 07            [ 2]  448 	ldw	x, (0x07, sp)
+      0001F4 7F               [ 1]  449 	clr	(x)
+                                    450 ;	user/remote.c: 124: remote.cnt = 0;
+      0001F5 1E 03            [ 2]  451 	ldw	x, (0x03, sp)
+      0001F7 7F               [ 1]  452 	clr	(x)
+                                    453 ;	user/remote.c: 125: remote_Decode();
+      0001F8 CDr00rB3         [ 4]  454 	call	_remote_Decode
+      0001FB                        455 00109$:
+                                    456 ;	user/remote.c: 128: TIM1_EnIn();
+      0001FB CDr00r00         [ 4]  457 	call	_TIM1_EnIn
+      0001FE 5B 08            [ 2]  458 	addw	sp, #8
+      000200 81               [ 4]  459 	ret
+                                    460 ;	user/remote.c: 133: void remote_Manager(void)
+                                    461 ;	-----------------------------------------
+                                    462 ;	 function remote_Manager
+                                    463 ;	-----------------------------------------
+      000201                        464 _remote_Manager:
+      000201 52 33            [ 2]  465 	sub	sp, #51
+                                    466 ;	user/remote.c: 138: if(TIMER_CheckTimeMS(&remote.time, 100) == 0)
+      000203 AEr00r00         [ 2]  467 	ldw	x, #_remote+0
+      000206 1F 32            [ 2]  468 	ldw	(0x32, sp), x
+      000208 1E 32            [ 2]  469 	ldw	x, (0x32, sp)
+      00020A 1C 00 99         [ 2]  470 	addw	x, #0x0099
+      00020D 4B 64            [ 1]  471 	push	#0x64
+      00020F 4B 00            [ 1]  472 	push	#0x00
+      000211 4B 00            [ 1]  473 	push	#0x00
+      000213 4B 00            [ 1]  474 	push	#0x00
+      000215 89               [ 2]  475 	pushw	x
+      000216 CDr00r00         [ 4]  476 	call	_TIMER_CheckTimeMS
+      000219 5B 06            [ 2]  477 	addw	sp, #6
+      00021B 4D               [ 1]  478 	tnz	a
+      00021C 27 03            [ 1]  479 	jreq	00162$
+      00021E CCr03r9F         [ 2]  480 	jp	00119$
+      000221                        481 00162$:
+                                    482 ;	user/remote.c: 141: if(ctrCnt != 0)ctrCnt--;
+      000221 72 5Du00u01      [ 1]  483 	tnz	_ctrCnt+0
+      000225 27 04            [ 1]  484 	jreq	00102$
+      000227 72 5Au00u01      [ 1]  485 	dec	_ctrCnt+0
+      00022B                        486 00102$:
+                                    487 ;	user/remote.c: 146: if(remote.flag == 1)
+      00022B 1E 32            [ 2]  488 	ldw	x, (0x32, sp)
+      00022D E6 02            [ 1]  489 	ld	a, (0x2, x)
+      00022F A1 01            [ 1]  490 	cp	a, #0x01
+      000231 27 03            [ 1]  491 	jreq	00166$
+      000233 CCr03r9F         [ 2]  492 	jp	00119$
+      000236                        493 00166$:
+                                    494 ;	user/remote.c: 148: disableInterrupts();
+      000236 9B               [ 1]  495 	sim
+                                    496 ;	user/remote.c: 149: remote.compareCnt = 0;
+      000237 1E 32            [ 2]  497 	ldw	x, (0x32, sp)
+      000239 1C 00 94         [ 2]  498 	addw	x, #0x0094
+      00023C 1F 30            [ 2]  499 	ldw	(0x30, sp), x
+      00023E 1E 30            [ 2]  500 	ldw	x, (0x30, sp)
+      000240 7F               [ 1]  501 	clr	(x)
+                                    502 ;	user/remote.c: 150: for(add = 0;add < MAX_BUFF_CMD;add++)
+      000241 AEr03rBE         [ 2]  503 	ldw	x, #___str_2+0
+      000244 1F 2E            [ 2]  504 	ldw	(0x2e, sp), x
+      000246 AEr03rB1         [ 2]  505 	ldw	x, #___str_1+0
+      000249 1F 2C            [ 2]  506 	ldw	(0x2c, sp), x
+      00024B 1E 32            [ 2]  507 	ldw	x, (0x32, sp)
+      00024D 1C 00 7C         [ 2]  508 	addw	x, #0x007c
+      000250 1F 24            [ 2]  509 	ldw	(0x24, sp), x
+      000252 AEr03rA2         [ 2]  510 	ldw	x, #___str_0+0
+      000255 1F 2A            [ 2]  511 	ldw	(0x2a, sp), x
+      000257 0F 05            [ 1]  512 	clr	(0x05, sp)
+      000259                        513 00117$:
+                                    514 ;	user/remote.c: 152: cm[0] = (remote.cmdBuff[add]&0xFF000000)>>24;
+      000259 96               [ 1]  515 	ldw	x, sp
+      00025A 5C               [ 2]  516 	incw	x
+      00025B 1F 1C            [ 2]  517 	ldw	(0x1c, sp), x
+      00025D 7B 05            [ 1]  518 	ld	a, (0x05, sp)
+      00025F 97               [ 1]  519 	ld	xl, a
+      000260 58               [ 2]  520 	sllw	x
+      000261 58               [ 2]  521 	sllw	x
+      000262 4F               [ 1]  522 	clr	a
+      000263 95               [ 1]  523 	ld	xh, a
+      000264 72 FB 24         [ 2]  524 	addw	x, (0x24, sp)
+      000267 1F 1E            [ 2]  525 	ldw	(0x1e, sp), x
+      000269 1E 1E            [ 2]  526 	ldw	x, (0x1e, sp)
+      00026B 89               [ 2]  527 	pushw	x
+      00026C EE 02            [ 2]  528 	ldw	x, (0x2, x)
+      00026E 51               [ 1]  529 	exgw	x, y
+      00026F 85               [ 2]  530 	popw	x
+      000270 FE               [ 2]  531 	ldw	x, (x)
+      000271 4F               [ 1]  532 	clr	a
+      000272 90 5F            [ 1]  533 	clrw	y
+      000274 9E               [ 1]  534 	ld	a, xh
+      000275 5F               [ 1]  535 	clrw	x
+      000276 0F 0A            [ 1]  536 	clr	(0x0a, sp)
+      000278 1E 1C            [ 2]  537 	ldw	x, (0x1c, sp)
+      00027A F7               [ 1]  538 	ld	(x), a
+                                    539 ;	user/remote.c: 153: cm[1] = (remote.cmdBuff[add]&0x00FF0000)>>16;
+      00027B 1E 1C            [ 2]  540 	ldw	x, (0x1c, sp)
+      00027D 5C               [ 2]  541 	incw	x
+      00027E 1F 1A            [ 2]  542 	ldw	(0x1a, sp), x
+      000280 1E 1E            [ 2]  543 	ldw	x, (0x1e, sp)
+      000282 89               [ 2]  544 	pushw	x
+      000283 EE 02            [ 2]  545 	ldw	x, (0x2, x)
+      000285 51               [ 1]  546 	exgw	x, y
+      000286 85               [ 2]  547 	popw	x
+      000287 FE               [ 2]  548 	ldw	x, (x)
+      000288 90 5F            [ 1]  549 	clrw	y
+      00028A 4F               [ 1]  550 	clr	a
+      00028B 90 5F            [ 1]  551 	clrw	y
+      00028D 9F               [ 1]  552 	ld	a, xl
+      00028E 1E 1A            [ 2]  553 	ldw	x, (0x1a, sp)
+      000290 F7               [ 1]  554 	ld	(x), a
+                                    555 ;	user/remote.c: 154: cm[2] = (remote.cmdBuff[add]&0x0000FF00)>>8;
+      000291 1E 1C            [ 2]  556 	ldw	x, (0x1c, sp)
+      000293 5C               [ 2]  557 	incw	x
+      000294 5C               [ 2]  558 	incw	x
+      000295 1F 28            [ 2]  559 	ldw	(0x28, sp), x
+      000297 1E 1E            [ 2]  560 	ldw	x, (0x1e, sp)
+      000299 89               [ 2]  561 	pushw	x
+      00029A EE 02            [ 2]  562 	ldw	x, (0x2, x)
+      00029C 51               [ 1]  563 	exgw	x, y
+      00029D 85               [ 2]  564 	popw	x
+      00029E FE               [ 2]  565 	ldw	x, (x)
+      00029F 0F 19            [ 1]  566 	clr	(0x19, sp)
+      0002A1 5F               [ 1]  567 	clrw	x
+      0002A2 4F               [ 1]  568 	clr	a
+      0002A3 90 9E            [ 1]  569 	ld	a, yh
+      0002A5 1E 28            [ 2]  570 	ldw	x, (0x28, sp)
+      0002A7 F7               [ 1]  571 	ld	(x), a
+                                    572 ;	user/remote.c: 155: cm[3] = (remote.cmdBuff[add]&0x000000FF)>>0;
+      0002A8 1E 1C            [ 2]  573 	ldw	x, (0x1c, sp)
+      0002AA 1C 00 03         [ 2]  574 	addw	x, #0x0003
+      0002AD 1F 20            [ 2]  575 	ldw	(0x20, sp), x
+      0002AF 1E 1E            [ 2]  576 	ldw	x, (0x1e, sp)
+      0002B1 89               [ 2]  577 	pushw	x
+      0002B2 EE 02            [ 2]  578 	ldw	x, (0x2, x)
+      0002B4 51               [ 1]  579 	exgw	x, y
+      0002B5 85               [ 2]  580 	popw	x
+      0002B6 FE               [ 2]  581 	ldw	x, (x)
+      0002B7 4F               [ 1]  582 	clr	a
+      0002B8 5F               [ 1]  583 	clrw	x
+      0002B9 90 9F            [ 1]  584 	ld	a, yl
+      0002BB 1E 20            [ 2]  585 	ldw	x, (0x20, sp)
+      0002BD F7               [ 1]  586 	ld	(x), a
+                                    587 ;	user/remote.c: 156: debugInfo("Data decoder: ", cm, 4);
+      0002BE 16 1C            [ 2]  588 	ldw	y, (0x1c, sp)
+      0002C0 1E 2A            [ 2]  589 	ldw	x, (0x2a, sp)
+      0002C2 4B 04            [ 1]  590 	push	#0x04
+      0002C4 90 89            [ 2]  591 	pushw	y
+      0002C6 89               [ 2]  592 	pushw	x
+      0002C7 CDr00r00         [ 4]  593 	call	_debugInfo
+      0002CA 5B 05            [ 2]  594 	addw	sp, #5
+                                    595 ;	user/remote.c: 157: if(remote.cmdBuff[add] != 0)
+      0002CC 1E 1E            [ 2]  596 	ldw	x, (0x1e, sp)
+      0002CE E6 03            [ 1]  597 	ld	a, (0x3, x)
+      0002D0 6B 09            [ 1]  598 	ld	(0x09, sp), a
+      0002D2 E6 02            [ 1]  599 	ld	a, (0x2, x)
+      0002D4 6B 08            [ 1]  600 	ld	(0x08, sp), a
+      0002D6 FE               [ 2]  601 	ldw	x, (x)
+      0002D7 1F 06            [ 2]  602 	ldw	(0x06, sp), x
+      0002D9 1E 08            [ 2]  603 	ldw	x, (0x08, sp)
+      0002DB 26 07            [ 1]  604 	jrne	00167$
+      0002DD 1E 06            [ 2]  605 	ldw	x, (0x06, sp)
+      0002DF 26 03            [ 1]  606 	jrne	00167$
+      0002E1 CCr03r90         [ 2]  607 	jp	00118$
+      0002E4                        608 00167$:
+                                    609 ;	user/remote.c: 159: if(remote_CheckCompare(remote.cmdBuff[add], remote.cmdBuff, add, MAX_BUFF_CMD))
+      0002E4 1E 24            [ 2]  610 	ldw	x, (0x24, sp)
+      0002E6 4B 05            [ 1]  611 	push	#0x05
+      0002E8 7B 06            [ 1]  612 	ld	a, (0x06, sp)
+      0002EA 88               [ 1]  613 	push	a
+      0002EB 89               [ 2]  614 	pushw	x
+      0002EC 1E 0C            [ 2]  615 	ldw	x, (0x0c, sp)
+      0002EE 89               [ 2]  616 	pushw	x
+      0002EF 1E 0C            [ 2]  617 	ldw	x, (0x0c, sp)
+      0002F1 89               [ 2]  618 	pushw	x
+      0002F2 CDr00r78         [ 4]  619 	call	_remote_CheckCompare
+      0002F5 5B 08            [ 2]  620 	addw	sp, #8
+      0002F7 5D               [ 2]  621 	tnzw	x
+      0002F8 26 07            [ 1]  622 	jrne	00168$
+      0002FA 90 5D            [ 2]  623 	tnzw	y
+      0002FC 26 03            [ 1]  624 	jrne	00168$
+      0002FE CCr03r90         [ 2]  625 	jp	00118$
+      000301                        626 00168$:
+                                    627 ;	user/remote.c: 161: remote.lastCmd = remote.cmdBuff[add];
+      000301 1E 32            [ 2]  628 	ldw	x, (0x32, sp)
+      000303 1C 00 90         [ 2]  629 	addw	x, #0x0090
+      000306 1F 26            [ 2]  630 	ldw	(0x26, sp), x
+      000308 1E 1E            [ 2]  631 	ldw	x, (0x1e, sp)
+      00030A 89               [ 2]  632 	pushw	x
+      00030B EE 02            [ 2]  633 	ldw	x, (0x2, x)
+      00030D 51               [ 1]  634 	exgw	x, y
+      00030E 85               [ 2]  635 	popw	x
+      00030F FE               [ 2]  636 	ldw	x, (x)
+      000310 1F 12            [ 2]  637 	ldw	(0x12, sp), x
+      000312 1E 26            [ 2]  638 	ldw	x, (0x26, sp)
+      000314 EF 02            [ 2]  639 	ldw	(0x2, x), y
+      000316 16 12            [ 2]  640 	ldw	y, (0x12, sp)
+      000318 FF               [ 2]  641 	ldw	(x), y
+                                    642 ;	user/remote.c: 162: remote.compareCnt++;
+      000319 1E 30            [ 2]  643 	ldw	x, (0x30, sp)
+      00031B F6               [ 1]  644 	ld	a, (x)
+      00031C 4C               [ 1]  645 	inc	a
+      00031D F7               [ 1]  646 	ld	(x), a
+                                    647 ;	user/remote.c: 163: if(remote.compareCnt >= (MAX_BUFF_CMD - 2))
+      00031E A1 03            [ 1]  648 	cp	a, #0x03
+      000320 25 6E            [ 1]  649 	jrc	00118$
+                                    650 ;	user/remote.c: 165: remote.compareCnt = 0;
+      000322 1E 30            [ 2]  651 	ldw	x, (0x30, sp)
+      000324 7F               [ 1]  652 	clr	(x)
+                                    653 ;	user/remote.c: 166: remote.command = remote.lastCmd;
+      000325 1E 32            [ 2]  654 	ldw	x, (0x32, sp)
+      000327 1C 00 95         [ 2]  655 	addw	x, #0x0095
+      00032A 1F 22            [ 2]  656 	ldw	(0x22, sp), x
+      00032C 1E 26            [ 2]  657 	ldw	x, (0x26, sp)
+      00032E 89               [ 2]  658 	pushw	x
+      00032F EE 02            [ 2]  659 	ldw	x, (0x2, x)
+      000331 51               [ 1]  660 	exgw	x, y
+      000332 85               [ 2]  661 	popw	x
+      000333 FE               [ 2]  662 	ldw	x, (x)
+      000334 1F 0E            [ 2]  663 	ldw	(0x0e, sp), x
+      000336 1E 22            [ 2]  664 	ldw	x, (0x22, sp)
+      000338 EF 02            [ 2]  665 	ldw	(0x2, x), y
+      00033A 7B 0F            [ 1]  666 	ld	a, (0x0f, sp)
+      00033C E7 01            [ 1]  667 	ld	(0x1, x), a
+      00033E 7B 0E            [ 1]  668 	ld	a, (0x0e, sp)
+      000340 F7               [ 1]  669 	ld	(x), a
+                                    670 ;	user/remote.c: 167: remote.lastCmd = 0;
+      000341 1E 26            [ 2]  671 	ldw	x, (0x26, sp)
+      000343 6F 03            [ 1]  672 	clr	(0x3, x)
+      000345 6F 02            [ 1]  673 	clr	(0x2, x)
+      000347 6F 01            [ 1]  674 	clr	(0x1, x)
+      000349 7F               [ 1]  675 	clr	(x)
+                                    676 ;	user/remote.c: 168: sys.idKeyGet = remote.command;
+      00034A AEr00r01         [ 2]  677 	ldw	x, #_sys+1
+      00034D EF 02            [ 2]  678 	ldw	(0x2, x), y
+      00034F 16 0E            [ 2]  679 	ldw	y, (0x0e, sp)
+      000351 FF               [ 2]  680 	ldw	(x), y
+                                    681 ;	user/remote.c: 169: info("Key press \r\n");
+      000352 1E 2C            [ 2]  682 	ldw	x, (0x2c, sp)
+      000354 89               [ 2]  683 	pushw	x
+      000355 CDr00r00         [ 4]  684 	call	_info
+      000358 85               [ 2]  685 	popw	x
+                                    686 ;	user/remote.c: 175: checkCmd = system_checkID(remote.command);
+      000359 1E 22            [ 2]  687 	ldw	x, (0x22, sp)
+      00035B 89               [ 2]  688 	pushw	x
+      00035C EE 02            [ 2]  689 	ldw	x, (0x2, x)
+      00035E 51               [ 1]  690 	exgw	x, y
+      00035F 85               [ 2]  691 	popw	x
+      000360 FE               [ 2]  692 	ldw	x, (x)
+      000361 90 89            [ 2]  693 	pushw	y
+      000363 89               [ 2]  694 	pushw	x
+      000364 CDr00r00         [ 4]  695 	call	_system_checkID
+      000367 5B 04            [ 2]  696 	addw	sp, #4
+                                    697 ;	user/remote.c: 176: if((checkCmd == 1)&&(ctrCnt == 0))
+      000369 A1 01            [ 1]  698 	cp	a, #0x01
+      00036B 26 23            [ 1]  699 	jrne	00118$
+      00036D 72 5Du00u01      [ 1]  700 	tnz	_ctrCnt+0
+      000371 26 1D            [ 1]  701 	jrne	00118$
+                                    702 ;	user/remote.c: 178: GPIO_WriteReverse(CTR_GPIO, CTR_PIN);
+      000373 4B 04            [ 1]  703 	push	#0x04
+      000375 4B 0F            [ 1]  704 	push	#0x0f
+      000377 4B 50            [ 1]  705 	push	#0x50
+      000379 CDr00r00         [ 4]  706 	call	_GPIO_WriteReverse
+      00037C 5B 03            [ 2]  707 	addw	sp, #3
+                                    708 ;	user/remote.c: 179: info("TurnOn A \r\n");
+      00037E 1E 2E            [ 2]  709 	ldw	x, (0x2e, sp)
+      000380 89               [ 2]  710 	pushw	x
+      000381 CDr00r00         [ 4]  711 	call	_info
+      000384 85               [ 2]  712 	popw	x
+                                    713 ;	user/remote.c: 180: ctrCnt = 20;
+      000385 35 14u00u01      [ 1]  714 	mov	_ctrCnt+0, #0x14
+                                    715 ;	user/remote.c: 181: remote.command = 0;
+      000389 1E 22            [ 2]  716 	ldw	x, (0x22, sp)
+      00038B 90 5F            [ 1]  717 	clrw	y
+      00038D EF 02            [ 2]  718 	ldw	(0x2, x), y
+      00038F FF               [ 2]  719 	ldw	(x), y
+      000390                        720 00118$:
+                                    721 ;	user/remote.c: 150: for(add = 0;add < MAX_BUFF_CMD;add++)
+      000390 0C 05            [ 1]  722 	inc	(0x05, sp)
+      000392 7B 05            [ 1]  723 	ld	a, (0x05, sp)
+      000394 A1 05            [ 1]  724 	cp	a, #0x05
+      000396 24 03            [ 1]  725 	jrnc	00174$
+      000398 CCr02r59         [ 2]  726 	jp	00117$
+      00039B                        727 00174$:
+                                    728 ;	user/remote.c: 187: remote_Clear();
+      00039B CDr01r75         [ 4]  729 	call	_remote_Clear
+                                    730 ;	user/remote.c: 188: enableInterrupts();
+      00039E 9A               [ 1]  731 	rim
+      00039F                        732 00119$:
+      00039F 5B 33            [ 2]  733 	addw	sp, #51
+      0003A1 81               [ 4]  734 	ret
+                                    735 	.area CODE
+      0003A2                        736 ___str_0:
+      0003A2 44 61 74 61 20 64 65   737 	.ascii "Data decoder: "
              63 6F 64 65 72 3A 20
-      0003BD 00                     747 	.db 0x00
-      0003BE                        748 ___str_1:
-      0003BE 4B 65 79 20 70 72 65   749 	.ascii "Key press "
+      0003B0 00                     738 	.db 0x00
+      0003B1                        739 ___str_1:
+      0003B1 4B 65 79 20 70 72 65   740 	.ascii "Key press "
              73 73 20
-      0003C8 0D                     750 	.db 0x0d
-      0003C9 0A                     751 	.db 0x0a
-      0003CA 00                     752 	.db 0x00
-      0003CB                        753 ___str_2:
-      0003CB 54 75 72 6E 4F 6E 20   754 	.ascii "TurnOn A "
+      0003BB 0D                     741 	.db 0x0d
+      0003BC 0A                     742 	.db 0x0a
+      0003BD 00                     743 	.db 0x00
+      0003BE                        744 ___str_2:
+      0003BE 54 75 72 6E 4F 6E 20   745 	.ascii "TurnOn A "
              41 20
-      0003D4 0D                     755 	.db 0x0d
-      0003D5 0A                     756 	.db 0x0a
-      0003D6 00                     757 	.db 0x00
-                                    758 	.area INITIALIZER
-      000000                        759 __xinit__ctrFlag:
-      000000 00                     760 	.db #0x00	; 0
-      000001                        761 __xinit__ctrCnt:
-      000001 00                     762 	.db #0x00	; 0
-                                    763 	.area CABS (ABS)
+      0003C7 0D                     746 	.db 0x0d
+      0003C8 0A                     747 	.db 0x0a
+      0003C9 00                     748 	.db 0x00
+                                    749 	.area INITIALIZER
+      000000                        750 __xinit__ctrFlag:
+      000000 00                     751 	.db #0x00	; 0
+      000001                        752 __xinit__ctrCnt:
+      000001 00                     753 	.db #0x00	; 0
+                                    754 	.area CABS (ABS)

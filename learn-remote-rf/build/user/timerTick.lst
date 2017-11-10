@@ -1,6 +1,6 @@
                                       1 ;--------------------------------------------------------
                                       2 ; File Created by SDCC : free open source ANSI-C Compiler
-                                      3 ; Version 3.6.0 #9615 (Mac OS X x86_64)
+                                      3 ; Version 3.6.0 #9615 (MINGW64)
                                       4 ;--------------------------------------------------------
                                       5 	.module timerTick
                                       6 	.optsdcc -mstm8
@@ -200,47 +200,47 @@
       0000BD 1F 0A            [ 2]  200 	ldw	(0x0a, sp), x
       0000BF 1E 0A            [ 2]  201 	ldw	x, (0x0a, sp)
       0000C1 E6 03            [ 1]  202 	ld	a, (0x3, x)
-      0000C3 6B 09            [ 1]  203 	ld	(0x09, sp), a
+      0000C3 6B 04            [ 1]  203 	ld	(0x04, sp), a
       0000C5 E6 02            [ 1]  204 	ld	a, (0x2, x)
-      0000C7 6B 08            [ 1]  205 	ld	(0x08, sp), a
+      0000C7 6B 03            [ 1]  205 	ld	(0x03, sp), a
       0000C9 FE               [ 2]  206 	ldw	x, (x)
-      0000CA 1F 06            [ 2]  207 	ldw	(0x06, sp), x
+      0000CA 1F 01            [ 2]  207 	ldw	(0x01, sp), x
       0000CC CEu00u06         [ 2]  208 	ldw	x, _timeTickMs+2
-      0000CF 72 F0 08         [ 2]  209 	subw	x, (0x08, sp)
+      0000CF 72 F0 03         [ 2]  209 	subw	x, (0x03, sp)
       0000D2 C6u00u05         [ 1]  210 	ld	a, _timeTickMs+1
-      0000D5 12 07            [ 1]  211 	sbc	a, (0x07, sp)
+      0000D5 12 02            [ 1]  211 	sbc	a, (0x02, sp)
       0000D7 88               [ 1]  212 	push	a
       0000D8 C6u00u04         [ 1]  213 	ld	a, _timeTickMs+0
-      0000DB 12 07            [ 1]  214 	sbc	a, (0x07, sp)
-      0000DD 6B 03            [ 1]  215 	ld	(0x03, sp), a
+      0000DB 12 02            [ 1]  214 	sbc	a, (0x02, sp)
+      0000DD 6B 07            [ 1]  215 	ld	(0x07, sp), a
       0000DF 84               [ 1]  216 	pop	a
       0000E0 88               [ 1]  217 	push	a
       0000E1 13 13            [ 2]  218 	cpw	x, (0x13, sp)
       0000E3 84               [ 1]  219 	pop	a
       0000E4 12 11            [ 1]  220 	sbc	a, (0x11, sp)
-      0000E6 7B 02            [ 1]  221 	ld	a, (0x02, sp)
+      0000E6 7B 06            [ 1]  221 	ld	a, (0x06, sp)
       0000E8 12 10            [ 1]  222 	sbc	a, (0x10, sp)
       0000EA 4F               [ 1]  223 	clr	a
       0000EB 49               [ 1]  224 	rlc	a
-      0000EC 6B 01            [ 1]  225 	ld	(0x01, sp), a
-      0000EE 1E 08            [ 2]  226 	ldw	x, (0x08, sp)
+      0000EC 6B 05            [ 1]  225 	ld	(0x05, sp), a
+      0000EE 1E 03            [ 2]  226 	ldw	x, (0x03, sp)
       0000F0 C3u00u06         [ 2]  227 	cpw	x, _timeTickMs+2
-      0000F3 7B 07            [ 1]  228 	ld	a, (0x07, sp)
+      0000F3 7B 02            [ 1]  228 	ld	a, (0x02, sp)
       0000F5 C2u00u05         [ 1]  229 	sbc	a, _timeTickMs+1
-      0000F8 7B 06            [ 1]  230 	ld	a, (0x06, sp)
+      0000F8 7B 01            [ 1]  230 	ld	a, (0x01, sp)
       0000FA C2u00u04         [ 1]  231 	sbc	a, _timeTickMs+0
       0000FD 24 04            [ 1]  232 	jrnc	00105$
-      0000FF 0D 01            [ 1]  233 	tnz	(0x01, sp)
+      0000FF 0D 05            [ 1]  233 	tnz	(0x05, sp)
       000101 27 15            [ 1]  234 	jreq	00101$
       000103                        235 00105$:
       000103 CEu00u06         [ 2]  236 	ldw	x, _timeTickMs+2
-      000106 13 08            [ 2]  237 	cpw	x, (0x08, sp)
+      000106 13 03            [ 2]  237 	cpw	x, (0x03, sp)
       000108 C6u00u05         [ 1]  238 	ld	a, _timeTickMs+1
-      00010B 12 07            [ 1]  239 	sbc	a, (0x07, sp)
+      00010B 12 02            [ 1]  239 	sbc	a, (0x02, sp)
       00010D C6u00u04         [ 1]  240 	ld	a, _timeTickMs+0
-      000110 12 06            [ 1]  241 	sbc	a, (0x06, sp)
+      000110 12 01            [ 1]  241 	sbc	a, (0x01, sp)
       000112 24 14            [ 1]  242 	jrnc	00102$
-      000114 0D 01            [ 1]  243 	tnz	(0x01, sp)
+      000114 0D 05            [ 1]  243 	tnz	(0x05, sp)
       000116 26 10            [ 1]  244 	jrne	00102$
       000118                        245 00101$:
                                     246 ;	user/timerTick.c: 48: pTime->timeMS = timeTickMs;

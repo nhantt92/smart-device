@@ -1,6 +1,6 @@
 ;--------------------------------------------------------
 ; File Created by SDCC : free open source ANSI-C Compiler
-; Version 3.6.0 #9615 (Mac OS X x86_64)
+; Version 3.6.0 #9615 (MINGW64)
 ;--------------------------------------------------------
 	.module clk
 	.optsdcc -mstm8
@@ -156,10 +156,10 @@ _CLK_SYSCLKConfig:
 ;	lib/clk.c: 54: CLK->CKDIVR |= (uint8_t)((uint8_t)CLK_Prescaler & (uint8_t)CLK_CKDIVR_HSIDIV);
 	ldw	x, #0x50c6
 	ld	a, (x)
-	ld	(0x02, sp), a
+	ld	(0x01, sp), a
 	ld	a, (0x05, sp)
 	and	a, #0x18
-	or	a, (0x02, sp)
+	or	a, (0x01, sp)
 	ldw	x, #0x50c6
 	ld	(x), a
 	jra	00104$
@@ -172,10 +172,10 @@ _CLK_SYSCLKConfig:
 ;	lib/clk.c: 59: CLK->CKDIVR |= (uint8_t)((uint8_t)CLK_Prescaler & (uint8_t)CLK_CKDIVR_CPUDIV);
 	ldw	x, #0x50c6
 	ld	a, (x)
-	ld	(0x01, sp), a
+	ld	(0x02, sp), a
 	ld	a, (0x05, sp)
 	and	a, #0x07
-	or	a, (0x01, sp)
+	or	a, (0x02, sp)
 	ldw	x, #0x50c6
 	ld	(x), a
 00104$:

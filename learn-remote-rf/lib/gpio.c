@@ -70,6 +70,11 @@ void GPIO_Write(GPIO_TypeDef* GPIOx, uint8_t PortVal)
   GPIOx->ODR = PortVal;
 }
 
+void GPIO_WriteReverse(GPIO_TypeDef* GPIOx, GPIO_Pin_TypeDef PortPins)
+{
+  GPIOx->ODR ^= (uint8_t)PortPins;
+}
+
 void GPIO_WriteHigh(GPIO_TypeDef* GPIOx, GPIO_Pin_TypeDef PortPins)
 {
   GPIOx->ODR |= (uint8_t)PortPins;

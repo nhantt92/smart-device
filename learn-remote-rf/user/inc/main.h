@@ -5,7 +5,7 @@
 #include "stm8s.h"
 #include "timerTick.h"
 
-#define CTR_GPIO       									GPIOD
-#define CTR_PIN      	 								GPIO_PIN_2
+// #define CTR_GPIO       									GPIOD
+// #define CTR_PIN      	 								GPIO_PIN_2
 
 #endif /* __MAIN_H*/

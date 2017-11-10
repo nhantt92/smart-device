@@ -1,6 +1,6 @@
                                       1 ;--------------------------------------------------------
                                       2 ; File Created by SDCC : free open source ANSI-C Compiler
-                                      3 ; Version 3.6.0 #9615 (Mac OS X x86_64)
+                                      3 ; Version 3.6.0 #9615 (MINGW64)
                                       4 ;--------------------------------------------------------
                                       5 	.module uart
                                       6 	.optsdcc -mstm8
@@ -132,572 +132,571 @@
       000077 F7               [ 1]  132 	ld	(x), a
                                     133 ;	lib/uart.c: 55: BaudRate_Mantissa    = ((uint32_t)CLK_GetClockFreq() / (BaudRate << 4));
       000078 CDr00r00         [ 4]  134 	call	_CLK_GetClockFreq
-      00007B 1F 24            [ 2]  135 	ldw	(0x24, sp), x
+      00007B 1F 13            [ 2]  135 	ldw	(0x13, sp), x
       00007D 1E 28            [ 2]  136 	ldw	x, (0x28, sp)
-      00007F 1F 1E            [ 2]  137 	ldw	(0x1e, sp), x
+      00007F 1F 22            [ 2]  137 	ldw	(0x22, sp), x
       000081 1E 2A            [ 2]  138 	ldw	x, (0x2a, sp)
       000083 A6 04            [ 1]  139 	ld	a, #0x04
       000085                        140 00124$:
       000085 58               [ 2]  141 	sllw	x
-      000086 09 1F            [ 1]  142 	rlc	(0x1f, sp)
-      000088 09 1E            [ 1]  143 	rlc	(0x1e, sp)
+      000086 09 23            [ 1]  142 	rlc	(0x23, sp)
+      000088 09 22            [ 1]  143 	rlc	(0x22, sp)
       00008A 4A               [ 1]  144 	dec	a
       00008B 26 F8            [ 1]  145 	jrne	00124$
-      00008D 1F 20            [ 2]  146 	ldw	(0x20, sp), x
-      00008F 1E 20            [ 2]  147 	ldw	x, (0x20, sp)
+      00008D 1F 24            [ 2]  146 	ldw	(0x24, sp), x
+      00008F 1E 24            [ 2]  147 	ldw	x, (0x24, sp)
       000091 89               [ 2]  148 	pushw	x
-      000092 1E 20            [ 2]  149 	ldw	x, (0x20, sp)
+      000092 1E 24            [ 2]  149 	ldw	x, (0x24, sp)
       000094 89               [ 2]  150 	pushw	x
-      000095 1E 28            [ 2]  151 	ldw	x, (0x28, sp)
+      000095 1E 17            [ 2]  151 	ldw	x, (0x17, sp)
       000097 89               [ 2]  152 	pushw	x
       000098 90 89            [ 2]  153 	pushw	y
       00009A CDr00r00         [ 4]  154 	call	__divulong
       00009D 5B 08            [ 2]  155 	addw	sp, #8
-      00009F 1F 03            [ 2]  156 	ldw	(0x03, sp), x
-      0000A1 17 01            [ 2]  157 	ldw	(0x01, sp), y
+      00009F 1F 07            [ 2]  156 	ldw	(0x07, sp), x
+      0000A1 17 05            [ 2]  157 	ldw	(0x05, sp), y
                                     158 ;	lib/uart.c: 56: BaudRate_Mantissa100 = (((uint32_t)CLK_GetClockFreq() * 100) / (BaudRate << 4));
       0000A3 CDr00r00         [ 4]  159 	call	_CLK_GetClockFreq
-      0000A6 51               [ 1]  160 	exgw	x, y
+      0000A6 89               [ 2]  160 	pushw	x
       0000A7 90 89            [ 2]  161 	pushw	y
-      0000A9 89               [ 2]  162 	pushw	x
-      0000AA 4B 64            [ 1]  163 	push	#0x64
-      0000AC 5F               [ 1]  164 	clrw	x
-      0000AD 89               [ 2]  165 	pushw	x
-      0000AE 4B 00            [ 1]  166 	push	#0x00
-      0000B0 CDr00r00         [ 4]  167 	call	__mullong
-      0000B3 5B 08            [ 2]  168 	addw	sp, #8
-      0000B5 1F 1C            [ 2]  169 	ldw	(0x1c, sp), x
-      0000B7 1E 20            [ 2]  170 	ldw	x, (0x20, sp)
-      0000B9 89               [ 2]  171 	pushw	x
-      0000BA 1E 20            [ 2]  172 	ldw	x, (0x20, sp)
-      0000BC 89               [ 2]  173 	pushw	x
-      0000BD 1E 20            [ 2]  174 	ldw	x, (0x20, sp)
-      0000BF 89               [ 2]  175 	pushw	x
-      0000C0 90 89            [ 2]  176 	pushw	y
-      0000C2 CDr00r00         [ 4]  177 	call	__divulong
-      0000C5 5B 08            [ 2]  178 	addw	sp, #8
-      0000C7 1F 07            [ 2]  179 	ldw	(0x07, sp), x
-      0000C9 17 05            [ 2]  180 	ldw	(0x05, sp), y
-                                    181 ;	lib/uart.c: 58: UART1->BRR2 |= (uint8_t)((uint8_t)(((BaudRate_Mantissa100 - (BaudRate_Mantissa * 100)) << 4) / 100) & (uint8_t)0x0F); 
-      0000CB AE 52 33         [ 2]  182 	ldw	x, #0x5233
-      0000CE F6               [ 1]  183 	ld	a, (x)
-      0000CF 6B 19            [ 1]  184 	ld	(0x19, sp), a
-      0000D1 1E 03            [ 2]  185 	ldw	x, (0x03, sp)
-      0000D3 89               [ 2]  186 	pushw	x
-      0000D4 1E 03            [ 2]  187 	ldw	x, (0x03, sp)
-      0000D6 89               [ 2]  188 	pushw	x
-      0000D7 4B 64            [ 1]  189 	push	#0x64
-      0000D9 5F               [ 1]  190 	clrw	x
-      0000DA 89               [ 2]  191 	pushw	x
-      0000DB 4B 00            [ 1]  192 	push	#0x00
-      0000DD CDr00r00         [ 4]  193 	call	__mullong
-      0000E0 5B 08            [ 2]  194 	addw	sp, #8
-      0000E2 1F 17            [ 2]  195 	ldw	(0x17, sp), x
-      0000E4 17 15            [ 2]  196 	ldw	(0x15, sp), y
-      0000E6 1E 07            [ 2]  197 	ldw	x, (0x07, sp)
-      0000E8 72 F0 17         [ 2]  198 	subw	x, (0x17, sp)
-      0000EB 1F 13            [ 2]  199 	ldw	(0x13, sp), x
-      0000ED 7B 06            [ 1]  200 	ld	a, (0x06, sp)
-      0000EF 12 16            [ 1]  201 	sbc	a, (0x16, sp)
-      0000F1 6B 12            [ 1]  202 	ld	(0x12, sp), a
-      0000F3 7B 05            [ 1]  203 	ld	a, (0x05, sp)
-      0000F5 12 15            [ 1]  204 	sbc	a, (0x15, sp)
-      0000F7 6B 11            [ 1]  205 	ld	(0x11, sp), a
-      0000F9 1E 13            [ 2]  206 	ldw	x, (0x13, sp)
-      0000FB 16 11            [ 2]  207 	ldw	y, (0x11, sp)
-      0000FD A6 04            [ 1]  208 	ld	a, #0x04
-      0000FF                        209 00126$:
-      0000FF 58               [ 2]  210 	sllw	x
-      000100 90 59            [ 2]  211 	rlcw	y
-      000102 4A               [ 1]  212 	dec	a
-      000103 26 FA            [ 1]  213 	jrne	00126$
-      000105 4B 64            [ 1]  214 	push	#0x64
-      000107 4B 00            [ 1]  215 	push	#0x00
-      000109 4B 00            [ 1]  216 	push	#0x00
-      00010B 4B 00            [ 1]  217 	push	#0x00
-      00010D 89               [ 2]  218 	pushw	x
-      00010E 90 89            [ 2]  219 	pushw	y
-      000110 CDr00r00         [ 4]  220 	call	__divulong
-      000113 5B 08            [ 2]  221 	addw	sp, #8
-      000115 9F               [ 1]  222 	ld	a, xl
-      000116 A4 0F            [ 1]  223 	and	a, #0x0f
-      000118 1A 19            [ 1]  224 	or	a, (0x19, sp)
-      00011A AE 52 33         [ 2]  225 	ldw	x, #0x5233
-      00011D F7               [ 1]  226 	ld	(x), a
-                                    227 ;	lib/uart.c: 60: UART1->BRR2 |= (uint8_t)((BaudRate_Mantissa >> 4) & (uint8_t)0xF0); 
-      00011E AE 52 33         [ 2]  228 	ldw	x, #0x5233
-      000121 F6               [ 1]  229 	ld	a, (x)
-      000122 6B 10            [ 1]  230 	ld	(0x10, sp), a
-      000124 1E 03            [ 2]  231 	ldw	x, (0x03, sp)
-      000126 16 01            [ 2]  232 	ldw	y, (0x01, sp)
-      000128 90 54            [ 2]  233 	srlw	y
-      00012A 56               [ 2]  234 	rrcw	x
-      00012B 90 54            [ 2]  235 	srlw	y
-      00012D 56               [ 2]  236 	rrcw	x
-      00012E 90 54            [ 2]  237 	srlw	y
-      000130 56               [ 2]  238 	rrcw	x
-      000131 90 54            [ 2]  239 	srlw	y
-      000133 56               [ 2]  240 	rrcw	x
-      000134 9F               [ 1]  241 	ld	a, xl
-      000135 A4 F0            [ 1]  242 	and	a, #0xf0
-      000137 88               [ 1]  243 	push	a
-      000138 5F               [ 1]  244 	clrw	x
-      000139 0F 0D            [ 1]  245 	clr	(0x0d, sp)
-      00013B 84               [ 1]  246 	pop	a
-      00013C 1A 10            [ 1]  247 	or	a, (0x10, sp)
-      00013E AE 52 33         [ 2]  248 	ldw	x, #0x5233
-      000141 F7               [ 1]  249 	ld	(x), a
-                                    250 ;	lib/uart.c: 62: UART1->BRR1 |= (uint8_t)BaudRate_Mantissa;           
-      000142 AE 52 32         [ 2]  251 	ldw	x, #0x5232
-      000145 F6               [ 1]  252 	ld	a, (x)
-      000146 6B 0B            [ 1]  253 	ld	(0x0b, sp), a
-      000148 7B 04            [ 1]  254 	ld	a, (0x04, sp)
-      00014A 1A 0B            [ 1]  255 	or	a, (0x0b, sp)
-      00014C AE 52 32         [ 2]  256 	ldw	x, #0x5232
-      00014F F7               [ 1]  257 	ld	(x), a
-                                    258 ;	lib/uart.c: 65: UART1->CR2 &= (uint8_t)~(UART1_CR2_TEN | UART1_CR2_REN); 
-      000150 AE 52 35         [ 2]  259 	ldw	x, #0x5235
-      000153 F6               [ 1]  260 	ld	a, (x)
-      000154 A4 F3            [ 1]  261 	and	a, #0xf3
-      000156 F7               [ 1]  262 	ld	(x), a
-                                    263 ;	lib/uart.c: 67: UART1->CR3 &= (uint8_t)~(UART1_CR3_CPOL | UART1_CR3_CPHA | UART1_CR3_LBCL); 
-      000157 AE 52 36         [ 2]  264 	ldw	x, #0x5236
-      00015A F6               [ 1]  265 	ld	a, (x)
-      00015B A4 F8            [ 1]  266 	and	a, #0xf8
-      00015D F7               [ 1]  267 	ld	(x), a
-                                    268 ;	lib/uart.c: 69: UART1->CR3 |= (uint8_t)((uint8_t)SyncMode & (uint8_t)(UART1_CR3_CPOL | 
-      00015E AE 52 36         [ 2]  269 	ldw	x, #0x5236
-      000161 F6               [ 1]  270 	ld	a, (x)
-      000162 6B 0A            [ 1]  271 	ld	(0x0a, sp), a
-      000164 7B 2F            [ 1]  272 	ld	a, (0x2f, sp)
-      000166 A4 07            [ 1]  273 	and	a, #0x07
-      000168 1A 0A            [ 1]  274 	or	a, (0x0a, sp)
-      00016A AE 52 36         [ 2]  275 	ldw	x, #0x5236
-      00016D F7               [ 1]  276 	ld	(x), a
-                                    277 ;	lib/uart.c: 72: if ((uint8_t)(Mode & UART1_MODE_TX_ENABLE))
-      00016E 7B 30            [ 1]  278 	ld	a, (0x30, sp)
-      000170 A5 04            [ 1]  279 	bcp	a, #0x04
-      000172 27 09            [ 1]  280 	jreq	00102$
-                                    281 ;	lib/uart.c: 75: UART1->CR2 |= (uint8_t)UART1_CR2_TEN;  
-      000174 AE 52 35         [ 2]  282 	ldw	x, #0x5235
-      000177 F6               [ 1]  283 	ld	a, (x)
-      000178 AA 08            [ 1]  284 	or	a, #0x08
-      00017A F7               [ 1]  285 	ld	(x), a
-      00017B 20 07            [ 2]  286 	jra	00103$
-      00017D                        287 00102$:
-                                    288 ;	lib/uart.c: 80: UART1->CR2 &= (uint8_t)(~UART1_CR2_TEN);  
-      00017D AE 52 35         [ 2]  289 	ldw	x, #0x5235
-      000180 F6               [ 1]  290 	ld	a, (x)
-      000181 A4 F7            [ 1]  291 	and	a, #0xf7
-      000183 F7               [ 1]  292 	ld	(x), a
-      000184                        293 00103$:
-                                    294 ;	lib/uart.c: 82: if ((uint8_t)(Mode & UART1_MODE_RX_ENABLE))
-      000184 7B 30            [ 1]  295 	ld	a, (0x30, sp)
-      000186 A5 08            [ 1]  296 	bcp	a, #0x08
-      000188 27 09            [ 1]  297 	jreq	00105$
-                                    298 ;	lib/uart.c: 85: UART1->CR2 |= (uint8_t)UART1_CR2_REN;  
-      00018A AE 52 35         [ 2]  299 	ldw	x, #0x5235
-      00018D F6               [ 1]  300 	ld	a, (x)
-      00018E AA 04            [ 1]  301 	or	a, #0x04
-      000190 F7               [ 1]  302 	ld	(x), a
-      000191 20 07            [ 2]  303 	jra	00106$
-      000193                        304 00105$:
-                                    305 ;	lib/uart.c: 90: UART1->CR2 &= (uint8_t)(~UART1_CR2_REN);  
-      000193 AE 52 35         [ 2]  306 	ldw	x, #0x5235
-      000196 F6               [ 1]  307 	ld	a, (x)
-      000197 A4 FB            [ 1]  308 	and	a, #0xfb
-      000199 F7               [ 1]  309 	ld	(x), a
-      00019A                        310 00106$:
-                                    311 ;	lib/uart.c: 94: if ((uint8_t)(SyncMode & UART1_SYNCMODE_CLOCK_DISABLE))
-      00019A 0D 2F            [ 1]  312 	tnz	(0x2f, sp)
-      00019C 2A 09            [ 1]  313 	jrpl	00108$
-                                    314 ;	lib/uart.c: 97: UART1->CR3 &= (uint8_t)(~UART1_CR3_CKEN); 
-      00019E AE 52 36         [ 2]  315 	ldw	x, #0x5236
-      0001A1 F6               [ 1]  316 	ld	a, (x)
-      0001A2 A4 F7            [ 1]  317 	and	a, #0xf7
-      0001A4 F7               [ 1]  318 	ld	(x), a
-      0001A5 20 10            [ 2]  319 	jra	00110$
-      0001A7                        320 00108$:
-                                    321 ;	lib/uart.c: 101: UART1->CR3 |= (uint8_t)((uint8_t)SyncMode & UART1_CR3_CKEN);
-      0001A7 AE 52 36         [ 2]  322 	ldw	x, #0x5236
-      0001AA F6               [ 1]  323 	ld	a, (x)
-      0001AB 6B 09            [ 1]  324 	ld	(0x09, sp), a
-      0001AD 7B 2F            [ 1]  325 	ld	a, (0x2f, sp)
-      0001AF A4 08            [ 1]  326 	and	a, #0x08
-      0001B1 1A 09            [ 1]  327 	or	a, (0x09, sp)
-      0001B3 AE 52 36         [ 2]  328 	ldw	x, #0x5236
-      0001B6 F7               [ 1]  329 	ld	(x), a
-      0001B7                        330 00110$:
-      0001B7 5B 25            [ 2]  331 	addw	sp, #37
-      0001B9 81               [ 4]  332 	ret
-                                    333 ;	lib/uart.c: 105: void UART1_Cmd(FunctionalState NewState)
-                                    334 ;	-----------------------------------------
-                                    335 ;	 function UART1_Cmd
-                                    336 ;	-----------------------------------------
-      0001BA                        337 _UART1_Cmd:
-                                    338 ;	lib/uart.c: 107: if (NewState != DISABLE)
-      0001BA 0D 03            [ 1]  339 	tnz	(0x03, sp)
-      0001BC 27 08            [ 1]  340 	jreq	00102$
-                                    341 ;	lib/uart.c: 110: UART1->CR1 &= (uint8_t)(~UART1_CR1_UARTD); 
-      0001BE AE 52 34         [ 2]  342 	ldw	x, #0x5234
-      0001C1 F6               [ 1]  343 	ld	a, (x)
-      0001C2 A4 DF            [ 1]  344 	and	a, #0xdf
-      0001C4 F7               [ 1]  345 	ld	(x), a
-      0001C5 81               [ 4]  346 	ret
-      0001C6                        347 00102$:
-                                    348 ;	lib/uart.c: 115: UART1->CR1 |= UART1_CR1_UARTD;  
-      0001C6 AE 52 34         [ 2]  349 	ldw	x, #0x5234
-      0001C9 F6               [ 1]  350 	ld	a, (x)
-      0001CA AA 20            [ 1]  351 	or	a, #0x20
-      0001CC F7               [ 1]  352 	ld	(x), a
-      0001CD 81               [ 4]  353 	ret
-                                    354 ;	lib/uart.c: 119: void UART1_ITConfig(UART1_IT_TypeDef UART1_IT, FunctionalState NewState)
-                                    355 ;	-----------------------------------------
-                                    356 ;	 function UART1_ITConfig
-                                    357 ;	-----------------------------------------
-      0001CE                        358 _UART1_ITConfig:
-      0001CE 52 03            [ 2]  359 	sub	sp, #3
-                                    360 ;	lib/uart.c: 124: uartreg = (uint8_t)((uint16_t)UART1_IT >> 0x08);
-      0001D0 7B 06            [ 1]  361 	ld	a, (0x06, sp)
-      0001D2 97               [ 1]  362 	ld	xl, a
-      0001D3 4F               [ 1]  363 	clr	a
-                                    364 ;	lib/uart.c: 126: itpos = (uint8_t)((uint8_t)1 << (uint8_t)((uint8_t)UART1_IT & (uint8_t)0x0F));
-      0001D4 7B 07            [ 1]  365 	ld	a, (0x07, sp)
-      0001D6 A4 0F            [ 1]  366 	and	a, #0x0f
-      0001D8 95               [ 1]  367 	ld	xh, a
-      0001D9 A6 01            [ 1]  368 	ld	a, #0x01
-      0001DB 88               [ 1]  369 	push	a
-      0001DC 9E               [ 1]  370 	ld	a, xh
-      0001DD 4D               [ 1]  371 	tnz	a
-      0001DE 27 05            [ 1]  372 	jreq	00139$
-      0001E0                        373 00138$:
-      0001E0 08 01            [ 1]  374 	sll	(1, sp)
-      0001E2 4A               [ 1]  375 	dec	a
-      0001E3 26 FB            [ 1]  376 	jrne	00138$
-      0001E5                        377 00139$:
-      0001E5 84               [ 1]  378 	pop	a
-      0001E6 6B 01            [ 1]  379 	ld	(0x01, sp), a
-                                    380 ;	lib/uart.c: 131: if (uartreg == 0x01)
-      0001E8 9F               [ 1]  381 	ld	a, xl
-      0001E9 A1 01            [ 1]  382 	cp	a, #0x01
-      0001EB 26 06            [ 1]  383 	jrne	00141$
-      0001ED A6 01            [ 1]  384 	ld	a, #0x01
-      0001EF 6B 03            [ 1]  385 	ld	(0x03, sp), a
-      0001F1 20 02            [ 2]  386 	jra	00142$
-      0001F3                        387 00141$:
-      0001F3 0F 03            [ 1]  388 	clr	(0x03, sp)
-      0001F5                        389 00142$:
-                                    390 ;	lib/uart.c: 135: else if (uartreg == 0x02)
-      0001F5 9F               [ 1]  391 	ld	a, xl
-      0001F6 A1 02            [ 1]  392 	cp	a, #0x02
-      0001F8 26 03            [ 1]  393 	jrne	00144$
-      0001FA A6 01            [ 1]  394 	ld	a, #0x01
-      0001FC 21                     395 	.byte 0x21
-      0001FD                        396 00144$:
-      0001FD 4F               [ 1]  397 	clr	a
-      0001FE                        398 00145$:
-                                    399 ;	lib/uart.c: 128: if (NewState != DISABLE)
-      0001FE 0D 08            [ 1]  400 	tnz	(0x08, sp)
-      000200 27 2B            [ 1]  401 	jreq	00114$
-                                    402 ;	lib/uart.c: 131: if (uartreg == 0x01)
-      000202 0D 03            [ 1]  403 	tnz	(0x03, sp)
-      000204 27 0C            [ 1]  404 	jreq	00105$
-                                    405 ;	lib/uart.c: 133: UART1->CR1 |= itpos;
-      000206 AE 52 34         [ 2]  406 	ldw	x, #0x5234
-      000209 F6               [ 1]  407 	ld	a, (x)
-      00020A 1A 01            [ 1]  408 	or	a, (0x01, sp)
-      00020C AE 52 34         [ 2]  409 	ldw	x, #0x5234
-      00020F F7               [ 1]  410 	ld	(x), a
-      000210 20 4B            [ 2]  411 	jra	00116$
-      000212                        412 00105$:
-                                    413 ;	lib/uart.c: 135: else if (uartreg == 0x02)
-      000212 4D               [ 1]  414 	tnz	a
-      000213 27 0C            [ 1]  415 	jreq	00102$
-                                    416 ;	lib/uart.c: 137: UART1->CR2 |= itpos;
-      000215 AE 52 35         [ 2]  417 	ldw	x, #0x5235
-      000218 F6               [ 1]  418 	ld	a, (x)
-      000219 1A 01            [ 1]  419 	or	a, (0x01, sp)
-      00021B AE 52 35         [ 2]  420 	ldw	x, #0x5235
-      00021E F7               [ 1]  421 	ld	(x), a
-      00021F 20 3C            [ 2]  422 	jra	00116$
-      000221                        423 00102$:
-                                    424 ;	lib/uart.c: 141: UART1->CR4 |= itpos;
-      000221 AE 52 37         [ 2]  425 	ldw	x, #0x5237
-      000224 F6               [ 1]  426 	ld	a, (x)
-      000225 1A 01            [ 1]  427 	or	a, (0x01, sp)
-      000227 AE 52 37         [ 2]  428 	ldw	x, #0x5237
-      00022A F7               [ 1]  429 	ld	(x), a
-      00022B 20 30            [ 2]  430 	jra	00116$
-      00022D                        431 00114$:
-                                    432 ;	lib/uart.c: 149: UART1->CR1 &= (uint8_t)(~itpos);
-      00022D 88               [ 1]  433 	push	a
-      00022E 7B 02            [ 1]  434 	ld	a, (0x02, sp)
-      000230 43               [ 1]  435 	cpl	a
-      000231 6B 03            [ 1]  436 	ld	(0x03, sp), a
-      000233 84               [ 1]  437 	pop	a
-                                    438 ;	lib/uart.c: 147: if (uartreg == 0x01)
-      000234 0D 03            [ 1]  439 	tnz	(0x03, sp)
-      000236 27 0C            [ 1]  440 	jreq	00111$
-                                    441 ;	lib/uart.c: 149: UART1->CR1 &= (uint8_t)(~itpos);
-      000238 AE 52 34         [ 2]  442 	ldw	x, #0x5234
-      00023B F6               [ 1]  443 	ld	a, (x)
-      00023C 14 02            [ 1]  444 	and	a, (0x02, sp)
-      00023E AE 52 34         [ 2]  445 	ldw	x, #0x5234
-      000241 F7               [ 1]  446 	ld	(x), a
-      000242 20 19            [ 2]  447 	jra	00116$
-      000244                        448 00111$:
-                                    449 ;	lib/uart.c: 151: else if (uartreg == 0x02)
-      000244 4D               [ 1]  450 	tnz	a
-      000245 27 0C            [ 1]  451 	jreq	00108$
-                                    452 ;	lib/uart.c: 153: UART1->CR2 &= (uint8_t)(~itpos);
-      000247 AE 52 35         [ 2]  453 	ldw	x, #0x5235
-      00024A F6               [ 1]  454 	ld	a, (x)
-      00024B 14 02            [ 1]  455 	and	a, (0x02, sp)
-      00024D AE 52 35         [ 2]  456 	ldw	x, #0x5235
-      000250 F7               [ 1]  457 	ld	(x), a
-      000251 20 0A            [ 2]  458 	jra	00116$
-      000253                        459 00108$:
-                                    460 ;	lib/uart.c: 157: UART1->CR4 &= (uint8_t)(~itpos);
-      000253 AE 52 37         [ 2]  461 	ldw	x, #0x5237
-      000256 F6               [ 1]  462 	ld	a, (x)
-      000257 14 02            [ 1]  463 	and	a, (0x02, sp)
-      000259 AE 52 37         [ 2]  464 	ldw	x, #0x5237
-      00025C F7               [ 1]  465 	ld	(x), a
-      00025D                        466 00116$:
-      00025D 5B 03            [ 2]  467 	addw	sp, #3
-      00025F 81               [ 4]  468 	ret
-                                    469 ;	lib/uart.c: 163: uint8_t UART1_ReceiveData8(void)
-                                    470 ;	-----------------------------------------
-                                    471 ;	 function UART1_ReceiveData8
-                                    472 ;	-----------------------------------------
-      000260                        473 _UART1_ReceiveData8:
-                                    474 ;	lib/uart.c: 165: return ((uint8_t)UART1->DR);
-      000260 AE 52 31         [ 2]  475 	ldw	x, #0x5231
-      000263 F6               [ 1]  476 	ld	a, (x)
-      000264 81               [ 4]  477 	ret
-                                    478 ;	lib/uart.c: 168: void UART1_SendData8(uint8_t Data)
-                                    479 ;	-----------------------------------------
-                                    480 ;	 function UART1_SendData8
-                                    481 ;	-----------------------------------------
-      000265                        482 _UART1_SendData8:
-                                    483 ;	lib/uart.c: 171: UART1->DR = Data;
-      000265 AE 52 31         [ 2]  484 	ldw	x, #0x5231
-      000268 7B 03            [ 1]  485 	ld	a, (0x03, sp)
-      00026A F7               [ 1]  486 	ld	(x), a
-      00026B 81               [ 4]  487 	ret
-                                    488 ;	lib/uart.c: 174: FlagStatus UART1_GetFlagStatus(UART1_Flag_TypeDef UART1_FLAG)
-                                    489 ;	-----------------------------------------
-                                    490 ;	 function UART1_GetFlagStatus
-                                    491 ;	-----------------------------------------
-      00026C                        492 _UART1_GetFlagStatus:
-      00026C 88               [ 1]  493 	push	a
-                                    494 ;	lib/uart.c: 180: if ((UART1->CR4 & (uint8_t)UART1_FLAG) != (uint8_t)0x00)
-      00026D 7B 05            [ 1]  495 	ld	a, (0x05, sp)
-      00026F 6B 01            [ 1]  496 	ld	(0x01, sp), a
-                                    497 ;	lib/uart.c: 178: if (UART1_FLAG == UART1_FLAG_LBDF)
-      000271 1E 04            [ 2]  498 	ldw	x, (0x04, sp)
-      000273 A3 02 10         [ 2]  499 	cpw	x, #0x0210
-      000276 26 10            [ 1]  500 	jrne	00114$
-                                    501 ;	lib/uart.c: 180: if ((UART1->CR4 & (uint8_t)UART1_FLAG) != (uint8_t)0x00)
-      000278 AE 52 37         [ 2]  502 	ldw	x, #0x5237
-      00027B F6               [ 1]  503 	ld	a, (x)
-      00027C 14 01            [ 1]  504 	and	a, (0x01, sp)
-      00027E 4D               [ 1]  505 	tnz	a
-      00027F 27 04            [ 1]  506 	jreq	00102$
-                                    507 ;	lib/uart.c: 183: status = SET;
-      000281 A6 01            [ 1]  508 	ld	a, #0x01
-      000283 20 27            [ 2]  509 	jra	00115$
-      000285                        510 00102$:
-                                    511 ;	lib/uart.c: 188: status = RESET;
-      000285 4F               [ 1]  512 	clr	a
-      000286 20 24            [ 2]  513 	jra	00115$
-      000288                        514 00114$:
-                                    515 ;	lib/uart.c: 191: else if (UART1_FLAG == UART1_FLAG_SBK)
-      000288 1E 04            [ 2]  516 	ldw	x, (0x04, sp)
-      00028A A3 01 01         [ 2]  517 	cpw	x, #0x0101
-      00028D 26 10            [ 1]  518 	jrne	00111$
-                                    519 ;	lib/uart.c: 193: if ((UART1->CR2 & (uint8_t)UART1_FLAG) != (uint8_t)0x00)
-      00028F AE 52 35         [ 2]  520 	ldw	x, #0x5235
-      000292 F6               [ 1]  521 	ld	a, (x)
-      000293 14 01            [ 1]  522 	and	a, (0x01, sp)
-      000295 4D               [ 1]  523 	tnz	a
-      000296 27 04            [ 1]  524 	jreq	00105$
-                                    525 ;	lib/uart.c: 196: status = SET;
-      000298 A6 01            [ 1]  526 	ld	a, #0x01
-      00029A 20 10            [ 2]  527 	jra	00115$
-      00029C                        528 00105$:
-                                    529 ;	lib/uart.c: 201: status = RESET;
-      00029C 4F               [ 1]  530 	clr	a
-      00029D 20 0D            [ 2]  531 	jra	00115$
-      00029F                        532 00111$:
-                                    533 ;	lib/uart.c: 206: if ((UART1->SR & (uint8_t)UART1_FLAG) != (uint8_t)0x00)
-      00029F AE 52 30         [ 2]  534 	ldw	x, #0x5230
-      0002A2 F6               [ 1]  535 	ld	a, (x)
-      0002A3 14 01            [ 1]  536 	and	a, (0x01, sp)
-      0002A5 4D               [ 1]  537 	tnz	a
-      0002A6 27 03            [ 1]  538 	jreq	00108$
-                                    539 ;	lib/uart.c: 209: status = SET;
-      0002A8 A6 01            [ 1]  540 	ld	a, #0x01
-                                    541 ;	lib/uart.c: 214: status = RESET;
-      0002AA 21                     542 	.byte 0x21
-      0002AB                        543 00108$:
-      0002AB 4F               [ 1]  544 	clr	a
-      0002AC                        545 00115$:
-                                    546 ;	lib/uart.c: 218: return status;
-      0002AC 5B 01            [ 2]  547 	addw	sp, #1
-      0002AE 81               [ 4]  548 	ret
-                                    549 ;	lib/uart.c: 221: void UART1_ClearFlag(UART1_Flag_TypeDef UART1_FLAG)
-                                    550 ;	-----------------------------------------
-                                    551 ;	 function UART1_ClearFlag
-                                    552 ;	-----------------------------------------
-      0002AF                        553 _UART1_ClearFlag:
-                                    554 ;	lib/uart.c: 224: if (UART1_FLAG == UART1_FLAG_RXNE)
-      0002AF 1E 03            [ 2]  555 	ldw	x, (0x03, sp)
-      0002B1 A3 00 20         [ 2]  556 	cpw	x, #0x0020
-      0002B4 26 05            [ 1]  557 	jrne	00102$
-                                    558 ;	lib/uart.c: 226: UART1->SR = (uint8_t)~(UART1_SR_RXNE);
-      0002B6 35 DF 52 30      [ 1]  559 	mov	0x5230+0, #0xdf
-      0002BA 81               [ 4]  560 	ret
-      0002BB                        561 00102$:
-                                    562 ;	lib/uart.c: 231: UART1->CR4 &= (uint8_t)~(UART1_CR4_LBDF);
-      0002BB AE 52 37         [ 2]  563 	ldw	x, #0x5237
-      0002BE F6               [ 1]  564 	ld	a, (x)
-      0002BF A4 EF            [ 1]  565 	and	a, #0xef
-      0002C1 F7               [ 1]  566 	ld	(x), a
-      0002C2 81               [ 4]  567 	ret
-                                    568 ;	lib/uart.c: 235: ITStatus UART1_GetITStatus(UART1_IT_TypeDef UART1_IT)
-                                    569 ;	-----------------------------------------
-                                    570 ;	 function UART1_GetITStatus
-                                    571 ;	-----------------------------------------
-      0002C3                        572 _UART1_GetITStatus:
-      0002C3 52 05            [ 2]  573 	sub	sp, #5
-                                    574 ;	lib/uart.c: 244: itpos = (uint8_t)((uint8_t)1 << (uint8_t)((uint8_t)UART1_IT & (uint8_t)0x0F));
-      0002C5 7B 09            [ 1]  575 	ld	a, (0x09, sp)
-      0002C7 97               [ 1]  576 	ld	xl, a
-      0002C8 A4 0F            [ 1]  577 	and	a, #0x0f
-      0002CA 95               [ 1]  578 	ld	xh, a
-      0002CB A6 01            [ 1]  579 	ld	a, #0x01
-      0002CD 88               [ 1]  580 	push	a
-      0002CE 9E               [ 1]  581 	ld	a, xh
-      0002CF 4D               [ 1]  582 	tnz	a
-      0002D0 27 05            [ 1]  583 	jreq	00154$
-      0002D2                        584 00153$:
-      0002D2 08 01            [ 1]  585 	sll	(1, sp)
-      0002D4 4A               [ 1]  586 	dec	a
-      0002D5 26 FB            [ 1]  587 	jrne	00153$
-      0002D7                        588 00154$:
-      0002D7 84               [ 1]  589 	pop	a
-      0002D8 6B 03            [ 1]  590 	ld	(0x03, sp), a
-                                    591 ;	lib/uart.c: 246: itmask1 = (uint8_t)((uint8_t)UART1_IT >> (uint8_t)4);
-      0002DA 9F               [ 1]  592 	ld	a, xl
-      0002DB 4E               [ 1]  593 	swap	a
-      0002DC A4 0F            [ 1]  594 	and	a, #0x0f
-      0002DE 97               [ 1]  595 	ld	xl, a
-                                    596 ;	lib/uart.c: 248: itmask2 = (uint8_t)((uint8_t)1 << itmask1);
-      0002DF A6 01            [ 1]  597 	ld	a, #0x01
-      0002E1 88               [ 1]  598 	push	a
-      0002E2 9F               [ 1]  599 	ld	a, xl
-      0002E3 4D               [ 1]  600 	tnz	a
-      0002E4 27 05            [ 1]  601 	jreq	00156$
-      0002E6                        602 00155$:
-      0002E6 08 01            [ 1]  603 	sll	(1, sp)
-      0002E8 4A               [ 1]  604 	dec	a
-      0002E9 26 FB            [ 1]  605 	jrne	00155$
-      0002EB                        606 00156$:
-      0002EB 84               [ 1]  607 	pop	a
-      0002EC 6B 02            [ 1]  608 	ld	(0x02, sp), a
-                                    609 ;	lib/uart.c: 251: if (UART1_IT == UART1_IT_PE)
-      0002EE 1E 08            [ 2]  610 	ldw	x, (0x08, sp)
-      0002F0 A3 01 00         [ 2]  611 	cpw	x, #0x0100
-      0002F3 26 1C            [ 1]  612 	jrne	00117$
-                                    613 ;	lib/uart.c: 254: enablestatus = (uint8_t)((uint8_t)UART1->CR1 & itmask2);
-      0002F5 AE 52 34         [ 2]  614 	ldw	x, #0x5234
-      0002F8 F6               [ 1]  615 	ld	a, (x)
-      0002F9 14 02            [ 1]  616 	and	a, (0x02, sp)
-      0002FB 6B 04            [ 1]  617 	ld	(0x04, sp), a
-                                    618 ;	lib/uart.c: 257: if (((UART1->SR & itpos) != (uint8_t)0x00) && enablestatus)
-      0002FD AE 52 30         [ 2]  619 	ldw	x, #0x5230
-      000300 F6               [ 1]  620 	ld	a, (x)
-      000301 14 03            [ 1]  621 	and	a, (0x03, sp)
-      000303 4D               [ 1]  622 	tnz	a
-      000304 27 08            [ 1]  623 	jreq	00102$
-      000306 0D 04            [ 1]  624 	tnz	(0x04, sp)
-      000308 27 04            [ 1]  625 	jreq	00102$
-                                    626 ;	lib/uart.c: 260: pendingbitstatus = SET;
-      00030A A6 01            [ 1]  627 	ld	a, #0x01
-      00030C 20 3F            [ 2]  628 	jra	00118$
-      00030E                        629 00102$:
-                                    630 ;	lib/uart.c: 265: pendingbitstatus = RESET;
-      00030E 4F               [ 1]  631 	clr	a
-      00030F 20 3C            [ 2]  632 	jra	00118$
-      000311                        633 00117$:
-                                    634 ;	lib/uart.c: 269: else if (UART1_IT == UART1_IT_LBDF)
-      000311 1E 08            [ 2]  635 	ldw	x, (0x08, sp)
-      000313 A3 03 46         [ 2]  636 	cpw	x, #0x0346
-      000316 26 1C            [ 1]  637 	jrne	00114$
-                                    638 ;	lib/uart.c: 272: enablestatus = (uint8_t)((uint8_t)UART1->CR4 & itmask2);
-      000318 AE 52 37         [ 2]  639 	ldw	x, #0x5237
-      00031B F6               [ 1]  640 	ld	a, (x)
-      00031C 14 02            [ 1]  641 	and	a, (0x02, sp)
-      00031E 6B 01            [ 1]  642 	ld	(0x01, sp), a
-                                    643 ;	lib/uart.c: 274: if (((UART1->CR4 & itpos) != (uint8_t)0x00) && enablestatus)
-      000320 AE 52 37         [ 2]  644 	ldw	x, #0x5237
-      000323 F6               [ 1]  645 	ld	a, (x)
-      000324 14 03            [ 1]  646 	and	a, (0x03, sp)
-      000326 4D               [ 1]  647 	tnz	a
-      000327 27 08            [ 1]  648 	jreq	00106$
-      000329 0D 01            [ 1]  649 	tnz	(0x01, sp)
-      00032B 27 04            [ 1]  650 	jreq	00106$
-                                    651 ;	lib/uart.c: 277: pendingbitstatus = SET;
-      00032D A6 01            [ 1]  652 	ld	a, #0x01
-      00032F 20 1C            [ 2]  653 	jra	00118$
-      000331                        654 00106$:
-                                    655 ;	lib/uart.c: 282: pendingbitstatus = RESET;
-      000331 4F               [ 1]  656 	clr	a
-      000332 20 19            [ 2]  657 	jra	00118$
-      000334                        658 00114$:
-                                    659 ;	lib/uart.c: 288: enablestatus = (uint8_t)((uint8_t)UART1->CR2 & itmask2);
-      000334 AE 52 35         [ 2]  660 	ldw	x, #0x5235
-      000337 F6               [ 1]  661 	ld	a, (x)
-      000338 14 02            [ 1]  662 	and	a, (0x02, sp)
-      00033A 6B 05            [ 1]  663 	ld	(0x05, sp), a
-                                    664 ;	lib/uart.c: 290: if (((UART1->SR & itpos) != (uint8_t)0x00) && enablestatus)
-      00033C AE 52 30         [ 2]  665 	ldw	x, #0x5230
-      00033F F6               [ 1]  666 	ld	a, (x)
-      000340 14 03            [ 1]  667 	and	a, (0x03, sp)
-      000342 4D               [ 1]  668 	tnz	a
-      000343 27 07            [ 1]  669 	jreq	00110$
-      000345 0D 05            [ 1]  670 	tnz	(0x05, sp)
-      000347 27 03            [ 1]  671 	jreq	00110$
-                                    672 ;	lib/uart.c: 293: pendingbitstatus = SET;
-      000349 A6 01            [ 1]  673 	ld	a, #0x01
-                                    674 ;	lib/uart.c: 298: pendingbitstatus = RESET;
-      00034B 21                     675 	.byte 0x21
-      00034C                        676 00110$:
-      00034C 4F               [ 1]  677 	clr	a
-      00034D                        678 00118$:
-                                    679 ;	lib/uart.c: 303: return  pendingbitstatus;
-      00034D 5B 05            [ 2]  680 	addw	sp, #5
-      00034F 81               [ 4]  681 	ret
-                                    682 ;	lib/uart.c: 306: void UART1_ClearITPendingBit(UART1_IT_TypeDef UART1_IT)
-                                    683 ;	-----------------------------------------
-                                    684 ;	 function UART1_ClearITPendingBit
-                                    685 ;	-----------------------------------------
-      000350                        686 _UART1_ClearITPendingBit:
-                                    687 ;	lib/uart.c: 309: if (UART1_IT == UART1_IT_RXNE)
-      000350 1E 03            [ 2]  688 	ldw	x, (0x03, sp)
-      000352 A3 02 55         [ 2]  689 	cpw	x, #0x0255
-      000355 26 05            [ 1]  690 	jrne	00102$
-                                    691 ;	lib/uart.c: 311: UART1->SR = (uint8_t)~(UART1_SR_RXNE);
-      000357 35 DF 52 30      [ 1]  692 	mov	0x5230+0, #0xdf
-      00035B 81               [ 4]  693 	ret
-      00035C                        694 00102$:
-                                    695 ;	lib/uart.c: 316: UART1->CR4 &= (uint8_t)~(UART1_CR4_LBDF);
-      00035C AE 52 37         [ 2]  696 	ldw	x, #0x5237
-      00035F F6               [ 1]  697 	ld	a, (x)
-      000360 A4 EF            [ 1]  698 	and	a, #0xef
-      000362 F7               [ 1]  699 	ld	(x), a
-      000363 81               [ 4]  700 	ret
-                                    701 	.area CODE
-                                    702 	.area INITIALIZER
-                                    703 	.area CABS (ABS)
+      0000A9 4B 64            [ 1]  162 	push	#0x64
+      0000AB 5F               [ 1]  163 	clrw	x
+      0000AC 89               [ 2]  164 	pushw	x
+      0000AD 4B 00            [ 1]  165 	push	#0x00
+      0000AF CDr00r00         [ 4]  166 	call	__mullong
+      0000B2 5B 08            [ 2]  167 	addw	sp, #8
+      0000B4 1F 20            [ 2]  168 	ldw	(0x20, sp), x
+      0000B6 1E 24            [ 2]  169 	ldw	x, (0x24, sp)
+      0000B8 89               [ 2]  170 	pushw	x
+      0000B9 1E 24            [ 2]  171 	ldw	x, (0x24, sp)
+      0000BB 89               [ 2]  172 	pushw	x
+      0000BC 1E 24            [ 2]  173 	ldw	x, (0x24, sp)
+      0000BE 89               [ 2]  174 	pushw	x
+      0000BF 90 89            [ 2]  175 	pushw	y
+      0000C1 CDr00r00         [ 4]  176 	call	__divulong
+      0000C4 5B 08            [ 2]  177 	addw	sp, #8
+      0000C6 1F 03            [ 2]  178 	ldw	(0x03, sp), x
+      0000C8 17 01            [ 2]  179 	ldw	(0x01, sp), y
+                                    180 ;	lib/uart.c: 58: UART1->BRR2 |= (uint8_t)((uint8_t)(((BaudRate_Mantissa100 - (BaudRate_Mantissa * 100)) << 4) / 100) & (uint8_t)0x0F); 
+      0000CA AE 52 33         [ 2]  181 	ldw	x, #0x5233
+      0000CD F6               [ 1]  182 	ld	a, (x)
+      0000CE 6B 1B            [ 1]  183 	ld	(0x1b, sp), a
+      0000D0 1E 07            [ 2]  184 	ldw	x, (0x07, sp)
+      0000D2 89               [ 2]  185 	pushw	x
+      0000D3 1E 07            [ 2]  186 	ldw	x, (0x07, sp)
+      0000D5 89               [ 2]  187 	pushw	x
+      0000D6 4B 64            [ 1]  188 	push	#0x64
+      0000D8 5F               [ 1]  189 	clrw	x
+      0000D9 89               [ 2]  190 	pushw	x
+      0000DA 4B 00            [ 1]  191 	push	#0x00
+      0000DC CDr00r00         [ 4]  192 	call	__mullong
+      0000DF 5B 08            [ 2]  193 	addw	sp, #8
+      0000E1 1F 0F            [ 2]  194 	ldw	(0x0f, sp), x
+      0000E3 17 0D            [ 2]  195 	ldw	(0x0d, sp), y
+      0000E5 1E 03            [ 2]  196 	ldw	x, (0x03, sp)
+      0000E7 72 F0 0F         [ 2]  197 	subw	x, (0x0f, sp)
+      0000EA 1F 0B            [ 2]  198 	ldw	(0x0b, sp), x
+      0000EC 7B 02            [ 1]  199 	ld	a, (0x02, sp)
+      0000EE 12 0E            [ 1]  200 	sbc	a, (0x0e, sp)
+      0000F0 6B 0A            [ 1]  201 	ld	(0x0a, sp), a
+      0000F2 7B 01            [ 1]  202 	ld	a, (0x01, sp)
+      0000F4 12 0D            [ 1]  203 	sbc	a, (0x0d, sp)
+      0000F6 6B 09            [ 1]  204 	ld	(0x09, sp), a
+      0000F8 1E 0B            [ 2]  205 	ldw	x, (0x0b, sp)
+      0000FA 16 09            [ 2]  206 	ldw	y, (0x09, sp)
+      0000FC A6 04            [ 1]  207 	ld	a, #0x04
+      0000FE                        208 00126$:
+      0000FE 58               [ 2]  209 	sllw	x
+      0000FF 90 59            [ 2]  210 	rlcw	y
+      000101 4A               [ 1]  211 	dec	a
+      000102 26 FA            [ 1]  212 	jrne	00126$
+      000104 4B 64            [ 1]  213 	push	#0x64
+      000106 4B 00            [ 1]  214 	push	#0x00
+      000108 4B 00            [ 1]  215 	push	#0x00
+      00010A 4B 00            [ 1]  216 	push	#0x00
+      00010C 89               [ 2]  217 	pushw	x
+      00010D 90 89            [ 2]  218 	pushw	y
+      00010F CDr00r00         [ 4]  219 	call	__divulong
+      000112 5B 08            [ 2]  220 	addw	sp, #8
+      000114 9F               [ 1]  221 	ld	a, xl
+      000115 A4 0F            [ 1]  222 	and	a, #0x0f
+      000117 1A 1B            [ 1]  223 	or	a, (0x1b, sp)
+      000119 AE 52 33         [ 2]  224 	ldw	x, #0x5233
+      00011C F7               [ 1]  225 	ld	(x), a
+                                    226 ;	lib/uart.c: 60: UART1->BRR2 |= (uint8_t)((BaudRate_Mantissa >> 4) & (uint8_t)0xF0); 
+      00011D AE 52 33         [ 2]  227 	ldw	x, #0x5233
+      000120 F6               [ 1]  228 	ld	a, (x)
+      000121 6B 1C            [ 1]  229 	ld	(0x1c, sp), a
+      000123 1E 07            [ 2]  230 	ldw	x, (0x07, sp)
+      000125 16 05            [ 2]  231 	ldw	y, (0x05, sp)
+      000127 90 54            [ 2]  232 	srlw	y
+      000129 56               [ 2]  233 	rrcw	x
+      00012A 90 54            [ 2]  234 	srlw	y
+      00012C 56               [ 2]  235 	rrcw	x
+      00012D 90 54            [ 2]  236 	srlw	y
+      00012F 56               [ 2]  237 	rrcw	x
+      000130 90 54            [ 2]  238 	srlw	y
+      000132 56               [ 2]  239 	rrcw	x
+      000133 9F               [ 1]  240 	ld	a, xl
+      000134 A4 F0            [ 1]  241 	and	a, #0xf0
+      000136 88               [ 1]  242 	push	a
+      000137 5F               [ 1]  243 	clrw	x
+      000138 0F 17            [ 1]  244 	clr	(0x17, sp)
+      00013A 84               [ 1]  245 	pop	a
+      00013B 1A 1C            [ 1]  246 	or	a, (0x1c, sp)
+      00013D AE 52 33         [ 2]  247 	ldw	x, #0x5233
+      000140 F7               [ 1]  248 	ld	(x), a
+                                    249 ;	lib/uart.c: 62: UART1->BRR1 |= (uint8_t)BaudRate_Mantissa;           
+      000141 AE 52 32         [ 2]  250 	ldw	x, #0x5232
+      000144 F6               [ 1]  251 	ld	a, (x)
+      000145 6B 1A            [ 1]  252 	ld	(0x1a, sp), a
+      000147 7B 08            [ 1]  253 	ld	a, (0x08, sp)
+      000149 1A 1A            [ 1]  254 	or	a, (0x1a, sp)
+      00014B AE 52 32         [ 2]  255 	ldw	x, #0x5232
+      00014E F7               [ 1]  256 	ld	(x), a
+                                    257 ;	lib/uart.c: 65: UART1->CR2 &= (uint8_t)~(UART1_CR2_TEN | UART1_CR2_REN); 
+      00014F AE 52 35         [ 2]  258 	ldw	x, #0x5235
+      000152 F6               [ 1]  259 	ld	a, (x)
+      000153 A4 F3            [ 1]  260 	and	a, #0xf3
+      000155 F7               [ 1]  261 	ld	(x), a
+                                    262 ;	lib/uart.c: 67: UART1->CR3 &= (uint8_t)~(UART1_CR3_CPOL | UART1_CR3_CPHA | UART1_CR3_LBCL); 
+      000156 AE 52 36         [ 2]  263 	ldw	x, #0x5236
+      000159 F6               [ 1]  264 	ld	a, (x)
+      00015A A4 F8            [ 1]  265 	and	a, #0xf8
+      00015C F7               [ 1]  266 	ld	(x), a
+                                    267 ;	lib/uart.c: 69: UART1->CR3 |= (uint8_t)((uint8_t)SyncMode & (uint8_t)(UART1_CR3_CPOL | 
+      00015D AE 52 36         [ 2]  268 	ldw	x, #0x5236
+      000160 F6               [ 1]  269 	ld	a, (x)
+      000161 6B 15            [ 1]  270 	ld	(0x15, sp), a
+      000163 7B 2F            [ 1]  271 	ld	a, (0x2f, sp)
+      000165 A4 07            [ 1]  272 	and	a, #0x07
+      000167 1A 15            [ 1]  273 	or	a, (0x15, sp)
+      000169 AE 52 36         [ 2]  274 	ldw	x, #0x5236
+      00016C F7               [ 1]  275 	ld	(x), a
+                                    276 ;	lib/uart.c: 72: if ((uint8_t)(Mode & UART1_MODE_TX_ENABLE))
+      00016D 7B 30            [ 1]  277 	ld	a, (0x30, sp)
+      00016F A5 04            [ 1]  278 	bcp	a, #0x04
+      000171 27 09            [ 1]  279 	jreq	00102$
+                                    280 ;	lib/uart.c: 75: UART1->CR2 |= (uint8_t)UART1_CR2_TEN;  
+      000173 AE 52 35         [ 2]  281 	ldw	x, #0x5235
+      000176 F6               [ 1]  282 	ld	a, (x)
+      000177 AA 08            [ 1]  283 	or	a, #0x08
+      000179 F7               [ 1]  284 	ld	(x), a
+      00017A 20 07            [ 2]  285 	jra	00103$
+      00017C                        286 00102$:
+                                    287 ;	lib/uart.c: 80: UART1->CR2 &= (uint8_t)(~UART1_CR2_TEN);  
+      00017C AE 52 35         [ 2]  288 	ldw	x, #0x5235
+      00017F F6               [ 1]  289 	ld	a, (x)
+      000180 A4 F7            [ 1]  290 	and	a, #0xf7
+      000182 F7               [ 1]  291 	ld	(x), a
+      000183                        292 00103$:
+                                    293 ;	lib/uart.c: 82: if ((uint8_t)(Mode & UART1_MODE_RX_ENABLE))
+      000183 7B 30            [ 1]  294 	ld	a, (0x30, sp)
+      000185 A5 08            [ 1]  295 	bcp	a, #0x08
+      000187 27 09            [ 1]  296 	jreq	00105$
+                                    297 ;	lib/uart.c: 85: UART1->CR2 |= (uint8_t)UART1_CR2_REN;  
+      000189 AE 52 35         [ 2]  298 	ldw	x, #0x5235
+      00018C F6               [ 1]  299 	ld	a, (x)
+      00018D AA 04            [ 1]  300 	or	a, #0x04
+      00018F F7               [ 1]  301 	ld	(x), a
+      000190 20 07            [ 2]  302 	jra	00106$
+      000192                        303 00105$:
+                                    304 ;	lib/uart.c: 90: UART1->CR2 &= (uint8_t)(~UART1_CR2_REN);  
+      000192 AE 52 35         [ 2]  305 	ldw	x, #0x5235
+      000195 F6               [ 1]  306 	ld	a, (x)
+      000196 A4 FB            [ 1]  307 	and	a, #0xfb
+      000198 F7               [ 1]  308 	ld	(x), a
+      000199                        309 00106$:
+                                    310 ;	lib/uart.c: 94: if ((uint8_t)(SyncMode & UART1_SYNCMODE_CLOCK_DISABLE))
+      000199 0D 2F            [ 1]  311 	tnz	(0x2f, sp)
+      00019B 2A 09            [ 1]  312 	jrpl	00108$
+                                    313 ;	lib/uart.c: 97: UART1->CR3 &= (uint8_t)(~UART1_CR3_CKEN); 
+      00019D AE 52 36         [ 2]  314 	ldw	x, #0x5236
+      0001A0 F6               [ 1]  315 	ld	a, (x)
+      0001A1 A4 F7            [ 1]  316 	and	a, #0xf7
+      0001A3 F7               [ 1]  317 	ld	(x), a
+      0001A4 20 10            [ 2]  318 	jra	00110$
+      0001A6                        319 00108$:
+                                    320 ;	lib/uart.c: 101: UART1->CR3 |= (uint8_t)((uint8_t)SyncMode & UART1_CR3_CKEN);
+      0001A6 AE 52 36         [ 2]  321 	ldw	x, #0x5236
+      0001A9 F6               [ 1]  322 	ld	a, (x)
+      0001AA 6B 1D            [ 1]  323 	ld	(0x1d, sp), a
+      0001AC 7B 2F            [ 1]  324 	ld	a, (0x2f, sp)
+      0001AE A4 08            [ 1]  325 	and	a, #0x08
+      0001B0 1A 1D            [ 1]  326 	or	a, (0x1d, sp)
+      0001B2 AE 52 36         [ 2]  327 	ldw	x, #0x5236
+      0001B5 F7               [ 1]  328 	ld	(x), a
+      0001B6                        329 00110$:
+      0001B6 5B 25            [ 2]  330 	addw	sp, #37
+      0001B8 81               [ 4]  331 	ret
+                                    332 ;	lib/uart.c: 105: void UART1_Cmd(FunctionalState NewState)
+                                    333 ;	-----------------------------------------
+                                    334 ;	 function UART1_Cmd
+                                    335 ;	-----------------------------------------
+      0001B9                        336 _UART1_Cmd:
+                                    337 ;	lib/uart.c: 107: if (NewState != DISABLE)
+      0001B9 0D 03            [ 1]  338 	tnz	(0x03, sp)
+      0001BB 27 08            [ 1]  339 	jreq	00102$
+                                    340 ;	lib/uart.c: 110: UART1->CR1 &= (uint8_t)(~UART1_CR1_UARTD); 
+      0001BD AE 52 34         [ 2]  341 	ldw	x, #0x5234
+      0001C0 F6               [ 1]  342 	ld	a, (x)
+      0001C1 A4 DF            [ 1]  343 	and	a, #0xdf
+      0001C3 F7               [ 1]  344 	ld	(x), a
+      0001C4 81               [ 4]  345 	ret
+      0001C5                        346 00102$:
+                                    347 ;	lib/uart.c: 115: UART1->CR1 |= UART1_CR1_UARTD;  
+      0001C5 AE 52 34         [ 2]  348 	ldw	x, #0x5234
+      0001C8 F6               [ 1]  349 	ld	a, (x)
+      0001C9 AA 20            [ 1]  350 	or	a, #0x20
+      0001CB F7               [ 1]  351 	ld	(x), a
+      0001CC 81               [ 4]  352 	ret
+                                    353 ;	lib/uart.c: 119: void UART1_ITConfig(UART1_IT_TypeDef UART1_IT, FunctionalState NewState)
+                                    354 ;	-----------------------------------------
+                                    355 ;	 function UART1_ITConfig
+                                    356 ;	-----------------------------------------
+      0001CD                        357 _UART1_ITConfig:
+      0001CD 52 03            [ 2]  358 	sub	sp, #3
+                                    359 ;	lib/uart.c: 124: uartreg = (uint8_t)((uint16_t)UART1_IT >> 0x08);
+      0001CF 7B 06            [ 1]  360 	ld	a, (0x06, sp)
+      0001D1 97               [ 1]  361 	ld	xl, a
+      0001D2 4F               [ 1]  362 	clr	a
+                                    363 ;	lib/uart.c: 126: itpos = (uint8_t)((uint8_t)1 << (uint8_t)((uint8_t)UART1_IT & (uint8_t)0x0F));
+      0001D3 7B 07            [ 1]  364 	ld	a, (0x07, sp)
+      0001D5 A4 0F            [ 1]  365 	and	a, #0x0f
+      0001D7 95               [ 1]  366 	ld	xh, a
+      0001D8 A6 01            [ 1]  367 	ld	a, #0x01
+      0001DA 88               [ 1]  368 	push	a
+      0001DB 9E               [ 1]  369 	ld	a, xh
+      0001DC 4D               [ 1]  370 	tnz	a
+      0001DD 27 05            [ 1]  371 	jreq	00139$
+      0001DF                        372 00138$:
+      0001DF 08 01            [ 1]  373 	sll	(1, sp)
+      0001E1 4A               [ 1]  374 	dec	a
+      0001E2 26 FB            [ 1]  375 	jrne	00138$
+      0001E4                        376 00139$:
+      0001E4 84               [ 1]  377 	pop	a
+      0001E5 6B 01            [ 1]  378 	ld	(0x01, sp), a
+                                    379 ;	lib/uart.c: 131: if (uartreg == 0x01)
+      0001E7 9F               [ 1]  380 	ld	a, xl
+      0001E8 A1 01            [ 1]  381 	cp	a, #0x01
+      0001EA 26 06            [ 1]  382 	jrne	00141$
+      0001EC A6 01            [ 1]  383 	ld	a, #0x01
+      0001EE 6B 03            [ 1]  384 	ld	(0x03, sp), a
+      0001F0 20 02            [ 2]  385 	jra	00142$
+      0001F2                        386 00141$:
+      0001F2 0F 03            [ 1]  387 	clr	(0x03, sp)
+      0001F4                        388 00142$:
+                                    389 ;	lib/uart.c: 135: else if (uartreg == 0x02)
+      0001F4 9F               [ 1]  390 	ld	a, xl
+      0001F5 A1 02            [ 1]  391 	cp	a, #0x02
+      0001F7 26 03            [ 1]  392 	jrne	00144$
+      0001F9 A6 01            [ 1]  393 	ld	a, #0x01
+      0001FB 21                     394 	.byte 0x21
+      0001FC                        395 00144$:
+      0001FC 4F               [ 1]  396 	clr	a
+      0001FD                        397 00145$:
+                                    398 ;	lib/uart.c: 128: if (NewState != DISABLE)
+      0001FD 0D 08            [ 1]  399 	tnz	(0x08, sp)
+      0001FF 27 2B            [ 1]  400 	jreq	00114$
+                                    401 ;	lib/uart.c: 131: if (uartreg == 0x01)
+      000201 0D 03            [ 1]  402 	tnz	(0x03, sp)
+      000203 27 0C            [ 1]  403 	jreq	00105$
+                                    404 ;	lib/uart.c: 133: UART1->CR1 |= itpos;
+      000205 AE 52 34         [ 2]  405 	ldw	x, #0x5234
+      000208 F6               [ 1]  406 	ld	a, (x)
+      000209 1A 01            [ 1]  407 	or	a, (0x01, sp)
+      00020B AE 52 34         [ 2]  408 	ldw	x, #0x5234
+      00020E F7               [ 1]  409 	ld	(x), a
+      00020F 20 4B            [ 2]  410 	jra	00116$
+      000211                        411 00105$:
+                                    412 ;	lib/uart.c: 135: else if (uartreg == 0x02)
+      000211 4D               [ 1]  413 	tnz	a
+      000212 27 0C            [ 1]  414 	jreq	00102$
+                                    415 ;	lib/uart.c: 137: UART1->CR2 |= itpos;
+      000214 AE 52 35         [ 2]  416 	ldw	x, #0x5235
+      000217 F6               [ 1]  417 	ld	a, (x)
+      000218 1A 01            [ 1]  418 	or	a, (0x01, sp)
+      00021A AE 52 35         [ 2]  419 	ldw	x, #0x5235
+      00021D F7               [ 1]  420 	ld	(x), a
+      00021E 20 3C            [ 2]  421 	jra	00116$
+      000220                        422 00102$:
+                                    423 ;	lib/uart.c: 141: UART1->CR4 |= itpos;
+      000220 AE 52 37         [ 2]  424 	ldw	x, #0x5237
+      000223 F6               [ 1]  425 	ld	a, (x)
+      000224 1A 01            [ 1]  426 	or	a, (0x01, sp)
+      000226 AE 52 37         [ 2]  427 	ldw	x, #0x5237
+      000229 F7               [ 1]  428 	ld	(x), a
+      00022A 20 30            [ 2]  429 	jra	00116$
+      00022C                        430 00114$:
+                                    431 ;	lib/uart.c: 149: UART1->CR1 &= (uint8_t)(~itpos);
+      00022C 88               [ 1]  432 	push	a
+      00022D 7B 02            [ 1]  433 	ld	a, (0x02, sp)
+      00022F 43               [ 1]  434 	cpl	a
+      000230 6B 03            [ 1]  435 	ld	(0x03, sp), a
+      000232 84               [ 1]  436 	pop	a
+                                    437 ;	lib/uart.c: 147: if (uartreg == 0x01)
+      000233 0D 03            [ 1]  438 	tnz	(0x03, sp)
+      000235 27 0C            [ 1]  439 	jreq	00111$
+                                    440 ;	lib/uart.c: 149: UART1->CR1 &= (uint8_t)(~itpos);
+      000237 AE 52 34         [ 2]  441 	ldw	x, #0x5234
+      00023A F6               [ 1]  442 	ld	a, (x)
+      00023B 14 02            [ 1]  443 	and	a, (0x02, sp)
+      00023D AE 52 34         [ 2]  444 	ldw	x, #0x5234
+      000240 F7               [ 1]  445 	ld	(x), a
+      000241 20 19            [ 2]  446 	jra	00116$
+      000243                        447 00111$:
+                                    448 ;	lib/uart.c: 151: else if (uartreg == 0x02)
+      000243 4D               [ 1]  449 	tnz	a
+      000244 27 0C            [ 1]  450 	jreq	00108$
+                                    451 ;	lib/uart.c: 153: UART1->CR2 &= (uint8_t)(~itpos);
+      000246 AE 52 35         [ 2]  452 	ldw	x, #0x5235
+      000249 F6               [ 1]  453 	ld	a, (x)
+      00024A 14 02            [ 1]  454 	and	a, (0x02, sp)
+      00024C AE 52 35         [ 2]  455 	ldw	x, #0x5235
+      00024F F7               [ 1]  456 	ld	(x), a
+      000250 20 0A            [ 2]  457 	jra	00116$
+      000252                        458 00108$:
+                                    459 ;	lib/uart.c: 157: UART1->CR4 &= (uint8_t)(~itpos);
+      000252 AE 52 37         [ 2]  460 	ldw	x, #0x5237
+      000255 F6               [ 1]  461 	ld	a, (x)
+      000256 14 02            [ 1]  462 	and	a, (0x02, sp)
+      000258 AE 52 37         [ 2]  463 	ldw	x, #0x5237
+      00025B F7               [ 1]  464 	ld	(x), a
+      00025C                        465 00116$:
+      00025C 5B 03            [ 2]  466 	addw	sp, #3
+      00025E 81               [ 4]  467 	ret
+                                    468 ;	lib/uart.c: 163: uint8_t UART1_ReceiveData8(void)
+                                    469 ;	-----------------------------------------
+                                    470 ;	 function UART1_ReceiveData8
+                                    471 ;	-----------------------------------------
+      00025F                        472 _UART1_ReceiveData8:
+                                    473 ;	lib/uart.c: 165: return ((uint8_t)UART1->DR);
+      00025F AE 52 31         [ 2]  474 	ldw	x, #0x5231
+      000262 F6               [ 1]  475 	ld	a, (x)
+      000263 81               [ 4]  476 	ret
+                                    477 ;	lib/uart.c: 168: void UART1_SendData8(uint8_t Data)
+                                    478 ;	-----------------------------------------
+                                    479 ;	 function UART1_SendData8
+                                    480 ;	-----------------------------------------
+      000264                        481 _UART1_SendData8:
+                                    482 ;	lib/uart.c: 171: UART1->DR = Data;
+      000264 AE 52 31         [ 2]  483 	ldw	x, #0x5231
+      000267 7B 03            [ 1]  484 	ld	a, (0x03, sp)
+      000269 F7               [ 1]  485 	ld	(x), a
+      00026A 81               [ 4]  486 	ret
+                                    487 ;	lib/uart.c: 174: FlagStatus UART1_GetFlagStatus(UART1_Flag_TypeDef UART1_FLAG)
+                                    488 ;	-----------------------------------------
+                                    489 ;	 function UART1_GetFlagStatus
+                                    490 ;	-----------------------------------------
+      00026B                        491 _UART1_GetFlagStatus:
+      00026B 88               [ 1]  492 	push	a
+                                    493 ;	lib/uart.c: 180: if ((UART1->CR4 & (uint8_t)UART1_FLAG) != (uint8_t)0x00)
+      00026C 7B 05            [ 1]  494 	ld	a, (0x05, sp)
+      00026E 6B 01            [ 1]  495 	ld	(0x01, sp), a
+                                    496 ;	lib/uart.c: 178: if (UART1_FLAG == UART1_FLAG_LBDF)
+      000270 1E 04            [ 2]  497 	ldw	x, (0x04, sp)
+      000272 A3 02 10         [ 2]  498 	cpw	x, #0x0210
+      000275 26 10            [ 1]  499 	jrne	00114$
+                                    500 ;	lib/uart.c: 180: if ((UART1->CR4 & (uint8_t)UART1_FLAG) != (uint8_t)0x00)
+      000277 AE 52 37         [ 2]  501 	ldw	x, #0x5237
+      00027A F6               [ 1]  502 	ld	a, (x)
+      00027B 14 01            [ 1]  503 	and	a, (0x01, sp)
+      00027D 4D               [ 1]  504 	tnz	a
+      00027E 27 04            [ 1]  505 	jreq	00102$
+                                    506 ;	lib/uart.c: 183: status = SET;
+      000280 A6 01            [ 1]  507 	ld	a, #0x01
+      000282 20 27            [ 2]  508 	jra	00115$
+      000284                        509 00102$:
+                                    510 ;	lib/uart.c: 188: status = RESET;
+      000284 4F               [ 1]  511 	clr	a
+      000285 20 24            [ 2]  512 	jra	00115$
+      000287                        513 00114$:
+                                    514 ;	lib/uart.c: 191: else if (UART1_FLAG == UART1_FLAG_SBK)
+      000287 1E 04            [ 2]  515 	ldw	x, (0x04, sp)
+      000289 A3 01 01         [ 2]  516 	cpw	x, #0x0101
+      00028C 26 10            [ 1]  517 	jrne	00111$
+                                    518 ;	lib/uart.c: 193: if ((UART1->CR2 & (uint8_t)UART1_FLAG) != (uint8_t)0x00)
+      00028E AE 52 35         [ 2]  519 	ldw	x, #0x5235
+      000291 F6               [ 1]  520 	ld	a, (x)
+      000292 14 01            [ 1]  521 	and	a, (0x01, sp)
+      000294 4D               [ 1]  522 	tnz	a
+      000295 27 04            [ 1]  523 	jreq	00105$
+                                    524 ;	lib/uart.c: 196: status = SET;
+      000297 A6 01            [ 1]  525 	ld	a, #0x01
+      000299 20 10            [ 2]  526 	jra	00115$
+      00029B                        527 00105$:
+                                    528 ;	lib/uart.c: 201: status = RESET;
+      00029B 4F               [ 1]  529 	clr	a
+      00029C 20 0D            [ 2]  530 	jra	00115$
+      00029E                        531 00111$:
+                                    532 ;	lib/uart.c: 206: if ((UART1->SR & (uint8_t)UART1_FLAG) != (uint8_t)0x00)
+      00029E AE 52 30         [ 2]  533 	ldw	x, #0x5230
+      0002A1 F6               [ 1]  534 	ld	a, (x)
+      0002A2 14 01            [ 1]  535 	and	a, (0x01, sp)
+      0002A4 4D               [ 1]  536 	tnz	a
+      0002A5 27 03            [ 1]  537 	jreq	00108$
+                                    538 ;	lib/uart.c: 209: status = SET;
+      0002A7 A6 01            [ 1]  539 	ld	a, #0x01
+                                    540 ;	lib/uart.c: 214: status = RESET;
+      0002A9 21                     541 	.byte 0x21
+      0002AA                        542 00108$:
+      0002AA 4F               [ 1]  543 	clr	a
+      0002AB                        544 00115$:
+                                    545 ;	lib/uart.c: 218: return status;
+      0002AB 5B 01            [ 2]  546 	addw	sp, #1
+      0002AD 81               [ 4]  547 	ret
+                                    548 ;	lib/uart.c: 221: void UART1_ClearFlag(UART1_Flag_TypeDef UART1_FLAG)
+                                    549 ;	-----------------------------------------
+                                    550 ;	 function UART1_ClearFlag
+                                    551 ;	-----------------------------------------
+      0002AE                        552 _UART1_ClearFlag:
+                                    553 ;	lib/uart.c: 224: if (UART1_FLAG == UART1_FLAG_RXNE)
+      0002AE 1E 03            [ 2]  554 	ldw	x, (0x03, sp)
+      0002B0 A3 00 20         [ 2]  555 	cpw	x, #0x0020
+      0002B3 26 05            [ 1]  556 	jrne	00102$
+                                    557 ;	lib/uart.c: 226: UART1->SR = (uint8_t)~(UART1_SR_RXNE);
+      0002B5 35 DF 52 30      [ 1]  558 	mov	0x5230+0, #0xdf
+      0002B9 81               [ 4]  559 	ret
+      0002BA                        560 00102$:
+                                    561 ;	lib/uart.c: 231: UART1->CR4 &= (uint8_t)~(UART1_CR4_LBDF);
+      0002BA AE 52 37         [ 2]  562 	ldw	x, #0x5237
+      0002BD F6               [ 1]  563 	ld	a, (x)
+      0002BE A4 EF            [ 1]  564 	and	a, #0xef
+      0002C0 F7               [ 1]  565 	ld	(x), a
+      0002C1 81               [ 4]  566 	ret
+                                    567 ;	lib/uart.c: 235: ITStatus UART1_GetITStatus(UART1_IT_TypeDef UART1_IT)
+                                    568 ;	-----------------------------------------
+                                    569 ;	 function UART1_GetITStatus
+                                    570 ;	-----------------------------------------
+      0002C2                        571 _UART1_GetITStatus:
+      0002C2 52 05            [ 2]  572 	sub	sp, #5
+                                    573 ;	lib/uart.c: 244: itpos = (uint8_t)((uint8_t)1 << (uint8_t)((uint8_t)UART1_IT & (uint8_t)0x0F));
+      0002C4 7B 09            [ 1]  574 	ld	a, (0x09, sp)
+      0002C6 97               [ 1]  575 	ld	xl, a
+      0002C7 A4 0F            [ 1]  576 	and	a, #0x0f
+      0002C9 95               [ 1]  577 	ld	xh, a
+      0002CA A6 01            [ 1]  578 	ld	a, #0x01
+      0002CC 88               [ 1]  579 	push	a
+      0002CD 9E               [ 1]  580 	ld	a, xh
+      0002CE 4D               [ 1]  581 	tnz	a
+      0002CF 27 05            [ 1]  582 	jreq	00154$
+      0002D1                        583 00153$:
+      0002D1 08 01            [ 1]  584 	sll	(1, sp)
+      0002D3 4A               [ 1]  585 	dec	a
+      0002D4 26 FB            [ 1]  586 	jrne	00153$
+      0002D6                        587 00154$:
+      0002D6 84               [ 1]  588 	pop	a
+      0002D7 6B 02            [ 1]  589 	ld	(0x02, sp), a
+                                    590 ;	lib/uart.c: 246: itmask1 = (uint8_t)((uint8_t)UART1_IT >> (uint8_t)4);
+      0002D9 9F               [ 1]  591 	ld	a, xl
+      0002DA 4E               [ 1]  592 	swap	a
+      0002DB A4 0F            [ 1]  593 	and	a, #0x0f
+      0002DD 97               [ 1]  594 	ld	xl, a
+                                    595 ;	lib/uart.c: 248: itmask2 = (uint8_t)((uint8_t)1 << itmask1);
+      0002DE A6 01            [ 1]  596 	ld	a, #0x01
+      0002E0 88               [ 1]  597 	push	a
+      0002E1 9F               [ 1]  598 	ld	a, xl
+      0002E2 4D               [ 1]  599 	tnz	a
+      0002E3 27 05            [ 1]  600 	jreq	00156$
+      0002E5                        601 00155$:
+      0002E5 08 01            [ 1]  602 	sll	(1, sp)
+      0002E7 4A               [ 1]  603 	dec	a
+      0002E8 26 FB            [ 1]  604 	jrne	00155$
+      0002EA                        605 00156$:
+      0002EA 84               [ 1]  606 	pop	a
+      0002EB 6B 03            [ 1]  607 	ld	(0x03, sp), a
+                                    608 ;	lib/uart.c: 251: if (UART1_IT == UART1_IT_PE)
+      0002ED 1E 08            [ 2]  609 	ldw	x, (0x08, sp)
+      0002EF A3 01 00         [ 2]  610 	cpw	x, #0x0100
+      0002F2 26 1C            [ 1]  611 	jrne	00117$
+                                    612 ;	lib/uart.c: 254: enablestatus = (uint8_t)((uint8_t)UART1->CR1 & itmask2);
+      0002F4 AE 52 34         [ 2]  613 	ldw	x, #0x5234
+      0002F7 F6               [ 1]  614 	ld	a, (x)
+      0002F8 14 03            [ 1]  615 	and	a, (0x03, sp)
+      0002FA 6B 04            [ 1]  616 	ld	(0x04, sp), a
+                                    617 ;	lib/uart.c: 257: if (((UART1->SR & itpos) != (uint8_t)0x00) && enablestatus)
+      0002FC AE 52 30         [ 2]  618 	ldw	x, #0x5230
+      0002FF F6               [ 1]  619 	ld	a, (x)
+      000300 14 02            [ 1]  620 	and	a, (0x02, sp)
+      000302 4D               [ 1]  621 	tnz	a
+      000303 27 08            [ 1]  622 	jreq	00102$
+      000305 0D 04            [ 1]  623 	tnz	(0x04, sp)
+      000307 27 04            [ 1]  624 	jreq	00102$
+                                    625 ;	lib/uart.c: 260: pendingbitstatus = SET;
+      000309 A6 01            [ 1]  626 	ld	a, #0x01
+      00030B 20 3F            [ 2]  627 	jra	00118$
+      00030D                        628 00102$:
+                                    629 ;	lib/uart.c: 265: pendingbitstatus = RESET;
+      00030D 4F               [ 1]  630 	clr	a
+      00030E 20 3C            [ 2]  631 	jra	00118$
+      000310                        632 00117$:
+                                    633 ;	lib/uart.c: 269: else if (UART1_IT == UART1_IT_LBDF)
+      000310 1E 08            [ 2]  634 	ldw	x, (0x08, sp)
+      000312 A3 03 46         [ 2]  635 	cpw	x, #0x0346
+      000315 26 1C            [ 1]  636 	jrne	00114$
+                                    637 ;	lib/uart.c: 272: enablestatus = (uint8_t)((uint8_t)UART1->CR4 & itmask2);
+      000317 AE 52 37         [ 2]  638 	ldw	x, #0x5237
+      00031A F6               [ 1]  639 	ld	a, (x)
+      00031B 14 03            [ 1]  640 	and	a, (0x03, sp)
+      00031D 6B 01            [ 1]  641 	ld	(0x01, sp), a
+                                    642 ;	lib/uart.c: 274: if (((UART1->CR4 & itpos) != (uint8_t)0x00) && enablestatus)
+      00031F AE 52 37         [ 2]  643 	ldw	x, #0x5237
+      000322 F6               [ 1]  644 	ld	a, (x)
+      000323 14 02            [ 1]  645 	and	a, (0x02, sp)
+      000325 4D               [ 1]  646 	tnz	a
+      000326 27 08            [ 1]  647 	jreq	00106$
+      000328 0D 01            [ 1]  648 	tnz	(0x01, sp)
+      00032A 27 04            [ 1]  649 	jreq	00106$
+                                    650 ;	lib/uart.c: 277: pendingbitstatus = SET;
+      00032C A6 01            [ 1]  651 	ld	a, #0x01
+      00032E 20 1C            [ 2]  652 	jra	00118$
+      000330                        653 00106$:
+                                    654 ;	lib/uart.c: 282: pendingbitstatus = RESET;
+      000330 4F               [ 1]  655 	clr	a
+      000331 20 19            [ 2]  656 	jra	00118$
+      000333                        657 00114$:
+                                    658 ;	lib/uart.c: 288: enablestatus = (uint8_t)((uint8_t)UART1->CR2 & itmask2);
+      000333 AE 52 35         [ 2]  659 	ldw	x, #0x5235
+      000336 F6               [ 1]  660 	ld	a, (x)
+      000337 14 03            [ 1]  661 	and	a, (0x03, sp)
+      000339 6B 05            [ 1]  662 	ld	(0x05, sp), a
+                                    663 ;	lib/uart.c: 290: if (((UART1->SR & itpos) != (uint8_t)0x00) && enablestatus)
+      00033B AE 52 30         [ 2]  664 	ldw	x, #0x5230
+      00033E F6               [ 1]  665 	ld	a, (x)
+      00033F 14 02            [ 1]  666 	and	a, (0x02, sp)
+      000341 4D               [ 1]  667 	tnz	a
+      000342 27 07            [ 1]  668 	jreq	00110$
+      000344 0D 05            [ 1]  669 	tnz	(0x05, sp)
+      000346 27 03            [ 1]  670 	jreq	00110$
+                                    671 ;	lib/uart.c: 293: pendingbitstatus = SET;
+      000348 A6 01            [ 1]  672 	ld	a, #0x01
+                                    673 ;	lib/uart.c: 298: pendingbitstatus = RESET;
+      00034A 21                     674 	.byte 0x21
+      00034B                        675 00110$:
+      00034B 4F               [ 1]  676 	clr	a
+      00034C                        677 00118$:
+                                    678 ;	lib/uart.c: 303: return  pendingbitstatus;
+      00034C 5B 05            [ 2]  679 	addw	sp, #5
+      00034E 81               [ 4]  680 	ret
+                                    681 ;	lib/uart.c: 306: void UART1_ClearITPendingBit(UART1_IT_TypeDef UART1_IT)
+                                    682 ;	-----------------------------------------
+                                    683 ;	 function UART1_ClearITPendingBit
+                                    684 ;	-----------------------------------------
+      00034F                        685 _UART1_ClearITPendingBit:
+                                    686 ;	lib/uart.c: 309: if (UART1_IT == UART1_IT_RXNE)
+      00034F 1E 03            [ 2]  687 	ldw	x, (0x03, sp)
+      000351 A3 02 55         [ 2]  688 	cpw	x, #0x0255
+      000354 26 05            [ 1]  689 	jrne	00102$
+                                    690 ;	lib/uart.c: 311: UART1->SR = (uint8_t)~(UART1_SR_RXNE);
+      000356 35 DF 52 30      [ 1]  691 	mov	0x5230+0, #0xdf
+      00035A 81               [ 4]  692 	ret
+      00035B                        693 00102$:
+                                    694 ;	lib/uart.c: 316: UART1->CR4 &= (uint8_t)~(UART1_CR4_LBDF);
+      00035B AE 52 37         [ 2]  695 	ldw	x, #0x5237
+      00035E F6               [ 1]  696 	ld	a, (x)
+      00035F A4 EF            [ 1]  697 	and	a, #0xef
+      000361 F7               [ 1]  698 	ld	(x), a
+      000362 81               [ 4]  699 	ret
+                                    700 	.area CODE
+                                    701 	.area INITIALIZER
+                                    702 	.area CABS (ABS)

@@ -16,7 +16,7 @@ Symbol Table
     _UART1_ITConfig                                                ****** GX
     _UART1_Init                                                    ****** GX
     _UART1_SendData8                                               ****** GX
-  7 ___str_0                                                       000131 R
+  7 ___str_0                                                       000130 R
   7 _debugInfo                                                     000093 GR
   7 _debug_Init                                                    000000 GR
   7 _info                                                          00008B GR
@@ -34,7 +34,7 @@ Area Table
    4 HOME                                       size      0   flags    0
    5 GSINIT                                     size      0   flags    0
    6 GSFINAL                                    size      0   flags    0
-   7 CODE                                       size    134   flags    0
+   7 CODE                                       size    133   flags    0
    8 INITIALIZER                                size      0   flags    0
    9 CABS                                       size      0   flags    8
 

@@ -7,7 +7,7 @@
 // Define pin connect touch key
 #define PORT_SET_KEY 			GPIOC
 
-#define PIN_SET_KEY 			GPIO_PIN_1
+#define PIN_SET_KEY 			GPIO_PIN_3
 
 #define SET_In()			    GPIO_ReadInputPin(PORT_SET_KEY, PIN_SET_KEY)
 

@@ -1,6 +1,6 @@
 ;--------------------------------------------------------
 ; File Created by SDCC : free open source ANSI-C Compiler
-; Version 3.6.0 #9615 (Mac OS X x86_64)
+; Version 3.6.0 #9615 (MINGW64)
 ;--------------------------------------------------------
 	.module uart
 	.optsdcc -mstm8
@@ -132,59 +132,58 @@ _UART1_Init:
 	ld	(x), a
 ;	lib/uart.c: 55: BaudRate_Mantissa    = ((uint32_t)CLK_GetClockFreq() / (BaudRate << 4));
 	call	_CLK_GetClockFreq
-	ldw	(0x24, sp), x
+	ldw	(0x13, sp), x
 	ldw	x, (0x28, sp)
-	ldw	(0x1e, sp), x
+	ldw	(0x22, sp), x
 	ldw	x, (0x2a, sp)
 	ld	a, #0x04
 00124$:
 	sllw	x
-	rlc	(0x1f, sp)
-	rlc	(0x1e, sp)
+	rlc	(0x23, sp)
+	rlc	(0x22, sp)
 	dec	a
 	jrne	00124$
-	ldw	(0x20, sp), x
-	ldw	x, (0x20, sp)
+	ldw	(0x24, sp), x
+	ldw	x, (0x24, sp)
 	pushw	x
-	ldw	x, (0x20, sp)
+	ldw	x, (0x24, sp)
 	pushw	x
-	ldw	x, (0x28, sp)
-	pushw	x
-	pushw	y
-	call	__divulong
-	addw	sp, #8
-	ldw	(0x03, sp), x
-	ldw	(0x01, sp), y
-;	lib/uart.c: 56: BaudRate_Mantissa100 = (((uint32_t)CLK_GetClockFreq() * 100) / (BaudRate << 4));
-	call	_CLK_GetClockFreq
-	exgw	x, y
-	pushw	y
-	pushw	x
-	push	#0x64
-	clrw	x
-	pushw	x
-	push	#0x00
-	call	__mullong
-	addw	sp, #8
-	ldw	(0x1c, sp), x
-	ldw	x, (0x20, sp)
-	pushw	x
-	ldw	x, (0x20, sp)
-	pushw	x
-	ldw	x, (0x20, sp)
+	ldw	x, (0x17, sp)
 	pushw	x
 	pushw	y
 	call	__divulong
 	addw	sp, #8
 	ldw	(0x07, sp), x
 	ldw	(0x05, sp), y
+;	lib/uart.c: 56: BaudRate_Mantissa100 = (((uint32_t)CLK_GetClockFreq() * 100) / (BaudRate << 4));
+	call	_CLK_GetClockFreq
+	pushw	x
+	pushw	y
+	push	#0x64
+	clrw	x
+	pushw	x
+	push	#0x00
+	call	__mullong
+	addw	sp, #8
+	ldw	(0x20, sp), x
+	ldw	x, (0x24, sp)
+	pushw	x
+	ldw	x, (0x24, sp)
+	pushw	x
+	ldw	x, (0x24, sp)
+	pushw	x
+	pushw	y
+	call	__divulong
+	addw	sp, #8
+	ldw	(0x03, sp), x
+	ldw	(0x01, sp), y
 ;	lib/uart.c: 58: UART1->BRR2 |= (uint8_t)((uint8_t)(((BaudRate_Mantissa100 - (BaudRate_Mantissa * 100)) << 4) / 100) & (uint8_t)0x0F); 
 	ldw	x, #0x5233
 	ld	a, (x)
-	ld	(0x19, sp), a
-	ldw	x, (0x03, sp)
+	ld	(0x1b, sp), a
+	ldw	x, (0x07, sp)
 	pushw	x
-	ldw	x, (0x03, sp)
+	ldw	x, (0x07, sp)
 	pushw	x
 	push	#0x64
 	clrw	x
@@ -192,19 +191,19 @@ _UART1_Init:
 	push	#0x00
 	call	__mullong
 	addw	sp, #8
-	ldw	(0x17, sp), x
-	ldw	(0x15, sp), y
-	ldw	x, (0x07, sp)
-	subw	x, (0x17, sp)
-	ldw	(0x13, sp), x
-	ld	a, (0x06, sp)
-	sbc	a, (0x16, sp)
-	ld	(0x12, sp), a
-	ld	a, (0x05, sp)
-	sbc	a, (0x15, sp)
-	ld	(0x11, sp), a
-	ldw	x, (0x13, sp)
-	ldw	y, (0x11, sp)
+	ldw	(0x0f, sp), x
+	ldw	(0x0d, sp), y
+	ldw	x, (0x03, sp)
+	subw	x, (0x0f, sp)
+	ldw	(0x0b, sp), x
+	ld	a, (0x02, sp)
+	sbc	a, (0x0e, sp)
+	ld	(0x0a, sp), a
+	ld	a, (0x01, sp)
+	sbc	a, (0x0d, sp)
+	ld	(0x09, sp), a
+	ldw	x, (0x0b, sp)
+	ldw	y, (0x09, sp)
 	ld	a, #0x04
 00126$:
 	sllw	x
@@ -221,15 +220,15 @@ _UART1_Init:
 	addw	sp, #8
 	ld	a, xl
 	and	a, #0x0f
-	or	a, (0x19, sp)
+	or	a, (0x1b, sp)
 	ldw	x, #0x5233
 	ld	(x), a
 ;	lib/uart.c: 60: UART1->BRR2 |= (uint8_t)((BaudRate_Mantissa >> 4) & (uint8_t)0xF0); 
 	ldw	x, #0x5233
 	ld	a, (x)
-	ld	(0x10, sp), a
-	ldw	x, (0x03, sp)
-	ldw	y, (0x01, sp)
+	ld	(0x1c, sp), a
+	ldw	x, (0x07, sp)
+	ldw	y, (0x05, sp)
 	srlw	y
 	rrcw	x
 	srlw	y
@@ -242,17 +241,17 @@ _UART1_Init:
 	and	a, #0xf0
 	push	a
 	clrw	x
-	clr	(0x0d, sp)
+	clr	(0x17, sp)
 	pop	a
-	or	a, (0x10, sp)
+	or	a, (0x1c, sp)
 	ldw	x, #0x5233
 	ld	(x), a
 ;	lib/uart.c: 62: UART1->BRR1 |= (uint8_t)BaudRate_Mantissa;           
 	ldw	x, #0x5232
 	ld	a, (x)
-	ld	(0x0b, sp), a
-	ld	a, (0x04, sp)
-	or	a, (0x0b, sp)
+	ld	(0x1a, sp), a
+	ld	a, (0x08, sp)
+	or	a, (0x1a, sp)
 	ldw	x, #0x5232
 	ld	(x), a
 ;	lib/uart.c: 65: UART1->CR2 &= (uint8_t)~(UART1_CR2_TEN | UART1_CR2_REN); 
@@ -268,10 +267,10 @@ _UART1_Init:
 ;	lib/uart.c: 69: UART1->CR3 |= (uint8_t)((uint8_t)SyncMode & (uint8_t)(UART1_CR3_CPOL | 
 	ldw	x, #0x5236
 	ld	a, (x)
-	ld	(0x0a, sp), a
+	ld	(0x15, sp), a
 	ld	a, (0x2f, sp)
 	and	a, #0x07
-	or	a, (0x0a, sp)
+	or	a, (0x15, sp)
 	ldw	x, #0x5236
 	ld	(x), a
 ;	lib/uart.c: 72: if ((uint8_t)(Mode & UART1_MODE_TX_ENABLE))
@@ -321,10 +320,10 @@ _UART1_Init:
 ;	lib/uart.c: 101: UART1->CR3 |= (uint8_t)((uint8_t)SyncMode & UART1_CR3_CKEN);
 	ldw	x, #0x5236
 	ld	a, (x)
-	ld	(0x09, sp), a
+	ld	(0x1d, sp), a
 	ld	a, (0x2f, sp)
 	and	a, #0x08
-	or	a, (0x09, sp)
+	or	a, (0x1d, sp)
 	ldw	x, #0x5236
 	ld	(x), a
 00110$:
@@ -587,7 +586,7 @@ _UART1_GetITStatus:
 	jrne	00153$
 00154$:
 	pop	a
-	ld	(0x03, sp), a
+	ld	(0x02, sp), a
 ;	lib/uart.c: 246: itmask1 = (uint8_t)((uint8_t)UART1_IT >> (uint8_t)4);
 	ld	a, xl
 	swap	a
@@ -605,7 +604,7 @@ _UART1_GetITStatus:
 	jrne	00155$
 00156$:
 	pop	a
-	ld	(0x02, sp), a
+	ld	(0x03, sp), a
 ;	lib/uart.c: 251: if (UART1_IT == UART1_IT_PE)
 	ldw	x, (0x08, sp)
 	cpw	x, #0x0100
@@ -613,12 +612,12 @@ _UART1_GetITStatus:
 ;	lib/uart.c: 254: enablestatus = (uint8_t)((uint8_t)UART1->CR1 & itmask2);
 	ldw	x, #0x5234
 	ld	a, (x)
-	and	a, (0x02, sp)
+	and	a, (0x03, sp)
 	ld	(0x04, sp), a
 ;	lib/uart.c: 257: if (((UART1->SR & itpos) != (uint8_t)0x00) && enablestatus)
 	ldw	x, #0x5230
 	ld	a, (x)
-	and	a, (0x03, sp)
+	and	a, (0x02, sp)
 	tnz	a
 	jreq	00102$
 	tnz	(0x04, sp)
@@ -638,12 +637,12 @@ _UART1_GetITStatus:
 ;	lib/uart.c: 272: enablestatus = (uint8_t)((uint8_t)UART1->CR4 & itmask2);
 	ldw	x, #0x5237
 	ld	a, (x)
-	and	a, (0x02, sp)
+	and	a, (0x03, sp)
 	ld	(0x01, sp), a
 ;	lib/uart.c: 274: if (((UART1->CR4 & itpos) != (uint8_t)0x00) && enablestatus)
 	ldw	x, #0x5237
 	ld	a, (x)
-	and	a, (0x03, sp)
+	and	a, (0x02, sp)
 	tnz	a
 	jreq	00106$
 	tnz	(0x01, sp)
@@ -659,12 +658,12 @@ _UART1_GetITStatus:
 ;	lib/uart.c: 288: enablestatus = (uint8_t)((uint8_t)UART1->CR2 & itmask2);
 	ldw	x, #0x5235
 	ld	a, (x)
-	and	a, (0x02, sp)
+	and	a, (0x03, sp)
 	ld	(0x05, sp), a
 ;	lib/uart.c: 290: if (((UART1->SR & itpos) != (uint8_t)0x00) && enablestatus)
 	ldw	x, #0x5230
 	ld	a, (x)
-	and	a, (0x03, sp)
+	and	a, (0x02, sp)
 	tnz	a
 	jreq	00110$
 	tnz	(0x05, sp)
