@@ -1,0 +1,319 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 3.6.0 #9615 (Mac OS X x86_64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module rom
+                                      6 	.optsdcc -mstm8
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _debugInfo
+                                     12 	.globl _sysCfg
+                                     13 	.globl _sys_WriteCfg
+                                     14 	.globl _sys_readCfg
+                                     15 ;--------------------------------------------------------
+                                     16 ; ram data
+                                     17 ;--------------------------------------------------------
+                                     18 	.area DATA
+      000000                         19 _sysCfg::
+      000000                         20 	.ds 24
+                                     21 ;--------------------------------------------------------
+                                     22 ; ram data
+                                     23 ;--------------------------------------------------------
+                                     24 	.area INITIALIZED
+                                     25 ;--------------------------------------------------------
+                                     26 ; absolute external ram data
+                                     27 ;--------------------------------------------------------
+                                     28 	.area DABS (ABS)
+                                     29 ;--------------------------------------------------------
+                                     30 ; global & static initialisations
+                                     31 ;--------------------------------------------------------
+                                     32 	.area HOME
+                                     33 	.area GSINIT
+                                     34 	.area GSFINAL
+                                     35 	.area GSINIT
+                                     36 ;--------------------------------------------------------
+                                     37 ; Home
+                                     38 ;--------------------------------------------------------
+                                     39 	.area HOME
+                                     40 	.area HOME
+                                     41 ;--------------------------------------------------------
+                                     42 ; code
+                                     43 ;--------------------------------------------------------
+                                     44 	.area CODE
+                                     45 ;	user/rom.c: 5: void sys_WriteCfg(void)
+                                     46 ;	-----------------------------------------
+                                     47 ;	 function sys_WriteCfg
+                                     48 ;	-----------------------------------------
+      000000                         49 _sys_WriteCfg:
+      000000 52 09            [ 2]   50 	sub	sp, #9
+                                     51 ;	user/rom.c: 9: pSys = (uint8_t*)&sysCfg;
+      000002 90 AEr00r00      [ 2]   52 	ldw	y, #_sysCfg+0
+                                     53 ;	user/rom.c: 11: FLASH->DUKR = FLASH_RASS_KEY2; /* Warning: keys are reversed on data memory !!! */
+      000006 35 AE 50 64      [ 1]   54 	mov	0x5064+0, #0xae
+                                     55 ;	user/rom.c: 12: FLASH->DUKR = FLASH_RASS_KEY1;
+      00000A 35 56 50 64      [ 1]   56 	mov	0x5064+0, #0x56
+                                     57 ;	user/rom.c: 13: while((FLASH->IAPSR & (uint8_t)FLASH_FLAG_DUL) == RESET);
+      00000E                         58 00101$:
+      00000E AE 50 5F         [ 2]   59 	ldw	x, #0x505f
+      000011 F6               [ 1]   60 	ld	a, (x)
+      000012 A5 08            [ 1]   61 	bcp	a, #0x08
+      000014 27 F8            [ 1]   62 	jreq	00101$
+                                     63 ;	user/rom.c: 14: for(add = 0; add < CFG_LEN; add++)
+      000016 0F 01            [ 1]   64 	clr	(0x01, sp)
+      000018                         65 00105$:
+                                     66 ;	user/rom.c: 16: *(PointerAttr uint8_t*) (MemoryAddressCast)(CFG_ADDRESS_START+add) = *pSys;
+      000018 5F               [ 1]   67 	clrw	x
+      000019 7B 01            [ 1]   68 	ld	a, (0x01, sp)
+      00001B 97               [ 1]   69 	ld	xl, a
+      00001C 4F               [ 1]   70 	clr	a
+      00001D 0F 06            [ 1]   71 	clr	(0x06, sp)
+      00001F 1C 40 00         [ 2]   72 	addw	x, #0x4000
+      000022 A9 00            [ 1]   73 	adc	a, #0x00
+      000024 6B 03            [ 1]   74 	ld	(0x03, sp), a
+      000026 7B 06            [ 1]   75 	ld	a, (0x06, sp)
+      000028 A9 00            [ 1]   76 	adc	a, #0x00
+      00002A 90 F6            [ 1]   77 	ld	a, (y)
+      00002C F7               [ 1]   78 	ld	(x), a
+                                     79 ;	user/rom.c: 17: pSys++;
+      00002D 90 5C            [ 2]   80 	incw	y
+                                     81 ;	user/rom.c: 14: for(add = 0; add < CFG_LEN; add++)
+      00002F 0C 01            [ 1]   82 	inc	(0x01, sp)
+      000031 7B 01            [ 1]   83 	ld	a, (0x01, sp)
+      000033 A1 18            [ 1]   84 	cp	a, #0x18
+      000035 25 E1            [ 1]   85 	jrc	00105$
+                                     86 ;	user/rom.c: 20: FLASH->IAPSR &= (uint8_t)FLASH_MEMTYPE_DATA;
+      000037 AE 50 5F         [ 2]   87 	ldw	x, #0x505f
+      00003A F6               [ 1]   88 	ld	a, (x)
+      00003B A4 F7            [ 1]   89 	and	a, #0xf7
+      00003D F7               [ 1]   90 	ld	(x), a
+      00003E 5B 09            [ 2]   91 	addw	sp, #9
+      000040 81               [ 4]   92 	ret
+                                     93 ;	user/rom.c: 23: void sys_readCfg(void)
+                                     94 ;	-----------------------------------------
+                                     95 ;	 function sys_readCfg
+                                     96 ;	-----------------------------------------
+      000041                         97 _sys_readCfg:
+      000041 52 2B            [ 2]   98 	sub	sp, #43
+                                     99 ;	user/rom.c: 28: pSys = (uint8_t*)&sysCfg;
+      000043 AEr00r00         [ 2]  100 	ldw	x, #_sysCfg+0
+      000046 1F 2A            [ 2]  101 	ldw	(0x2a, sp), x
+      000048 16 2A            [ 2]  102 	ldw	y, (0x2a, sp)
+                                    103 ;	user/rom.c: 35: (void) FLASH->IAPSR; /* Reading of this register causes the clearing of status flags */
+      00004A AE 50 5F         [ 2]  104 	ldw	x, #0x505f
+      00004D F6               [ 1]  105 	ld	a, (x)
+                                    106 ;	user/rom.c: 37: FLASH->DUKR = FLASH_RASS_KEY2; /* Warning: keys are reversed on data memory !!! */
+      00004E 35 AE 50 64      [ 1]  107 	mov	0x5064+0, #0xae
+                                    108 ;	user/rom.c: 38: FLASH->DUKR = FLASH_RASS_KEY1;
+      000052 35 56 50 64      [ 1]  109 	mov	0x5064+0, #0x56
+                                    110 ;	user/rom.c: 39: while((FLASH->IAPSR & (uint8_t)FLASH_FLAG_DUL) == RESET);
+      000056                        111 00101$:
+      000056 AE 50 5F         [ 2]  112 	ldw	x, #0x505f
+      000059 F6               [ 1]  113 	ld	a, (x)
+      00005A A5 08            [ 1]  114 	bcp	a, #0x08
+      00005C 27 F8            [ 1]  115 	jreq	00101$
+                                    116 ;	user/rom.c: 40: for(add = 0; add < CFG_LEN; add++)
+      00005E 0F 05            [ 1]  117 	clr	(0x05, sp)
+      000060                        118 00107$:
+                                    119 ;	user/rom.c: 42: *pSys = (*(PointerAttr uint8_t *) (MemoryAddressCast)(CFG_ADDRESS_START+add));
+      000060 5F               [ 1]  120 	clrw	x
+      000061 7B 05            [ 1]  121 	ld	a, (0x05, sp)
+      000063 97               [ 1]  122 	ld	xl, a
+      000064 4F               [ 1]  123 	clr	a
+      000065 0F 26            [ 1]  124 	clr	(0x26, sp)
+      000067 1C 40 00         [ 2]  125 	addw	x, #0x4000
+      00006A A9 00            [ 1]  126 	adc	a, #0x00
+      00006C 6B 23            [ 1]  127 	ld	(0x23, sp), a
+      00006E 7B 26            [ 1]  128 	ld	a, (0x26, sp)
+      000070 A9 00            [ 1]  129 	adc	a, #0x00
+      000072 F6               [ 1]  130 	ld	a, (x)
+      000073 90 F7            [ 1]  131 	ld	(y), a
+                                    132 ;	user/rom.c: 43: pSys++;
+      000075 90 5C            [ 2]  133 	incw	y
+                                    134 ;	user/rom.c: 40: for(add = 0; add < CFG_LEN; add++)
+      000077 0C 05            [ 1]  135 	inc	(0x05, sp)
+      000079 7B 05            [ 1]  136 	ld	a, (0x05, sp)
+      00007B A1 18            [ 1]  137 	cp	a, #0x18
+      00007D 25 E1            [ 1]  138 	jrc	00107$
+                                    139 ;	user/rom.c: 45: if(sysCfg.holder != CFG_HOLDER)
+      00007F 1E 2A            [ 2]  140 	ldw	x, (0x2a, sp)
+      000081 FE               [ 2]  141 	ldw	x, (x)
+                                    142 ;	user/rom.c: 48: sysCfg.id[0] = DEFAULT_ID_1;
+      000082 16 2A            [ 2]  143 	ldw	y, (0x2a, sp)
+      000084 72 A9 00 04      [ 2]  144 	addw	y, #0x0004
+      000088 17 20            [ 2]  145 	ldw	(0x20, sp), y
+                                    146 ;	user/rom.c: 49: sysCfg.id[1] = DEFAULT_ID_2;
+      00008A 16 2A            [ 2]  147 	ldw	y, (0x2a, sp)
+      00008C 72 A9 00 08      [ 2]  148 	addw	y, #0x0008
+      000090 17 1E            [ 2]  149 	ldw	(0x1e, sp), y
+                                    150 ;	user/rom.c: 45: if(sysCfg.holder != CFG_HOLDER)
+      000092 A3 00 44         [ 2]  151 	cpw	x, #0x0044
+      000095 27 24            [ 1]  152 	jreq	00106$
+                                    153 ;	user/rom.c: 47: sysCfg.holder = CFG_HOLDER;
+      000097 1E 2A            [ 2]  154 	ldw	x, (0x2a, sp)
+      000099 90 AE 00 44      [ 2]  155 	ldw	y, #0x0044
+      00009D FF               [ 2]  156 	ldw	(x), y
+                                    157 ;	user/rom.c: 48: sysCfg.id[0] = DEFAULT_ID_1;
+      00009E 1E 20            [ 2]  158 	ldw	x, (0x20, sp)
+      0000A0 90 AE 92 C6      [ 2]  159 	ldw	y, #0x92c6
+      0000A4 EF 02            [ 2]  160 	ldw	(0x2, x), y
+      0000A6 90 AE 01 43      [ 2]  161 	ldw	y, #0x0143
+      0000AA FF               [ 2]  162 	ldw	(x), y
+                                    163 ;	user/rom.c: 49: sysCfg.id[1] = DEFAULT_ID_2;
+      0000AB 1E 1E            [ 2]  164 	ldw	x, (0x1e, sp)
+      0000AD 90 AE B7 C6      [ 2]  165 	ldw	y, #0xb7c6
+      0000B1 EF 02            [ 2]  166 	ldw	(0x2, x), y
+      0000B3 90 AE 01 60      [ 2]  167 	ldw	y, #0x0160
+      0000B7 FF               [ 2]  168 	ldw	(x), y
+                                    169 ;	user/rom.c: 50: sys_WriteCfg();
+      0000B8 CDr00r00         [ 4]  170 	call	_sys_WriteCfg
+      0000BB                        171 00106$:
+                                    172 ;	user/rom.c: 53: FLASH->IAPSR &= (uint8_t)FLASH_MEMTYPE_DATA;
+      0000BB AE 50 5F         [ 2]  173 	ldw	x, #0x505f
+      0000BE F6               [ 1]  174 	ld	a, (x)
+      0000BF A4 F7            [ 1]  175 	and	a, #0xf7
+      0000C1 F7               [ 1]  176 	ld	(x), a
+                                    177 ;	user/rom.c: 55: cm[0] = (sysCfg.id[0]&0xFF000000)>>24;
+      0000C2 96               [ 1]  178 	ldw	x, sp
+      0000C3 5C               [ 2]  179 	incw	x
+      0000C4 1F 1C            [ 2]  180 	ldw	(0x1c, sp), x
+      0000C6 1E 20            [ 2]  181 	ldw	x, (0x20, sp)
+      0000C8 89               [ 2]  182 	pushw	x
+      0000C9 EE 02            [ 2]  183 	ldw	x, (0x2, x)
+      0000CB 51               [ 1]  184 	exgw	x, y
+      0000CC 85               [ 2]  185 	popw	x
+      0000CD FE               [ 2]  186 	ldw	x, (x)
+      0000CE 4F               [ 1]  187 	clr	a
+      0000CF 90 5F            [ 1]  188 	clrw	y
+      0000D1 9E               [ 1]  189 	ld	a, xh
+      0000D2 5F               [ 1]  190 	clrw	x
+      0000D3 0F 18            [ 1]  191 	clr	(0x18, sp)
+      0000D5 1E 1C            [ 2]  192 	ldw	x, (0x1c, sp)
+      0000D7 F7               [ 1]  193 	ld	(x), a
+                                    194 ;	user/rom.c: 56: cm[1] = (sysCfg.id[0]&0x00FF0000)>>16;
+      0000D8 1E 1C            [ 2]  195 	ldw	x, (0x1c, sp)
+      0000DA 5C               [ 2]  196 	incw	x
+      0000DB 1F 16            [ 2]  197 	ldw	(0x16, sp), x
+      0000DD 1E 20            [ 2]  198 	ldw	x, (0x20, sp)
+      0000DF 89               [ 2]  199 	pushw	x
+      0000E0 EE 02            [ 2]  200 	ldw	x, (0x2, x)
+      0000E2 51               [ 1]  201 	exgw	x, y
+      0000E3 85               [ 2]  202 	popw	x
+      0000E4 FE               [ 2]  203 	ldw	x, (x)
+      0000E5 90 5F            [ 1]  204 	clrw	y
+      0000E7 4F               [ 1]  205 	clr	a
+      0000E8 90 5F            [ 1]  206 	clrw	y
+      0000EA 9F               [ 1]  207 	ld	a, xl
+      0000EB 1E 16            [ 2]  208 	ldw	x, (0x16, sp)
+      0000ED F7               [ 1]  209 	ld	(x), a
+                                    210 ;	user/rom.c: 57: cm[2] = (sysCfg.id[0]&0x0000FF00)>>8;
+      0000EE 1E 1C            [ 2]  211 	ldw	x, (0x1c, sp)
+      0000F0 5C               [ 2]  212 	incw	x
+      0000F1 5C               [ 2]  213 	incw	x
+      0000F2 1F 14            [ 2]  214 	ldw	(0x14, sp), x
+      0000F4 1E 20            [ 2]  215 	ldw	x, (0x20, sp)
+      0000F6 89               [ 2]  216 	pushw	x
+      0000F7 EE 02            [ 2]  217 	ldw	x, (0x2, x)
+      0000F9 51               [ 1]  218 	exgw	x, y
+      0000FA 85               [ 2]  219 	popw	x
+      0000FB FE               [ 2]  220 	ldw	x, (x)
+      0000FC 0F 13            [ 1]  221 	clr	(0x13, sp)
+      0000FE 5F               [ 1]  222 	clrw	x
+      0000FF 4F               [ 1]  223 	clr	a
+      000100 90 9E            [ 1]  224 	ld	a, yh
+      000102 1E 14            [ 2]  225 	ldw	x, (0x14, sp)
+      000104 F7               [ 1]  226 	ld	(x), a
+                                    227 ;	user/rom.c: 58: cm[3] = (sysCfg.id[0]&0x000000FF)>>0;
+      000105 1E 1C            [ 2]  228 	ldw	x, (0x1c, sp)
+      000107 1C 00 03         [ 2]  229 	addw	x, #0x0003
+      00010A 1F 0E            [ 2]  230 	ldw	(0x0e, sp), x
+      00010C 1E 20            [ 2]  231 	ldw	x, (0x20, sp)
+      00010E 89               [ 2]  232 	pushw	x
+      00010F EE 02            [ 2]  233 	ldw	x, (0x2, x)
+      000111 51               [ 1]  234 	exgw	x, y
+      000112 85               [ 2]  235 	popw	x
+      000113 FE               [ 2]  236 	ldw	x, (x)
+      000114 4F               [ 1]  237 	clr	a
+      000115 5F               [ 1]  238 	clrw	x
+      000116 90 9F            [ 1]  239 	ld	a, yl
+      000118 1E 0E            [ 2]  240 	ldw	x, (0x0e, sp)
+      00011A F7               [ 1]  241 	ld	(x), a
+                                    242 ;	user/rom.c: 59: debugInfo("Key 1: ", cm, 4);
+      00011B 16 1C            [ 2]  243 	ldw	y, (0x1c, sp)
+      00011D AEr01r7D         [ 2]  244 	ldw	x, #___str_0+0
+      000120 4B 04            [ 1]  245 	push	#0x04
+      000122 90 89            [ 2]  246 	pushw	y
+      000124 89               [ 2]  247 	pushw	x
+      000125 CDr00r00         [ 4]  248 	call	_debugInfo
+      000128 5B 05            [ 2]  249 	addw	sp, #5
+                                    250 ;	user/rom.c: 60: cm[0] = (sysCfg.id[1]&0xFF000000)>>24;
+      00012A 1E 1E            [ 2]  251 	ldw	x, (0x1e, sp)
+      00012C 89               [ 2]  252 	pushw	x
+      00012D EE 02            [ 2]  253 	ldw	x, (0x2, x)
+      00012F 51               [ 1]  254 	exgw	x, y
+      000130 85               [ 2]  255 	popw	x
+      000131 FE               [ 2]  256 	ldw	x, (x)
+      000132 4F               [ 1]  257 	clr	a
+      000133 90 5F            [ 1]  258 	clrw	y
+      000135 9E               [ 1]  259 	ld	a, xh
+      000136 5F               [ 1]  260 	clrw	x
+      000137 0F 0A            [ 1]  261 	clr	(0x0a, sp)
+      000139 1E 1C            [ 2]  262 	ldw	x, (0x1c, sp)
+      00013B F7               [ 1]  263 	ld	(x), a
+                                    264 ;	user/rom.c: 61: cm[1] = (sysCfg.id[1]&0x00FF0000)>>16;
+      00013C 1E 1E            [ 2]  265 	ldw	x, (0x1e, sp)
+      00013E 89               [ 2]  266 	pushw	x
+      00013F EE 02            [ 2]  267 	ldw	x, (0x2, x)
+      000141 51               [ 1]  268 	exgw	x, y
+      000142 85               [ 2]  269 	popw	x
+      000143 FE               [ 2]  270 	ldw	x, (x)
+      000144 90 5F            [ 1]  271 	clrw	y
+      000146 4F               [ 1]  272 	clr	a
+      000147 90 5F            [ 1]  273 	clrw	y
+      000149 9F               [ 1]  274 	ld	a, xl
+      00014A 1E 16            [ 2]  275 	ldw	x, (0x16, sp)
+      00014C F7               [ 1]  276 	ld	(x), a
+                                    277 ;	user/rom.c: 62: cm[2] = (sysCfg.id[1]&0x0000FF00)>>8;
+      00014D 1E 1E            [ 2]  278 	ldw	x, (0x1e, sp)
+      00014F 89               [ 2]  279 	pushw	x
+      000150 EE 02            [ 2]  280 	ldw	x, (0x2, x)
+      000152 51               [ 1]  281 	exgw	x, y
+      000153 85               [ 2]  282 	popw	x
+      000154 FE               [ 2]  283 	ldw	x, (x)
+      000155 0F 09            [ 1]  284 	clr	(0x09, sp)
+      000157 5F               [ 1]  285 	clrw	x
+      000158 4F               [ 1]  286 	clr	a
+      000159 90 9E            [ 1]  287 	ld	a, yh
+      00015B 1E 14            [ 2]  288 	ldw	x, (0x14, sp)
+      00015D F7               [ 1]  289 	ld	(x), a
+                                    290 ;	user/rom.c: 63: cm[3] = (sysCfg.id[1]&0x000000FF)>>0;
+      00015E 1E 1E            [ 2]  291 	ldw	x, (0x1e, sp)
+      000160 89               [ 2]  292 	pushw	x
+      000161 EE 02            [ 2]  293 	ldw	x, (0x2, x)
+      000163 51               [ 1]  294 	exgw	x, y
+      000164 85               [ 2]  295 	popw	x
+      000165 FE               [ 2]  296 	ldw	x, (x)
+      000166 4F               [ 1]  297 	clr	a
+      000167 5F               [ 1]  298 	clrw	x
+      000168 90 9F            [ 1]  299 	ld	a, yl
+      00016A 1E 0E            [ 2]  300 	ldw	x, (0x0e, sp)
+      00016C F7               [ 1]  301 	ld	(x), a
+                                    302 ;	user/rom.c: 64: debugInfo("Key 2: ", cm, 4);
+      00016D 16 1C            [ 2]  303 	ldw	y, (0x1c, sp)
+      00016F AEr01r85         [ 2]  304 	ldw	x, #___str_1+0
+      000172 4B 04            [ 1]  305 	push	#0x04
+      000174 90 89            [ 2]  306 	pushw	y
+      000176 89               [ 2]  307 	pushw	x
+      000177 CDr00r00         [ 4]  308 	call	_debugInfo
+      00017A 5B 30            [ 2]  309 	addw	sp, #48
+      00017C 81               [ 4]  310 	ret
+                                    311 	.area CODE
+      00017D                        312 ___str_0:
+      00017D 4B 65 79 20 31 3A 20   313 	.ascii "Key 1: "
+      000184 00                     314 	.db 0x00
+      000185                        315 ___str_1:
+      000185 4B 65 79 20 32 3A 20   316 	.ascii "Key 2: "
+      00018C 00                     317 	.db 0x00
+                                    318 	.area INITIALIZER
+                                    319 	.area CABS (ABS)

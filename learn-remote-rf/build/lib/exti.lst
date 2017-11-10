@@ -1,0 +1,157 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 3.6.0 #9615 (Mac OS X x86_64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module exti
+                                      6 	.optsdcc -mstm8
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _EXTI_SetExtIntSensitivity
+                                     12 ;--------------------------------------------------------
+                                     13 ; ram data
+                                     14 ;--------------------------------------------------------
+                                     15 	.area DATA
+                                     16 ;--------------------------------------------------------
+                                     17 ; ram data
+                                     18 ;--------------------------------------------------------
+                                     19 	.area INITIALIZED
+                                     20 ;--------------------------------------------------------
+                                     21 ; absolute external ram data
+                                     22 ;--------------------------------------------------------
+                                     23 	.area DABS (ABS)
+                                     24 ;--------------------------------------------------------
+                                     25 ; global & static initialisations
+                                     26 ;--------------------------------------------------------
+                                     27 	.area HOME
+                                     28 	.area GSINIT
+                                     29 	.area GSFINAL
+                                     30 	.area GSINIT
+                                     31 ;--------------------------------------------------------
+                                     32 ; Home
+                                     33 ;--------------------------------------------------------
+                                     34 	.area HOME
+                                     35 	.area HOME
+                                     36 ;--------------------------------------------------------
+                                     37 ; code
+                                     38 ;--------------------------------------------------------
+                                     39 	.area CODE
+                                     40 ;	lib/exti.c: 4: void EXTI_SetExtIntSensitivity(EXTI_Port_TypeDef Port, EXTI_Sensitivity_TypeDef SensitivityValue)
+                                     41 ;	-----------------------------------------
+                                     42 ;	 function EXTI_SetExtIntSensitivity
+                                     43 ;	-----------------------------------------
+      000000                         44 _EXTI_SetExtIntSensitivity:
+      000000 52 03            [ 2]   45 	sub	sp, #3
+                                     46 ;	lib/exti.c: 7: switch (Port)
+      000002 7B 06            [ 1]   47 	ld	a, (0x06, sp)
+      000004 A1 04            [ 1]   48 	cp	a, #0x04
+      000006 23 03            [ 2]   49 	jrule	00114$
+      000008 CCr00r91         [ 2]   50 	jp	00108$
+      00000B                         51 00114$:
+      00000B 5F               [ 1]   52 	clrw	x
+      00000C 7B 06            [ 1]   53 	ld	a, (0x06, sp)
+      00000E 97               [ 1]   54 	ld	xl, a
+      00000F 58               [ 2]   55 	sllw	x
+      000010 DEu00u14         [ 2]   56 	ldw	x, (#00115$, x)
+      000013 FC               [ 2]   57 	jp	(x)
+      000014                         58 00115$:
+      000014r00r1E                   59 	.dw	#00101$
+      000016r00r31                   60 	.dw	#00102$
+      000018r00r4A                   61 	.dw	#00103$
+      00001Ar00r64                   62 	.dw	#00104$
+      00001Cr00r80                   63 	.dw	#00105$
+                                     64 ;	lib/exti.c: 9: case EXTI_PORT_GPIOA:
+      00001E                         65 00101$:
+                                     66 ;	lib/exti.c: 10: EXTI->CR1 &= (uint8_t)(~EXTI_CR1_PAIS);
+      00001E AE 50 A0         [ 2]   67 	ldw	x, #0x50a0
+      000021 F6               [ 1]   68 	ld	a, (x)
+      000022 A4 FC            [ 1]   69 	and	a, #0xfc
+      000024 F7               [ 1]   70 	ld	(x), a
+                                     71 ;	lib/exti.c: 11: EXTI->CR1 |= (uint8_t)(SensitivityValue);
+      000025 AE 50 A0         [ 2]   72 	ldw	x, #0x50a0
+      000028 F6               [ 1]   73 	ld	a, (x)
+      000029 1A 07            [ 1]   74 	or	a, (0x07, sp)
+      00002B AE 50 A0         [ 2]   75 	ldw	x, #0x50a0
+      00002E F7               [ 1]   76 	ld	(x), a
+                                     77 ;	lib/exti.c: 12: break;
+      00002F 20 60            [ 2]   78 	jra	00108$
+                                     79 ;	lib/exti.c: 13: case EXTI_PORT_GPIOB:
+      000031                         80 00102$:
+                                     81 ;	lib/exti.c: 14: EXTI->CR1 &= (uint8_t)(~EXTI_CR1_PBIS);
+      000031 AE 50 A0         [ 2]   82 	ldw	x, #0x50a0
+      000034 F6               [ 1]   83 	ld	a, (x)
+      000035 A4 F3            [ 1]   84 	and	a, #0xf3
+      000037 F7               [ 1]   85 	ld	(x), a
+                                     86 ;	lib/exti.c: 15: EXTI->CR1 |= (uint8_t)((uint8_t)(SensitivityValue) << 2);
+      000038 AE 50 A0         [ 2]   87 	ldw	x, #0x50a0
+      00003B F6               [ 1]   88 	ld	a, (x)
+      00003C 6B 03            [ 1]   89 	ld	(0x03, sp), a
+      00003E 7B 07            [ 1]   90 	ld	a, (0x07, sp)
+      000040 48               [ 1]   91 	sll	a
+      000041 48               [ 1]   92 	sll	a
+      000042 1A 03            [ 1]   93 	or	a, (0x03, sp)
+      000044 AE 50 A0         [ 2]   94 	ldw	x, #0x50a0
+      000047 F7               [ 1]   95 	ld	(x), a
+                                     96 ;	lib/exti.c: 16: break;
+      000048 20 47            [ 2]   97 	jra	00108$
+                                     98 ;	lib/exti.c: 17: case EXTI_PORT_GPIOC:
+      00004A                         99 00103$:
+                                    100 ;	lib/exti.c: 18: EXTI->CR1 &= (uint8_t)(~EXTI_CR1_PCIS);
+      00004A AE 50 A0         [ 2]  101 	ldw	x, #0x50a0
+      00004D F6               [ 1]  102 	ld	a, (x)
+      00004E A4 CF            [ 1]  103 	and	a, #0xcf
+      000050 F7               [ 1]  104 	ld	(x), a
+                                    105 ;	lib/exti.c: 19: EXTI->CR1 |= (uint8_t)((uint8_t)(SensitivityValue) << 4);
+      000051 AE 50 A0         [ 2]  106 	ldw	x, #0x50a0
+      000054 F6               [ 1]  107 	ld	a, (x)
+      000055 6B 02            [ 1]  108 	ld	(0x02, sp), a
+      000057 7B 07            [ 1]  109 	ld	a, (0x07, sp)
+      000059 4E               [ 1]  110 	swap	a
+      00005A A4 F0            [ 1]  111 	and	a, #0xf0
+      00005C 1A 02            [ 1]  112 	or	a, (0x02, sp)
+      00005E AE 50 A0         [ 2]  113 	ldw	x, #0x50a0
+      000061 F7               [ 1]  114 	ld	(x), a
+                                    115 ;	lib/exti.c: 20: break;
+      000062 20 2D            [ 2]  116 	jra	00108$
+                                    117 ;	lib/exti.c: 21: case EXTI_PORT_GPIOD:
+      000064                        118 00104$:
+                                    119 ;	lib/exti.c: 22: EXTI->CR1 &= (uint8_t)(~EXTI_CR1_PDIS);
+      000064 AE 50 A0         [ 2]  120 	ldw	x, #0x50a0
+      000067 F6               [ 1]  121 	ld	a, (x)
+      000068 A4 3F            [ 1]  122 	and	a, #0x3f
+      00006A F7               [ 1]  123 	ld	(x), a
+                                    124 ;	lib/exti.c: 23: EXTI->CR1 |= (uint8_t)((uint8_t)(SensitivityValue) << 6);
+      00006B AE 50 A0         [ 2]  125 	ldw	x, #0x50a0
+      00006E F6               [ 1]  126 	ld	a, (x)
+      00006F 6B 01            [ 1]  127 	ld	(0x01, sp), a
+      000071 7B 07            [ 1]  128 	ld	a, (0x07, sp)
+      000073 4E               [ 1]  129 	swap	a
+      000074 A4 F0            [ 1]  130 	and	a, #0xf0
+      000076 48               [ 1]  131 	sll	a
+      000077 48               [ 1]  132 	sll	a
+      000078 1A 01            [ 1]  133 	or	a, (0x01, sp)
+      00007A AE 50 A0         [ 2]  134 	ldw	x, #0x50a0
+      00007D F7               [ 1]  135 	ld	(x), a
+                                    136 ;	lib/exti.c: 24: break;
+      00007E 20 11            [ 2]  137 	jra	00108$
+                                    138 ;	lib/exti.c: 25: case EXTI_PORT_GPIOE:
+      000080                        139 00105$:
+                                    140 ;	lib/exti.c: 26: EXTI->CR2 &= (uint8_t)(~EXTI_CR2_PEIS);
+      000080 AE 50 A1         [ 2]  141 	ldw	x, #0x50a1
+      000083 F6               [ 1]  142 	ld	a, (x)
+      000084 A4 FC            [ 1]  143 	and	a, #0xfc
+      000086 F7               [ 1]  144 	ld	(x), a
+                                    145 ;	lib/exti.c: 27: EXTI->CR2 |= (uint8_t)(SensitivityValue);
+      000087 AE 50 A1         [ 2]  146 	ldw	x, #0x50a1
+      00008A F6               [ 1]  147 	ld	a, (x)
+      00008B 1A 07            [ 1]  148 	or	a, (0x07, sp)
+      00008D AE 50 A1         [ 2]  149 	ldw	x, #0x50a1
+      000090 F7               [ 1]  150 	ld	(x), a
+                                    151 ;	lib/exti.c: 31: }
+      000091                        152 00108$:
+      000091 5B 03            [ 2]  153 	addw	sp, #3
+      000093 81               [ 4]  154 	ret
+                                    155 	.area CODE
+                                    156 	.area INITIALIZER
+                                    157 	.area CABS (ABS)
