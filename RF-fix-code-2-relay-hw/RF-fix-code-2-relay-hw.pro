@@ -1,4 +1,4 @@
-update=11/28/2017 8:11:13 AM
+update=12/16/2017 11:07:42 AM
 version=1
 last_client=kicad
 [pcbnew]
@@ -59,3 +59,5 @@ LibName27=atmel
 LibName28=contrib
 LibName29=valves
 LibName30=E:/Project/2017/hw/Kicad-Lib/nhantt-kicad-lib/nhantt-kicad-lib
+LibName31=C:/Program Files/KiCad/share/kicad/library/relays
+LibName32=E:/Project/2017/hw/kicad/nhantt-kicad-lib/nhantt-kicad-lib/nhantt-kicad-lib
